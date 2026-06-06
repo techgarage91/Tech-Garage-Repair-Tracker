@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TECH GARAGE — Mobile Tablet Repair Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f6fa;--card:#fff;--border:#dde3ef;--border2:#c8d0e0;
+  --accent:#1a1aff;--accent2:#0d0d99;--green:#00a651;--yellow:#d97706;--red:#d42b2b;--orange:#f97316;--purple:#7c3aed;
+  --text:#111827;--muted:#6b7280;--dim:#9ca3af;--light:#eef1f8;--wa:#25D366;
+}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;min-height:100vh;font-size:14px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+nav{background:#fff;border-bottom:2px solid var(--border);padding:0 14px;display:flex;align-items:center;gap:3px;height:52px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.05);flex-wrap:wrap}
+.logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:13px;letter-spacing:2px;margin-right:8px;color:var(--accent);white-space:nowrap;text-transform:uppercase}
+.logo em{color:var(--text);font-style:normal}
+.nav-btn{background:transparent;border:none;color:var(--muted);padding:5px 10px;border-radius:7px;cursor:pointer;font-size:11px;font-family:'Montserrat',sans-serif;font-weight:600;transition:all .2s;white-space:nowrap}
+.nav-btn.active{background:var(--accent);color:#fff}
+.nav-btn:hover:not(.active){background:var(--light);color:var(--text)}
+.nav-count{margin-left:auto;color:var(--dim);font-size:11px;font-weight:600;background:var(--light);padding:3px 9px;border-radius:20px}
+.page{display:none;max-width:1200px;margin:0 auto;padding:20px 14px}
+.page.active{display:block}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card-title{color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:10px;margin-bottom:18px}
+.stat-card{border-radius:12px;padding:14px;border:1px solid;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.stat-val{font-size:22px;font-weight:900;margin-bottom:2px}
+.stat-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;opacity:.7}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:11px;margin-bottom:11px}
+label.fl{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:9px 11px;font-size:13px;font-family:'Montserrat',sans-serif;font-weight:500;outline:none;transition:border .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,26,255,.08);background:#fff}
+input[readonly]{background:var(--light);color:var(--muted);cursor:default}
+textarea{resize:vertical}
+.igrp{display:flex;gap:7px;align-items:stretch}
+.igrp>input,.igrp>select{flex:1}
+/* CUSTOM SELECT */
+.cs-wrap{position:relative}
+.cs-btn{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;color:var(--text);padding:9px 11px;font-size:13px;font-family:'Montserrat',sans-serif;font-weight:500;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all .2s}
+.cs-btn:hover,.cs-btn.open{border-color:var(--accent);background:#fff}
+.arr{font-size:10px;transition:transform .25s;color:var(--muted)}
+.cs-btn.open .arr{transform:rotate(180deg)}
+.cs-dd{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--accent);border-radius:12px;z-index:500;box-shadow:0 8px 28px rgba(0,0,0,.13);overflow:hidden;flex-direction:column}
+.cs-dd.open{display:flex}
+.cs-sw{padding:7px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
+.cs-sw input{background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 9px;font-size:12px;width:100%}
+.cs-list{overflow-y:auto;max-height:200px}
+.cs-item{padding:9px 11px;cursor:pointer;font-size:13px;font-weight:500;transition:background .12s;border-bottom:1px solid var(--light);display:flex;justify-content:space-between;align-items:center}
+.cs-item:last-child{border-bottom:none}
+.cs-item:hover{background:var(--light)}
+.cs-item.sel{background:rgba(26,26,255,.06);color:var(--accent);font-weight:700}
+.cs-item-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:2px 5px;border-radius:4px;opacity:.5;font-family:'Montserrat',sans-serif;font-weight:700}
+.cs-item-del:hover{opacity:1}
+.cs-none{padding:11px;color:var(--dim);text-align:center;font-size:12px}
+.cs-new-wrap{padding:7px 8px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:5px}
+.cs-new-wrap input{flex:1;padding:6px 9px;font-size:12px;border-radius:7px}
+.cs-new-wrap button{padding:6px 11px;font-size:11px;border-radius:7px;background:var(--accent);color:#fff;border:none;font-family:'Montserrat',sans-serif;font-weight:700;cursor:pointer;white-space:nowrap}
+/* PROBLEMS DROPDOWN — stays open */
+.prob-wrap{position:relative}
+.prob-dd{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--accent);border-radius:12px;z-index:500;box-shadow:0 8px 28px rgba(0,0,0,.13);overflow:hidden;flex-direction:column;max-height:300px}
+.prob-dd.open{display:flex}
+.pd-list{overflow-y:auto;flex:1}
+.pd-item{padding:9px 11px;cursor:pointer;font-size:12px;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--light);transition:background .12s}
+.pd-item:last-child{border-bottom:none}
+.pd-item:hover{background:var(--light)}
+.pd-chk{width:16px;height:16px;border:2px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s}
+.pd-item.sel .pd-chk{background:var(--accent);border-color:var(--accent);color:#fff}
+.pd-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:2px 5px;border-radius:4px;opacity:.4;margin-left:auto;font-family:'Montserrat',sans-serif;font-weight:700;flex-shrink:0}
+.pd-del:hover{opacity:1}
+.prob-new-wrap{padding:7px 8px;border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:5px}
+.prob-new-wrap input{flex:1;padding:6px 9px;font-size:12px;border-radius:7px}
+.prob-new-wrap button{padding:6px 11px;font-size:11px;border-radius:7px;background:var(--accent);color:#fff;border:none;font-family:'Montserrat',sans-serif;font-weight:700;cursor:pointer}
+.prob-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ptag{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--orange);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.ptag-x{cursor:pointer;font-size:12px;opacity:.5}.ptag-x:hover{opacity:1}
+/* TOGGLE */
+.tog-wrap{display:flex;align-items:center;gap:5px;cursor:pointer}
+.tog-track{width:34px;height:18px;border-radius:9px;background:var(--border2);position:relative;transition:background .2s;flex-shrink:0}
+.tog-track.on-green{background:var(--green)}
+.tog-track.on-green2{background:var(--green)}
+.tog-thumb{width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog-track.on-green .tog-thumb,.tog-track.on-green2 .tog-thumb{left:18px}
+.tog-label{font-size:10px;font-weight:700}
+/* CHECKBOXES */
+.chk-row{display:flex;flex-wrap:wrap;gap:8px}
+.chk-lbl{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:600;padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;transition:all .2s;user-select:none}
+.chk-lbl:hover{border-color:var(--accent);background:rgba(26,26,255,.04)}
+.chk-lbl input[type=checkbox]{width:15px;height:15px;margin:0;cursor:pointer;accent-color:var(--accent);-webkit-appearance:auto;appearance:auto}
+.chk-all-btn{padding:7px 13px;border:1.5px solid var(--accent);border-radius:8px;background:rgba(26,26,255,.06);color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .2s}
+.chk-all-btn:hover{background:var(--accent);color:#fff}
+/* PAYMENT */
+.pay-badge{border-radius:20px;padding:3px 9px;font-size:10px;font-weight:700;display:inline-block;cursor:pointer;border:1.5px solid}
+.pay-paid{background:#f0fdf4;border-color:var(--green);color:var(--green)}
+.pay-unpaid{background:#fff5f5;border-color:var(--red);color:var(--red)}
+/* BUTTONS */
+.btn{border-radius:8px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:.3px;padding:8px 13px;transition:all .2s;border:none;white-space:nowrap}
+.btn-pr{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(26,26,255,.2)}
+.btn-pr:hover{background:var(--accent2)}
+.btn-ol{background:transparent;border:1.5px solid var(--accent);color:var(--accent)}
+.btn-ol:hover{background:rgba(26,26,255,.06)}
+.btn-gr{border:1.5px solid var(--green);color:var(--green);background:transparent}
+.btn-ye{border:1.5px solid var(--yellow);color:var(--yellow);background:transparent}
+.btn-re{border:1.5px solid var(--red);color:var(--red);background:transparent}
+.btn-gh{background:var(--light);color:var(--muted);border:none}
+.btn-gh:hover{background:var(--border);color:var(--text)}
+.btn-wa{background:var(--wa);color:#fff;border:none}
+.btn-wa:hover{background:#1da851}
+.btn-sm{padding:4px 9px;font-size:10px;border-radius:6px}
+.btn-ic{padding:8px 12px;font-size:14px;border:1.5px solid var(--border)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+/* TAG */
+.tag{border-radius:20px;padding:3px 9px;font-size:10px;font-weight:700;display:inline-block}
+.tag-pending{background:#fffbeb;border:1.5px solid var(--yellow);color:var(--yellow)}
+.tag-done{background:#f0fdf4;border:1.5px solid var(--green);color:var(--green)}
+.tag-returned{background:#fff5f5;border:1.5px solid var(--red);color:var(--red)}
+.status-select{min-height:32px;width:auto;border-radius:20px;padding:4px 26px 4px 9px;font-size:10px;font-weight:700;text-transform:uppercase;cursor:pointer}
+.status-select.pending{background:#fffbeb;border-color:var(--yellow);color:var(--yellow)}
+.status-select.done{background:#f0fdf4;border-color:var(--green);color:var(--green)}
+.status-select.returned{background:#fff5f5;border-color:var(--red);color:var(--red)}
+/* TABLE */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:850px}
+th{color:var(--muted);padding:8px 9px;text-align:left;font-weight:700;border-bottom:2px solid var(--border);white-space:nowrap;font-size:10px;text-transform:uppercase;vertical-align:middle}
+td{padding:9px 9px;border-bottom:1px solid var(--light);vertical-align:middle;text-align:left}
+tr.jr:hover{background:#f0f4ff}
+.j-no{color:var(--accent);font-weight:800}
+.j-br{color:var(--text);font-weight:600}
+.j-im{color:var(--muted);font-size:10px}
+.j-pr{color:var(--orange);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.j-est{color:var(--green);font-weight:800}
+.j-dt{color:var(--muted);white-space:nowrap;font-size:10px}
+/* SEARCH */
+.sb{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px}
+@media(max-width:580px){.sb{grid-template-columns:1fr}}
+/* DETAIL */
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin-bottom:12px}
+.df{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}
+.dfl{color:var(--dim);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.dfv{color:var(--text);font-weight:700;font-size:13px}
+/* RECENT */
+.rr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
+.rr:hover{opacity:.7}
+.rr:last-child{border-bottom:none}
+.rr-t{font-size:13px;font-weight:600}
+.rr-t span{color:var(--accent);font-weight:800;margin-right:8px}
+.rr-b{color:var(--dim);font-size:11px;margin-top:2px}
+.empty{color:var(--dim);text-align:center;padding:30px;font-weight:500}
+/* SCANNER */
+#scan-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center}
+#scan-ov.open{display:flex}
+.scan-box{width:min(360px,94vw);border-radius:16px;overflow:hidden;border:2px solid var(--accent);box-shadow:0 0 40px rgba(26,26,255,.3)}
+.scan-hd{background:#fff;padding:11px 14px;display:flex;justify-content:space-between;align-items:center}
+.scan-hd span{color:var(--accent);font-weight:800;font-size:13px}
+#scan-vid{width:100%;display:block;max-height:240px;object-fit:cover;background:#000}
+.scan-fr{position:relative;background:#000}
+.scan-tgt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border:2px solid rgba(255,255,255,.9);border-radius:9px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+.scan-ln{position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:sc 2s ease-in-out infinite}
+@keyframes sc{0%,100%{top:0}50%{top:156px}}
+.scan-ft{background:#fff;padding:8px 14px;text-align:center;color:var(--muted);font-size:12px}
+.scan-err{background:#fff8f8;padding:20px;text-align:center;color:var(--red);font-size:12px}
+/* MODALS */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:16px;padding:22px;width:min(580px,97vw);box-shadow:0 12px 40px rgba(0,0,0,.18);max-height:92vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:900;margin-bottom:16px;color:var(--text)}
+.modal .close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);margin-top:-4px}
+/* REVENUE MODAL */
+.rev-period-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.rev-period-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all .2s}
+.rev-period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.rev-summary{background:var(--light);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
+.rev-sum-item{text-align:center}
+.rev-sum-val{font-size:20px;font-weight:900;color:var(--green)}
+.rev-sum-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+/* WA PREVIEW */
+.wa-preview{background:#e5ddd5;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:10px;font-family:'Segoe UI',sans-serif;white-space:pre-wrap;word-break:break-word;border:1px solid #ccc}
+.wa-bubble{background:#fff;border-radius:10px 10px 0 10px;padding:10px 13px;display:inline-block;box-shadow:0 1px 2px rgba(0,0,0,.15);max-width:88%}
+/* SYNC STATUS */
+.sync-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block}
+.sync-ok{background:#f0fdf4;border:1px solid var(--green);color:var(--green)}
+.sync-err{background:#fff5f5;border:1px solid var(--red);color:var(--red)}
+.sync-ing{background:#eff6ff;border:1px solid var(--accent);color:var(--accent)}
+/* TOAST */
+#toast{position:fixed;top:60px;right:12px;z-index:2000;border-radius:9px;padding:10px 14px;font-size:12px;font-weight:700;display:none;animation:fi .3s ease;box-shadow:0 4px 14px rgba(0,0,0,.12);max-width:300px}
+#toast.show{display:block}
+#toast.success{background:#f0fdf4;border:1.5px solid var(--green);color:var(--green)}
+#toast.error{background:#fff5f5;border:1.5px solid var(--red);color:var(--red)}
+#toast.info{background:#eff6ff;border:1.5px solid var(--accent);color:var(--accent)}
+@keyframes fi{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.ph h1{font-weight:900;font-size:20px;color:var(--text);letter-spacing:-.5px}
+.ph h2{font-weight:900;font-size:17px;color:var(--text);letter-spacing:-.5px}
+.ac{color:var(--accent)}
+.bk{background:var(--light);border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:6px 10px;border-radius:7px}
+.bk:hover{background:var(--border);color:var(--text)}
+.sp{flex:1}
+.dt-row{display:flex;gap:7px;align-items:center}
+.dt-row input{flex:1}
+.dt-eb{background:var(--light);border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:11px;font-family:'Montserrat',sans-serif;font-weight:600;white-space:nowrap;transition:all .2s}
+.dt-eb:hover,.dt-eb.ed{border-color:var(--accent);color:var(--accent)}
+.rp-wrap{display:flex;align-items:stretch}
+.rp-sym{padding:9px 10px;background:var(--light);border:1.5px solid var(--border);border-right:none;border-radius:9px 0 0 9px;color:var(--muted);font-weight:700;font-size:13px;display:flex;align-items:center}
+.rp-wrap input{border-radius:0 9px 9px 0;border-left:none}
+
+/* MOBILE AND TABLET UI OVERRIDE */
+:root{
+  --bg:#f6f8fb;--card:#ffffff;--border:#d9e2ef;--border2:#b8c4d6;
+  --accent:#1a1aff;--accent2:#0d0d99;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--orange:#ea580c;--purple:#7c3aed;
+  --text:#111827;--muted:#667085;--dim:#98a2b3;--light:#eef1f8;--wa:#22c55e;
+}
+body{background:#f6f8fb;font-size:15px;padding-bottom:0}
+nav{height:60px;background:#fff;border-bottom:1px solid var(--border);gap:6px}
+.logo{font-size:13px;color:#1a1aff}
+.nav-btn{min-height:38px;border-radius:10px;font-size:12px;padding:8px 12px}
+.nav-btn.active{background:#1a1aff}
+.page{max-width:1120px;padding:18px 16px}
+.card{border-radius:12px;padding:16px}
+.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat-card{min-height:92px;display:flex;flex-direction:column;justify-content:center}
+.stat-val{font-size:24px}
+.form-row{grid-template-columns:1fr 1fr;gap:12px}
+input,select,textarea,.cs-btn{min-height:44px;font-size:14px;border-radius:10px}
+.btn{min-height:40px;border-radius:10px;font-size:12px}
+.btn-sm{min-height:32px}
+.chk-lbl{min-height:42px;padding:9px 12px}
+.dg{grid-template-columns:repeat(2,minmax(0,1fr))}
+.df{border-radius:12px}
+table{min-width:900px}
+.modal{width:min(720px,96vw);border-radius:14px}
+.modal-bg{align-items:flex-start;padding-top:18px}
+.cs-list{max-height:260px}.pd-list{max-height:260px}
+
+@media(max-width:720px){
+  body{padding-bottom:74px}
+  nav{position:fixed;left:0;right:0;top:auto;bottom:0;height:66px;padding:6px 8px;border-top:1px solid var(--border);border-bottom:none;box-shadow:0 -8px 28px rgba(16,24,40,.10);justify-content:space-around;flex-wrap:nowrap}
+  .logo,.nav-count,#sync-nav{display:none!important}
+  .nav-btn{flex:1;min-width:0;height:52px;padding:5px 4px;font-size:10px;border-radius:12px;white-space:normal;line-height:1.2}
+  .page{padding:14px 12px 88px}
+  .ph{margin-bottom:14px}.ph h1{font-size:20px}.ph h2{font-size:18px}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat-card{padding:12px;min-height:86px}
+  .stat-val{font-size:22px}.stat-label{font-size:9px}
+  .card{padding:14px;border-radius:12px;margin-bottom:12px}
+  .form-row,.sb{grid-template-columns:1fr!important;gap:10px}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .btn-row .btn{width:100%}
+  .chk-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .chk-lbl{justify-content:center;padding:9px 7px;font-size:11px}
+  .dg{grid-template-columns:1fr}
+  .tw{margin:0 -14px;padding:0 14px}
+  table{min-width:0;width:100%;display:block;font-size:11px}
+  thead{display:none}
+  tbody{display:block;width:100%}
+  tr.jr{display:block;width:100%;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:#fff;overflow:hidden}
+  th,td{padding:8px 7px}
+  tr.jr td{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid var(--light);white-space:normal}
+  tr.jr td:last-child{border-bottom:none}
+  tr.jr td::before{content:attr(data-label);color:var(--dim);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;min-width:82px;flex-shrink:0}
+  .j-pr{max-width:none;white-space:normal;overflow:visible;text-overflow:clip;text-align:right}
+  .j-br,.j-no,.j-dt,.j-est{text-align:right}
+  .modal-bg{align-items:flex-end;padding-top:0}
+  .modal{width:100vw;max-height:90vh;border-radius:18px 18px 0 0;padding:18px 14px}
+  .cs-dd,.prob-dd{position:fixed;left:10px;right:10px;top:auto;bottom:76px;max-height:58vh}
+  .prob-dd{max-height:58vh}
+  #scan-ov{align-items:flex-end}.scan-box{width:100vw;border-radius:18px 18px 0 0}
+}
+
+@media(min-width:721px) and (max-width:1024px){
+  nav{height:auto;min-height:62px;padding:8px 14px}
+  .page{padding:22px 18px}
+  .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .form-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dg{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">🔧 <em>TECH</em> GARAGE</span>
+  <button class="nav-btn active" onclick="go('dashboard')">Dashboard</button>
+  <button class="nav-btn" onclick="openNewJob()">New Job</button>
+  <button class="nav-btn" onclick="go('jobList');renderList()">All Jobs</button>
+  <button class="nav-btn" onclick="openWASettings()">💬 WA</button>
+  <button class="nav-btn" onclick="openManageLists()">⚙️ Lists</button>
+  <span id="sync-nav" class="sync-badge sync-ok" style="margin-left:6px;cursor:pointer" onclick="syncFromSheet()" title="Sync from Google Sheets">☁ Synced</span>
+  <span class="nav-count" id="nav-count">0 jobs</span>
+</nav>
+<div id="toast"></div>
+
+<!-- SCANNER -->
+<div id="scan-ov">
+  <div class="scan-box">
+    <div class="scan-hd"><span>📷 Barcode Scanner</span><button class="btn btn-sm btn-re" onclick="closeScan()">✕</button></div>
+    <div class="scan-fr" id="scan-fr"><video id="scan-vid" autoplay playsinline muted></video><div class="scan-tgt"><div class="scan-ln"></div></div></div>
+    <div class="scan-err" id="scan-err" style="display:none"></div>
+    <div class="scan-ft">Point camera at barcode or QR code</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeEditModal()">✕</button>
+    <h3>✏️ Edit Job <span id="edit-modal-jno" class="ac"></span></h3>
+    <div class="form-row">
+      <div><label class="fl">Job Number</label><input type="text" id="e-jno"/></div>
+      <div>
+        <label class="fl">Date &amp; Time</label>
+        <div class="dt-row"><input type="text" id="e-dt" readonly/><button class="dt-eb" id="e-dte-btn" onclick="toggleEditDTE()">✏️</button></div>
+        <div id="e-dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="e-dtm" onchange="applyEditDTM()"/></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Customer Name</label><input type="text" id="e-cname" placeholder="Customer name"/></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="e-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/></div>
+    </div>
+    <div class="form-row"><div style="grid-column:1/-1"><label class="fl">IMEI</label><input type="text" id="e-imei"/></div></div>
+    <div class="form-row">
+      <div>
+        <label class="fl">Brand</label>
+        <div class="cs-wrap" id="e-bw"><button class="cs-btn" id="e-b-btn" onclick="togDD('e-b')"><span id="e-b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="e-b-dd"><div class="cs-sw"><input type="text" id="e-b-srch" placeholder="Search..." oninput="filtList('e-b')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="e-b-list"></div></div></div>
+      </div>
+      <div>
+        <label class="fl">Model</label>
+        <div class="cs-wrap" id="e-mw"><button class="cs-btn" id="e-m-btn" onclick="togDD('e-m')"><span id="e-m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="e-m-dd"><div class="cs-sw"><input type="text" id="e-m-srch" placeholder="Search..." oninput="filtList('e-m')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="e-m-list"></div><div class="cs-new-wrap"><input type="text" id="e-m-new" placeholder="Add new model..."/><button onclick="addNewModel('e')">+ Add</button></div></div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:11px">
+      <label class="fl">Problem(s)</label>
+      <div class="prob-wrap"><button class="cs-btn" id="e-p-btn" onclick="togProbDD('e')"><span id="e-p-lbl">Select...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-p-dd"><div class="pd-list" id="e-p-list"></div><div class="prob-new-wrap"><input type="text" id="e-p-new" placeholder="Add new problem..."/><button onclick="addNewProb('e')">+ Add</button></div></div></div>
+      <div class="prob-tags" id="e-p-tags"></div>
+    </div>
+    <div style="margin-bottom:11px">
+      <label class="fl">Part to be Change / Repair</label>
+      <div class="prob-wrap"><button class="cs-btn" id="e-pt-btn" onclick="togPartDD('e')"><span id="e-pt-lbl">Select part(s)...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-pt-dd"><div class="pd-list" id="e-pt-list"></div><div class="prob-new-wrap"><input type="text" id="e-pt-new" placeholder="Add new part..."/><button onclick="addNewPart('e')">+ Add</button></div></div></div>
+      <div class="prob-tags" id="e-pt-tags"></div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-est" placeholder="0.00"/></div></div>
+      <div><label class="fl">Device Lock</label><select id="e-lock" onchange="toggleLockValue('e')"><option value="nil">Nil</option><option value="pin">PIN</option><option value="pattern">Pattern</option><option value="password">Password</option></select></div>
+      <div id="e-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="e-lock-value" placeholder=""/></div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Payment</label><select id="e-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
+      <div><label class="fl">Job Status</label><select id="e-sts"><option value="pending">⏳ Pending</option><option value="done">✅ Done</option><option value="returned">Returned</option></select></div>
+    </div>
+    <div style="margin-bottom:11px">
+      <label class="fl">SIM / Storage</label>
+      <div class="chk-row">
+        <label class="chk-lbl"><input type="checkbox" id="e-sim1"/> SIM 1</label>
+        <label class="chk-lbl"><input type="checkbox" id="e-sim2"/> SIM 2</label>
+        <label class="chk-lbl"><input type="checkbox" id="e-mmc"/> MMC</label>
+      </div>
+    </div>
+    <div style="margin-bottom:4px"><label class="fl">Notes</label><textarea id="e-notes" rows="3" placeholder="Additional notes..."></textarea></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveEdit()">💾 Save Changes</button><button class="btn btn-gh" onclick="closeEditModal()">Cancel</button></div>
+  </div>
+</div>
+
+<!-- REVENUE MODAL -->
+<div class="modal-bg" id="rev-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('rev-modal').classList.remove('open')">✕</button>
+    <h3>📊 Revenue Report</h3>
+    <div class="rev-period-row">
+      <button class="rev-period-btn active" onclick="setRevPeriod('day',this)">Today</button>
+      <button class="rev-period-btn" onclick="setRevPeriod('week',this)">This Week</button>
+      <button class="rev-period-btn" onclick="setRevPeriod('month',this)">This Month</button>
+      <button class="rev-period-btn" onclick="setRevPeriod('year',this)">This Year</button>
+      <button class="rev-period-btn" onclick="setRevPeriod('all',this)">All Time</button>
+      <select id="rev-sort" onchange="renderRevModal()" style="width:auto;min-height:32px;border-radius:20px;font-size:11px;font-weight:700;padding:5px 26px 5px 10px"><option value="newest">Date: Newest First</option><option value="oldest">Date: Oldest First</option></select>
+    </div>
+    <div class="rev-summary" id="rev-summary"></div>
+    <div id="rev-job-list"></div>
+  </div>
+</div>
+
+<!-- FILTER MODAL (pending/done/unpaid) -->
+<div class="modal-bg" id="filter-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('filter-modal').classList.remove('open')">✕</button>
+    <h3 id="filter-modal-title">Jobs</h3>
+    <div id="filter-modal-list"></div>
+  </div>
+</div>
+
+<!-- WA MODAL -->
+<div class="modal-bg" id="wa-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('wa-modal').classList.remove('open')">✕</button>
+    <h3>💬 WhatsApp Message Template</h3>
+    <p style="color:var(--muted);font-size:11px;margin-bottom:12px;line-height:1.6">Placeholders: <code style="background:var(--light);padding:1px 5px;border-radius:4px">{JOB_NO}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{MODEL}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE_TIME}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{PROBLEMS}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{CUSTOMER_NAME}</code></p>
+    <label class="fl">Estimated Repair Time</label>
+    <input type="text" id="wa-time" placeholder="e.g. 2-3 hours" style="margin-bottom:11px"/>
+    <label class="fl">Message Template</label>
+    <textarea id="wa-template" rows="8" style="font-family:monospace;font-size:12px" oninput="updateWAPreview()"></textarea>
+    <div style="margin-top:10px"><label class="fl">Preview</label><div class="wa-preview"><div class="wa-bubble" id="wa-preview-text"></div></div></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveWASettings()">💾 Save</button><button class="btn btn-gh" onclick="resetWATemplate()">Reset Default</button></div>
+    <div style="height:18px"></div>
+    <div class="card-title">Job Done WhatsApp Message</div>
+    <label class="fl">Select Job</label>
+    <select id="wa-done-job" onchange="updateDoneWAPreview()" style="margin-bottom:11px"></select>
+    <label class="fl">Done Message Template</label>
+    <textarea id="wa-done-template" rows="7" style="font-family:monospace;font-size:12px" oninput="updateDoneWAPreview()"></textarea>
+    <div style="margin-top:10px"><label class="fl">Done Preview</label><div class="wa-preview"><div class="wa-bubble" id="wa-done-preview-text"></div></div></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn btn-wa" onclick="sendSelectedDoneWA()">💬 Send Done Message</button><button class="btn btn-gh" onclick="resetDoneWATemplate()">Reset Done Default</button></div>
+  </div>
+</div>
+
+<!-- MANAGE LISTS MODAL -->
+<div class="modal-bg" id="manage-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('manage-modal').classList.remove('open')">✕</button>
+    <h3>⚙️ Manage Models &amp; Problems</h3>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="btn btn-pr" id="tab-models" onclick="switchTab('models')">📱 Models</button>
+      <button class="btn btn-gh" id="tab-probs" onclick="switchTab('probs')">🔧 Problems</button>
+      <button class="btn btn-gh" id="tab-parts" onclick="switchTab('parts')">🔩 Parts</button>
+    </div>
+    <div id="tab-models-content">
+      <div style="margin-bottom:9px"><label class="fl">Brand</label><select id="manage-brand" onchange="renderManageModels()"></select></div>
+      <div id="manage-models-list" style="max-height:250px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
+      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-model-new" placeholder="Add new model..."/><button onclick="manageAddModel()">+ Add</button></div>
+    </div>
+    <div id="tab-probs-content" style="display:none">
+      <div id="manage-probs-list" style="max-height:290px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
+      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-prob-new" placeholder="Add new problem..."/><button onclick="manageAddProb()">+ Add</button></div>
+    </div>
+    <div id="tab-parts-content" style="display:none">
+      <div id="manage-parts-list" style="max-height:290px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
+      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-part-new" placeholder="Add new part..."/><button onclick="manageAddPart()">+ Add</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="ph"><div><h1>🔧 Repair <span class="ac">Tracker</span></h1><p style="color:var(--dim);font-size:11px;margin-top:3px;font-weight:500">Tech Garage · <span id="dash-date"></span></p></div></div>
+  <div class="stats-grid">
+    <div class="stat-card" style="background:#eff6ff;border-color:#bfdbfe" onclick="showFilterModal('all')"><div class="stat-val ac" id="s-tot">0</div><div class="stat-label ac">Total</div></div>
+    <div class="stat-card" style="background:#fffbeb;border-color:#fde68a" onclick="showFilterModal('pending')"><div class="stat-val" style="color:var(--yellow)" id="s-pen">0</div><div class="stat-label" style="color:var(--yellow)">Pending</div></div>
+    <div class="stat-card" style="background:#f0fdf4;border-color:#bbf7d0" onclick="showFilterModal('done')"><div class="stat-val" style="color:var(--green)" id="s-don">0</div><div class="stat-label" style="color:var(--green)">Done</div></div>
+    <div class="stat-card" style="background:#fff5f5;border-color:#fecaca" onclick="showFilterModal('unpaid')"><div class="stat-val" style="color:var(--red)" id="s-unp">0</div><div class="stat-label" style="color:var(--red)">Unpaid</div></div>
+    <div class="stat-card" style="background:#f0fdf4;border-color:#86efac" onclick="openRevModal()"><div class="stat-val" style="color:var(--green)" id="s-rev">₹0</div><div class="stat-label" style="color:var(--green)">Today's Revenue</div></div>
+  </div>
+  <div class="card"><div class="card-title">Recent Jobs</div><div id="recent-list"><div class="empty">No jobs yet!</div></div></div>
+  <div class="btn-row"><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button><button class="btn btn-ol" onclick="go('jobList');renderList()">View All →</button></div>
+</div>
+
+<!-- NEW JOB -->
+<div class="page" id="page-newJob">
+  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>New Repair <span class="ac">Job</span></h2></div>
+  <div class="card">
+    <div class="card-title">Job Identification</div>
+    <div class="form-row">
+      <div><label class="fl">Job Number *</label><div class="igrp"><input type="text" id="f-jno" placeholder="e.g. 00001" oninput="jnoChg()" onblur="lockJno()"/><button class="btn btn-ol btn-sm" onclick="autoJno()" id="btn-auto" style="padding:0 11px">AUTO</button></div></div>
+      <div>
+        <label class="fl">Date &amp; Time</label>
+        <div class="dt-row"><input type="text" id="f-dt" placeholder="Auto-fills after Job No" style="color:var(--dim)" readonly/><button class="dt-eb" id="btn-dte" onclick="toggleDTE()">✏️</button></div>
+        <div id="dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="f-dtm" onchange="applyDTM()"/></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Customer Identification</div>
+    <div class="form-row">
+      <div><label class="fl">Customer Name</label><input type="text" id="f-cname" placeholder="Full name"/></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="f-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Device Identification</div>
+    <div class="form-row" style="margin-bottom:9px"><div style="grid-column:1/-1"><label class="fl">IMEI Number *</label><div class="igrp"><input type="text" id="f-imei" placeholder="Scan barcode or type IMEI"/><button class="btn btn-ic btn-ol" onclick="openScan()" title="Scan">▤</button></div></div></div>
+    <div class="form-row">
+      <div>
+        <label class="fl">Brand *</label>
+        <div class="cs-wrap" id="bw"><button class="cs-btn" id="b-btn" onclick="togDD('b')"><span id="b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="b-dd"><div class="cs-sw"><input type="text" id="b-srch" placeholder="Search..." oninput="filtList('b')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="b-list"></div></div></div>
+      </div>
+      <div>
+        <label class="fl">Model *</label>
+        <div class="cs-wrap" id="mw"><button class="cs-btn" id="m-btn" onclick="togDD('m')"><span id="m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="m-dd"><div class="cs-sw"><input type="text" id="m-srch" placeholder="Search..." oninput="filtList('m')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="m-list"></div><div class="cs-new-wrap"><input type="text" id="m-new" placeholder="Add new model..."/><button onclick="addNewModel('n')">+ Add</button></div></div></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Device Lock</label><select id="f-lock" onchange="toggleLockValue('f')"><option value="nil">Nil (No Lock)</option><option value="pin">PIN</option><option value="pattern">Pattern</option><option value="password">Password</option></select></div>
+      <div id="f-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="f-lock-value" placeholder=""/></div>
+      <div>
+        <label class="fl">SIM / Storage</label>
+        <div class="chk-row" style="margin-top:2px">
+          <label class="chk-lbl"><input type="checkbox" id="f-sim1" onchange="syncSimState()"/> SIM 1</label>
+          <label class="chk-lbl"><input type="checkbox" id="f-sim2" onchange="syncSimState()"/> SIM 2</label>
+          <label class="chk-lbl"><input type="checkbox" id="f-mmc" onchange="syncSimState()"/> MMC</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Problem(s) Reported *</div>
+    <div class="prob-wrap">
+      <button class="cs-btn" id="p-btn" onclick="togProbDD('n')"><span id="p-lbl">Select problem(s)...</span><span class="arr">▼</span></button>
+      <div class="prob-dd" id="p-dd">
+        <div class="pd-list" id="p-list"></div>
+        <div class="prob-new-wrap"><input type="text" id="p-new" placeholder="Add new problem..."/><button onclick="addNewProb('n')">+ Add</button></div>
+      </div>
+    </div>
+    <div class="prob-tags" id="p-tags"></div>
+    <div style="height:14px"></div>
+    <div class="card-title" style="margin-bottom:8px">Part to be Change / Repair</div>
+    <div class="prob-wrap">
+      <button class="cs-btn" id="pt-btn" onclick="togPartDD('n')"><span id="pt-lbl">Select part(s)...</span><span class="arr">▼</span></button>
+      <div class="prob-dd" id="pt-dd">
+        <div class="pd-list" id="pt-list"></div>
+        <div class="prob-new-wrap"><input type="text" id="pt-new" placeholder="Add new part..."/><button onclick="addNewPart('n')">+ Add</button></div>
+      </div>
+    </div>
+    <div class="prob-tags" id="pt-tags"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Financial &amp; Notes</div>
+    <div class="form-row">
+      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-est" placeholder="0.00" min="0" step="0.01"/></div></div>
+      <div><label class="fl">Payment Status</label><select id="f-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
+      <div><label class="fl">Job Status</label><select id="f-sts"><option value="pending">⏳ Pending</option><option value="done">✅ Done</option><option value="returned">Returned</option></select></div>
+    </div>
+    <div><label class="fl">Notes</label><textarea id="f-notes" rows="3" placeholder="Additional notes..."></textarea></div>
+  </div>
+  <div class="btn-row"><button class="btn btn-pr" onclick="saveJob()">💾 Save Job</button><button class="btn btn-gh" onclick="cancelJob()">Cancel</button></div>
+</div>
+
+<!-- ALL JOBS -->
+<div class="page" id="page-jobList">
+  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>All <span class="ac">Jobs</span> <span id="jl-cnt" style="color:var(--dim);font-size:13px;font-weight:600"></span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button></div>
+  <div class="card"><div class="sb"><input type="text" id="s-inp" placeholder="🔍  Search Job No, IMEI, Name, Brand, Problem..." oninput="renderList()"/><select id="s-sts" onchange="renderList()"><option value="all">All Status</option><option value="pending">Pending</option><option value="done">Done</option><option value="returned">Returned</option></select><select id="s-brd" onchange="renderList()"><option value="all">All Brands</option></select><select id="s-pay" onchange="renderList()"><option value="all">All Payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option></select></div></div>
+  <div class="card">
+    <div class="tw">
+      <table>
+        <thead><tr>
+          <th>Job #</th><th>Date</th><th>Customer</th><th>Device</th><th>Problems</th>
+          <th>Parts</th><th>Status</th><th>Estimate</th><th>Payment</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="j-tbody"></tbody>
+      </table>
+    </div>
+    <div id="j-empty" class="empty" style="display:none">No jobs found.</div>
+  </div>
+</div>
+
+<!-- JOB DETAIL -->
+<div class="page" id="page-jobDetail">
+  <div class="ph"><button class="bk" onclick="go('jobList');renderList()">←</button><h2 id="d-title">Job <span class="ac">#—</span></h2><div class="sp"></div><span id="d-stag" class="tag"></span></div>
+  <div class="dg" id="d-top"></div>
+  <div class="card" id="d-main"></div>
+  <div class="card" id="d-prob-card" style="display:none"><div class="card-title">Problems Reported</div><div id="d-probs" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
+  <div class="card" id="d-parts-card" style="display:none"><div class="card-title">Part to be Change / Repair</div><div id="d-parts" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
+  <div class="card" id="d-note-card" style="display:none"><div class="card-title">Notes</div><div id="d-note" style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:12px"></div></div>
+  <div class="btn-row">
+    <button class="btn btn-ol" onclick="openEditModal(selJob)">✏️ Edit</button>
+    <button class="btn" id="d-tog" onclick="togCurSts()"></button>
+    <button class="btn btn-re" onclick="delCurJob()">🗑 Delete</button>
+  </div>
+</div>
+
+<script>
+// ════════ GOOGLE SHEETS SYNC ══════════════════════════════════
+const GS_URL = "https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec";
+const SYNC_INTERVAL_MS = 45000;
+let syncTimer = null;
+
+function normalizeJobForSync(job) {
+  const now = new Date().toISOString();
+  return {
+    id: String(job.id),
+    jno: job.jno || "",
+    dt: job.dt || now,
+    cname: job.cname || "",
+    cphone: job.cphone || "",
+    imei: job.imei || "0",
+    brand: job.brand || "",
+    model: job.model || "",
+    probs: Array.isArray(job.probs) ? job.probs.join("; ") : (job.probs || ""),
+    parts: Array.isArray(job.parts) ? job.parts.join("; ") : (job.parts || ""),
+    est: String(job.est || 0),
+    s: job.s || "pending",
+    pay: job.pay || "unpaid",
+    paidAt: job.paidAt || "",
+    lock: job.lock || "nil",
+    lockValue: job.lockValue || "",
+    sim1: job.sim1 ? "Yes" : "No",
+    sim2: job.sim2 ? "Yes" : "No",
+    mmc: job.mmc ? "Yes" : "No",
+    notes: job.notes || "",
+    deleted: job.deleted ? "true" : "false",
+    updatedAt: job.updatedAt || now
+  };
+}
+
+function normalizeRemoteJob(row) {
+  return {
+    id: parseInt(row.id, 10) || Number(row.id) || Date.now(),
+    jno: row.jno || "",
+    dt: row.dt || new Date().toISOString(),
+    cname: row.cname || "",
+    cphone: row.cphone || "",
+    imei: row.imei || "0",
+    brand: row.brand || "",
+    model: row.model || "",
+    probs: Array.isArray(row.probs) ? row.probs : String(row.probs || "").split(/;\s*|,\s*/).filter(Boolean),
+    parts: Array.isArray(row.parts) ? row.parts : String(row.parts || "").split(/;\s*|,\s*/).filter(Boolean),
+    est: row.est || "0",
+    s: row.s || "pending",
+    pay: row.pay || "unpaid",
+    paidAt: row.paidAt || "",
+    lock: row.lock || "nil",
+    lockValue: row.lockValue || "",
+    sim1: row.sim1 === true || row.sim1 === "Yes",
+    sim2: row.sim2 === true || row.sim2 === "Yes",
+    mmc: row.mmc === true || row.mmc === "Yes",
+    notes: row.notes || "",
+    deleted: row.deleted === true || row.deleted === "true",
+    updatedAt: row.updatedAt || row.dt || new Date().toISOString()
+  };
+}
+
+function newerThan(a, b) {
+  return new Date(a || 0).getTime() > new Date(b || 0).getTime();
+}
+
+function syncJobToSheet(job) {
+  const payload = normalizeJobForSync({...job, updatedAt: job.updatedAt || new Date().toISOString()});
+  payload.action = "upsert";
+  setSyncBadge("ing");
+  return fetch(GS_URL, {method: "POST", body: new URLSearchParams(payload)})
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) throw new Error(d.error || "Sheet sync failed");
+      setSyncBadge("ok");
+      toast("Synced to Google Sheets", "success");
+      return d;
+    })
+    .catch(err => {
+      setSyncBadge("err");
+      toast("Sheet sync failed - saved locally", "error");
+      console.error(err);
+    });
+}
+
+function syncDeleteToSheet(id) {
+  setSyncBadge("ing");
+  return fetch(GS_URL, {
+    method: "POST",
+    body: new URLSearchParams({action: "delete", id: String(id), updatedAt: new Date().toISOString()})
+  })
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) throw new Error(d.error || "Delete sync failed");
+      setSyncBadge("ok");
+      return d;
+    })
+    .catch(err => {
+      setSyncBadge("err");
+      toast("Delete sync failed - hidden locally only", "error");
+      console.error(err);
+    });
+}
+
+function syncFromSheet(silent = false) {
+  setSyncBadge("ing");
+  if (!silent) toast("Syncing from Google Sheets...", "info");
+  return fetch(GS_URL + "?action=read")
+    .then(r => r.json())
+    .then(data => {
+      if (!data.ok || !Array.isArray(data.jobs)) throw new Error(data.error || "Bad Sheet response");
+      const remoteJobs = data.jobs.map(normalizeRemoteJob);
+      const deletedIds = new Set((data.deletedIds || []).map(String));
+      const byId = new Map(jobs.map(j => [String(j.id), j]));
+      let changed = 0;
+
+      remoteJobs.forEach(remote => {
+        const key = String(remote.id);
+        const local = byId.get(key);
+        if (!local) {
+          jobs.push({...remote, syncedFromSheet: true});
+          changed++;
+          return;
+        }
+        if (newerThan(remote.updatedAt, local.updatedAt)) {
+          Object.assign(local, remote, {syncedFromSheet: true});
+          changed++;
+        }
+      });
+
+      jobs = jobs.filter(j => !j.deleted && !deletedIds.has(String(j.id)));
+      saveJobs(); updNC(); renderDash(); renderList();
+      if (selJob) renderDet(jobs.find(j => j.id === selJob));
+      setSyncBadge("ok");
+      if (!silent) toast(changed ? "Synced " + changed + " change(s)" : "Already up to date", "success");
+    })
+    .catch(err => {
+      setSyncBadge("err");
+      if (!silent) toast("Sync failed - check connection", "error");
+      console.error(err);
+    });
+}
+
+function startAutoSync() {
+  if (syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(() => syncFromSheet(true), SYNC_INTERVAL_MS);
+}
+
+function setSyncBadge(state) {
+  const b = document.getElementById("sync-nav");
+  b.className = "sync-badge sync-" + state;
+  b.textContent = state === "ok" ? "Synced" : state === "ing" ? "Syncing" : "Sync Error";
+}
+
+// ════════ DATA ═════════════════════════════════════════════════
+const BM_DEFAULT={
+  Apple:["iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Plus","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],
+  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20"],
+  OnePlus:["OnePlus 13 Pro","OnePlus 13","OnePlus 12 Pro","OnePlus 12","OnePlus 11 Pro","OnePlus 11","OnePlus 10 Pro","OnePlus 10T","OnePlus 10R","OnePlus 9 Pro","OnePlus 9","OnePlus 9R","OnePlus 8 Pro","OnePlus 8T","OnePlus 8","OnePlus 7 Pro","OnePlus 7T Pro","OnePlus 7T","OnePlus 7","OnePlus 6T","OnePlus 6","Nord 4","Nord CE4 Lite","Nord CE4","Nord CE3 Lite","Nord CE3","Nord CE2 Lite","Nord CE2","Nord CE","Nord 3","Nord 2T","Nord 2"],
+  Xiaomi:["Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12 Ultra","Xiaomi 12 Pro","Xiaomi 12","Xiaomi 11 Ultra","Xiaomi 11 Pro","Xiaomi 11","POCO X7 Pro","POCO X7","POCO X6 Pro","POCO X6","POCO X5 Pro","POCO X5","POCO F7 Ultra","POCO F7 Pro","POCO F6 Pro","POCO F6","POCO F5 Pro","POCO F5","POCO F4 GT","POCO F4","POCO F3","POCO M7 Pro","POCO M6 Pro","POCO M6","POCO M5s","POCO M5","POCO M4 Pro","POCO M4","POCO C75","POCO C65","POCO C55","POCO C40"],
+  Redmi:["Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 14 4G","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 13 4G","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","Redmi Note 12 4G","Redmi Note 11 Pro+","Redmi Note 11 Pro","Redmi Note 11","Redmi Note 11 4G","Redmi Note 10 Pro Max","Redmi Note 10 Pro","Redmi Note 10","Redmi Note 10 4G","Redmi 14C","Redmi 13C","Redmi 13","Redmi 12","Redmi 12C","Redmi A4","Redmi A3","Redmi A2+","Redmi A2","Redmi A1+","Redmi A1","Redmi K80 Pro","Redmi K80","Redmi K70 Pro","Redmi K70","Redmi K60 Pro","Redmi K60"],
+  Realme:["Realme GT 7 Pro","Realme GT 7","Realme GT 6T","Realme GT 6","Realme GT 5 Pro","Realme GT 5","Realme GT Neo 6","Realme GT Neo 5","Realme GT Neo 3","Realme 14 Pro+","Realme 14 Pro","Realme 14","Realme 13 Pro+","Realme 13 Pro","Realme 13","Realme 12 Pro+","Realme 12 Pro","Realme 12","Realme 11 Pro+","Realme 11 Pro","Realme 11","Realme C67","Realme C65","Realme C63","Realme C55","Realme C53","Realme C51","Realme C35","Realme C33"],
+  Oppo:["Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Pro","Find X5","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","Reno 10 Pro+","Reno 10 Pro","Reno 10","A3 Pro","A3","A2 Pro","A2","A98","A78","A58","A38","A18"],
+  Vivo:["X200 Ultra","X200 Pro","X200","X100 Ultra","X100 Pro","X100","X90 Pro+","X90 Pro","X90","V40 Pro","V40","V30 Pro","V30","V29 Pro","V29","V27 Pro","V27","Y300 Pro+","Y300 Pro","Y300","Y200","Y100","Y78","Y56","Y36","Y18","iQOO 13","iQOO 12","iQOO 11","iQOO Neo 9 Pro","iQOO Neo 9","iQOO Z9 Pro","iQOO Z9"],
+  Nokia:["Nokia G42","Nokia G22","Nokia G21","Nokia G20","Nokia G10","Nokia C32","Nokia C22","Nokia C21","Nokia C12","Nokia XR21","Nokia XR20","Nokia 8.3","Nokia 7.3","Nokia 6.3","Nokia 5.4","Nokia 4.3","Nokia 3.4"],
+  Motorola:["Edge 50 Ultra","Edge 50 Pro","Edge 50 Fusion","Edge 50","Edge 40 Pro","Edge 40 Neo","Edge 40","Edge 30 Ultra","Edge 30 Pro","Moto G85","Moto G84","Moto G64","Moto G54","Moto G34","Moto G14","Razr 50 Ultra","Razr 50","Razr 40 Ultra","Razr 40"],
+  Sony:["Xperia 1 VI","Xperia 5 VI","Xperia 10 VI","Xperia 1 V","Xperia 5 V","Xperia 10 V","Xperia 1 IV","Xperia 5 IV","Xperia 10 IV"],
+  Google:["Pixel 9 Pro Fold","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8a","Pixel 8","Pixel 7 Pro","Pixel 7a","Pixel 7","Pixel 6 Pro","Pixel 6a","Pixel 6"],
+  Other:["Other / Unknown"]
+};
+const PROBS_DEFAULT=["Screen Cracked / Broken","Screen Not Displaying","Touch Screen Not Working","Battery Draining Fast","Battery Not Charging","Swollen Battery","Charging Port Damaged","Wireless Charging Issue","Speaker Not Working","Earpiece Not Working","Microphone Issue","Front Camera Not Working","Rear Camera Not Working","Camera Blurry / Foggy","Back Glass Broken","Frame / Body Damaged","Water / Liquid Damage","Corrosion Damage","Phone Not Turning On","Boot Loop / Stuck on Logo","Software Crash / Hang","Power Button Not Working","Volume Buttons Not Working","Home Button Issue","Fingerprint Sensor Issue","Face ID Not Working","Wi-Fi Not Working","Bluetooth Issue","Mobile Data Issue","SIM Card Not Detected","SIM Tray Damaged","Overheating","Phone Restarting Randomly","No Sound / Audio Issue","GPS Not Working","Vibration Not Working"];
+const PARTS_DEFAULT=["Display / Screen Replacement","Touch Glass Replacement","Battery Replacement","Charging Port Repair / Replacement","Speaker Repair / Replacement","Earpiece Repair / Replacement","Microphone Repair / Replacement","Front Camera Replacement","Rear Camera Replacement","Camera Lens / Glass Replacement","Back Glass Replacement","Middle Frame / Housing Replacement","Power Button Flex Repair / Replacement","Volume Button Flex Repair / Replacement","Fingerprint Sensor Repair / Replacement","Face ID / Sensor Repair","SIM Tray Replacement","SIM Slot Repair","Memory Card Slot Repair","Motherboard Repair","IC Replacement","Water Damage Cleaning / Repair","Software Repair / Flashing","Wi-Fi / Bluetooth Antenna Repair","Network Antenna Repair","Vibration Motor Replacement","Receiver Mesh Cleaning / Replacement","Tempered Glass Installation"];
+const WA_DEFAULT="Hello {CUSTOMER_NAME}! 👋\n\nThank you for choosing Tech Garage for your repair.\n\n📋 *Job Details:*\n• Job No: *#{JOB_NO}*\n• Device: *{MODEL}*\n• Issue: {PROBLEMS}\n\n💰 Estimate: ₹{ESTIMATE}\n⏱ Expected repair time: *{ESTIMATE_TIME}*\n\nWe will keep you updated. Please keep this message for reference.\n\nThank you! 🙏";
+const WA_DONE_DEFAULT="Hello {CUSTOMER_NAME}!\n\nYour repair job is completed and ready for pickup.\n\nJob No: #{JOB_NO}\nDevice: {MODEL}\nIssue: {PROBLEMS}\nAmount: Rs. {ESTIMATE}\n\nThank you for choosing Tech Garage.";
+
+// ════════ STATE ════════════════════════════════════════════════
+let BM,PROBS,PARTS,jobs=[],selJob=null,jLocked=false,selBrand='',selModel='',selProbs=[],selParts=[],dtISO='',dtEdit=false,scanStr=null,scanRun=false,tTimer=null;
+let eSelBrand='',eSelModel='',eSelProbs=[],eSelParts=[],eJobId=null,eDTISO='';
+let waTemplate='',waDoneTemplate='',waTime='2-3 hours';
+let simAllState=false, eSimAllState=false;
+
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function loadAll(){
+  jobs=lsGet('tg_jobs_v3',[]);
+  BM=lsGet('tg_bm',JSON.parse(JSON.stringify(BM_DEFAULT)));
+  PROBS=lsGet('tg_probs',[...PROBS_DEFAULT]);
+  PARTS=lsGet('tg_parts',[...PARTS_DEFAULT]);
+  waTemplate=lsGet('tg_wa_tmpl',WA_DEFAULT);
+  waDoneTemplate=lsGet('tg_wa_done_tmpl',WA_DONE_DEFAULT);
+  waTime=lsGet('tg_wa_time','2-3 hours');
+}
+function saveJobs(){lsSet('tg_jobs_v3',jobs)}
+function saveBM(){lsSet('tg_bm',BM)}
+function saveProbs(){lsSet('tg_probs',PROBS)}
+function saveParts(){lsSet('tg_parts',PARTS)}
+const BRANDS=()=>Object.keys(BM);
+
+window.onload=function(){
+  loadAll();
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
+  document.addEventListener('click',outClick);
+  // Auto sync on load
+  setTimeout(()=>syncFromSheet(),1500);
+  startAutoSync();
+};
+function updNC(){document.getElementById('nav-count').textContent=jobs.length+' job'+(jobs.length!==1?'s':'')}
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const m={dashboard:0,newJob:1,jobList:2};if(m[id]!==undefined)document.querySelectorAll('.nav-btn')[m[id]].classList.add('active');closeAll()}
+function outClick(ev){
+  if(!ev.target.closest('#bw')&&!ev.target.closest('#e-bw')){closeDD('b');closeDD('e-b')}
+  if(!ev.target.closest('#mw')&&!ev.target.closest('#e-mw')){closeDD('m');closeDD('e-m')}
+  if(!ev.target.closest('.prob-wrap')){closeProbDD('n');closeProbDD('e');closePartDD('n');closePartDD('e')}
+}
+function closeAll(){['b','m','e-b','e-m'].forEach(closeDD)}
+function phoneDigits(v){return String(v||'').replace(/^\s*\+?91/,'').replace(/\D/g,'').slice(0,10)}
+function phoneForStorage(v){return phoneDigits(v)}
+function phoneValue(v){const d=phoneDigits(v);return d?'+91 '+d:'+91 '}
+function formatPhoneInput(el){el.value=phoneValue(el.value)}
+function ensurePhonePrefix(el){if(el.value&&!el.value.startsWith('+91'))el.value=phoneValue(el.value)}
+function sortedJobs(){return jobs.slice().sort((a,b)=>(new Date(b.dt||0).getTime()-new Date(a.dt||0).getTime())||((Number(b.id)||0)-(Number(a.id)||0)))}
+function paidDate(j){return j&&j.paidAt?j.paidAt:(j&&j.dt?j.dt:'')}
+function toggleLockValue(pfx){const sel=document.getElementById(pfx+'-lock'),wrap=document.getElementById(pfx+'-lock-value-wrap'),inp=document.getElementById(pfx+'-lock-value');if(!sel||!wrap||!inp)return;const show=sel.value==='pin'||sel.value==='password';wrap.style.display=show?'block':'none';inp.placeholder=sel.value==='pin'?'Enter PIN':sel.value==='password'?'Enter password':'';if(!show)inp.value=''}
+
+// ════════ DASHBOARD ════════════════════════════════════════════
+function renderDash(){
+  const now=new Date();const todayStr=now.toDateString();
+  const tot=jobs.length,pen=jobs.filter(j=>j.s==='pending').length,don=jobs.filter(j=>j.s==='done').length,unp=jobs.filter(j=>j.s==='done'&&j.pay!=='paid').length;
+  const todayRev=jobs.filter(j=>j.pay==='paid'&&new Date(paidDate(j)).toDateString()===todayStr).reduce((a,j)=>a+(parseFloat(j.est)||0),0);
+  document.getElementById('s-tot').textContent=tot;document.getElementById('s-pen').textContent=pen;
+  document.getElementById('s-don').textContent=don;document.getElementById('s-unp').textContent=unp;
+  document.getElementById('s-rev').innerHTML='&#8377;'+fR(todayRev);
+  const el=document.getElementById('recent-list'),rec=sortedJobs().slice(0,5);
+  if(!rec.length){el.innerHTML='<div class="empty">No jobs yet!</div>';return}
+  el.innerHTML=rec.map(j=>`<div class="rr" onclick="openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'')}${j.cphone?' · '+e(j.cphone):''} · ${fDT(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span><span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')
+}
+
+// ════════ REVENUE MODAL ════════════════════════════════════════
+let revPeriod='day';
+function openRevModal(){revPeriod='day';document.querySelectorAll('.rev-period-btn').forEach((b,i)=>b.classList.toggle('active',i===0));renderRevModal();document.getElementById('rev-modal').classList.add('open')}
+function setRevPeriod(p,btn){revPeriod=p;document.querySelectorAll('.rev-period-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRevModal()}
+function getRevJobs(){
+  const now=new Date();
+  const revSort=document.getElementById('rev-sort')?.value||'newest';
+  return jobs.filter(j=>{
+    if(j.pay!=='paid')return false;
+    const d=new Date(paidDate(j));
+    if(revPeriod==='all')return true;
+    if(revPeriod==='day')return d.toDateString()===now.toDateString();
+    if(revPeriod==='week'){const wk=new Date(now);const day=wk.getDay();const diff=(day+6)%7;wk.setDate(now.getDate()-diff);wk.setHours(0,0,0,0);return d>=wk}
+    if(revPeriod==='month')return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    if(revPeriod==='year')return d.getFullYear()===now.getFullYear();
+    return true;
+  }).sort((a,b)=>revSort==='oldest'?new Date(paidDate(a)||0)-new Date(paidDate(b)||0):new Date(paidDate(b)||0)-new Date(paidDate(a)||0));
+}
+function renderRevModal(){
+  const jj=getRevJobs();
+  const total=jj.reduce((a,j)=>a+(parseFloat(j.est)||0),0);
+  const paid=total;
+  const unpaid=0;
+  document.getElementById('rev-summary').innerHTML=`
+    <div class="rev-sum-item"><div class="rev-sum-val">&#8377;${fR(total)}</div><div class="rev-sum-label">Paid Revenue</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--green)">&#8377;${fR(paid)}</div><div class="rev-sum-label">Paid</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--red)">&#8377;${fR(unpaid)}</div><div class="rev-sum-label">Excluded Unpaid</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--accent)">${jj.length}</div><div class="rev-sum-label">Jobs</div></div>`;
+  if(!jj.length){document.getElementById('rev-job-list').innerHTML='<div class="empty">No jobs for this period.</div>';return}
+  document.getElementById('rev-job-list').innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Job #</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Date</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Customer</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Device</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Estimate</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Payment</th></tr></thead><tbody>${jj.map(j=>`<tr style="border-bottom:1px solid var(--light);cursor:pointer" onclick="document.getElementById('rev-modal').classList.remove('open');openDet(${j.id})"><td style="padding:9px;color:var(--accent);font-weight:800">#${e(j.jno)}</td><td style="padding:9px;color:var(--muted);font-size:11px">${fD(paidDate(j))}</td><td style="padding:9px;font-weight:600">${e(j.cname||'—')}</td><td style="padding:9px">${e(j.brand)} ${e(j.model)}</td><td style="padding:9px;color:var(--green);font-weight:800">&#8377;${fR(j.est)}</td><td style="padding:9px"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span></td></tr>`).join('')}</tbody></table></div>`
+}
+
+// ════════ FILTER MODAL (pending/done/unpaid/all) ════════════════
+function showFilterModal(type){
+  let jj,title;
+  if(type==='pending'){jj=jobs.filter(j=>j.s==='pending');title='⏳ Pending Jobs'}
+  else if(type==='done'){jj=jobs.filter(j=>j.s==='done');title='✅ Completed Jobs'}
+  else if(type==='unpaid'){jj=jobs.filter(j=>j.s==='done'&&j.pay!=='paid');title='💸 Done Unpaid Jobs'}
+  else{jj=[...jobs];title='📋 All Jobs'}
+  document.getElementById('filter-modal-title').textContent=title+' ('+jj.length+')';
+  if(!jj.length){document.getElementById('filter-modal-list').innerHTML='<div class="empty">No jobs in this category.</div>'}
+  else{document.getElementById('filter-modal-list').innerHTML=jj.slice().reverse().map(j=>`<div class="rr" onclick="document.getElementById('filter-modal').classList.remove('open');openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'—')}${j.cphone?' · '+e(j.cphone):''} · ${fD(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center"><span style="color:var(--green);font-weight:800;font-size:12px">&#8377;${fR(j.est)}</span><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span><span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')}
+  document.getElementById('filter-modal').classList.add('open');
+}
+
+// ════════ NEW JOB ══════════════════════════════════════════════
+function openNewJob(){reset();go('newJob');autoJno()}
+function reset(){
+  jLocked=false;selBrand='';selModel='';selProbs=[];selParts=[];dtISO='';dtEdit=false;simAllState=false;
+  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('f-cphone').value='+91 ';
+  const dt=document.getElementById('f-dt');dt.value='';dt.style.color='var(--dim)';
+  document.getElementById('dte-wrap').style.display='none';document.getElementById('btn-dte').classList.remove('ed');document.getElementById('btn-dte').textContent='✏️';
+  document.getElementById('btn-auto').style.display='';document.getElementById('f-jno').readOnly=false;
+  document.getElementById('b-lbl').textContent='Select Brand';document.getElementById('m-lbl').textContent='Select Model';
+  document.getElementById('p-lbl').textContent='Select problem(s)...';document.getElementById('p-tags').innerHTML='';
+  document.getElementById('pt-lbl').textContent='Select part(s)...';document.getElementById('pt-tags').innerHTML='';
+  document.getElementById('f-sts').value='pending';document.getElementById('f-pay').value='unpaid';document.getElementById('f-lock').value='nil';
+  document.getElementById('f-lock-value').value='';toggleLockValue('f');
+  ['f-sim1','f-sim2','f-mmc'].forEach(id=>document.getElementById(id).checked=false);
+  buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');
+}
+function jnoChg(){jLocked=false;document.getElementById('btn-auto').style.display=''}
+function lockJno(){const v=document.getElementById('f-jno').value.trim();if(v&&!jLocked){jLocked=true;setDT();document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true}}
+function autoJno(){const max=jobs.reduce((m,j)=>Math.max(m,parseInt(j.jno)||0),0);document.getElementById('f-jno').value=String(max+1).padStart(5,'0');jLocked=true;document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true;setDT()}
+function setDT(){const now=new Date();dtISO=now.toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--green)'}
+function toggleDTE(){dtEdit=!dtEdit;const w=document.getElementById('dte-wrap'),b=document.getElementById('btn-dte');if(dtEdit){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('f-dtm').value=dtISO?new Date(dtISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
+function applyDTM(){const v=document.getElementById('f-dtm').value;if(v){dtISO=new Date(v).toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--accent)'}}
+
+// SIM ALL TOGGLE
+function toggleAllSIM(){
+  simAllState=!simAllState;
+  ['f-sim1','f-sim2','f-mmc'].forEach(id=>document.getElementById(id).checked=simAllState);
+}
+function syncSimState(){
+  const all=['f-sim1','f-sim2','f-mmc'].every(id=>document.getElementById(id).checked);
+  simAllState=all;
+}
+function toggleAllSIMEdit(){
+  eSimAllState=!eSimAllState;
+  ['e-sim1','e-sim2','e-mmc'].forEach(id=>document.getElementById(id).checked=eSimAllState);
+}
+
+// ════════ BRAND/MODEL DROPDOWNS ════════════════════════════════
+function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" onclick="selB('${pfx}','${b}')"><span>${b}</span></div>`).join('')}
+function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span>${m}</span><button class="cs-item-del" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')}
+function togDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn'),isO=dd.classList.contains('open');closeAll();if(!isO){dd.classList.add('open');btn.classList.add('open');const s=document.getElementById(pfx+'-srch');if(s)s.focus()}}
+function closeDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
+function filtList(pfx){const q=document.getElementById(pfx+'-srch').value.toLowerCase(),items=document.querySelectorAll('#'+pfx+'-list .cs-item');let v=0;items.forEach(i=>{const s=i.textContent.toLowerCase().includes(q);i.style.display=s?'':'none';if(s)v++});let em=document.getElementById(pfx+'-list-empty');if(!em){em=document.createElement('div');em.className='cs-none';em.id=pfx+'-list-empty';document.getElementById(pfx+'-list').appendChild(em)}em.style.display=v===0?'block':'none';if(v===0)em.textContent='No results found.'}
+function selB(pfx,brand){if(pfx==='e'){eSelBrand=brand;eSelModel='';document.getElementById('e-b-lbl').textContent=brand;document.getElementById('e-m-lbl').textContent='Select Model';closeDD('e-b');buildMList('e',BM[brand]||[]);document.getElementById('e-b-srch').value='';buildBList('e')}else{selBrand=brand;selModel='';document.getElementById('b-lbl').textContent=brand;document.getElementById('m-lbl').textContent='Select Model';closeDD('b');buildMList('m',BM[brand]||[]);document.getElementById('b-srch').value='';buildBList('b')}}
+function selM(pfx,model){if(pfx==='e'){eSelModel=model;document.getElementById('e-m-lbl').textContent=model;closeDD('e-m');document.getElementById('e-m-srch').value='';buildMList('e',BM[eSelBrand]||[])}else{selModel=model;document.getElementById('m-lbl').textContent=model;closeDD('m');document.getElementById('m-srch').value='';buildMList('m',BM[selBrand]||[])}}
+function addNewModel(pfx){const inputId=pfx==='e'?'e-m-new':'m-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a model name','error');return}const brand=pfx==='e'?eSelBrand:selBrand;if(!brand){toast('Select a brand first','error');return}if(!BM[brand])BM[brand]=[];if(!BM[brand].includes(val))BM[brand].unshift(val);saveBM();document.getElementById(inputId).value='';if(pfx==='e'){eSelModel=val;document.getElementById('e-m-lbl').textContent=val;closeDD('e-m');buildMList('e',BM[brand])}else{selModel=val;document.getElementById('m-lbl').textContent=val;closeDD('m');buildMList('m',BM[brand])}toast('Model "'+val+'" added!')}
+function delModel(ev,pfx,model){ev.stopPropagation();const brand=pfx==='e'?eSelBrand:selBrand;if(!brand||!confirm('Delete model "'+model+'"?'))return;BM[brand]=(BM[brand]||[]).filter(m=>m!==model);saveBM();if(pfx==='e'){if(eSelModel===model){eSelModel='';document.getElementById('e-m-lbl').textContent='Select Model'}buildMList('e',BM[brand])}else{if(selModel===model){selModel='';document.getElementById('m-lbl').textContent='Select Model'}buildMList('m',BM[brand])}toast('Model deleted.')}
+
+// ════════ PROBLEMS (stays open on selection) ════════════════════
+function buildPList(pfx){
+  const cur=pfx==='e'?eSelProbs:selProbs;
+  const listId=pfx==='e'?'e-p-list':'p-list';
+  document.getElementById(listId).innerHTML=PROBS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delProb(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')
+}
+function togProbDD(pfx){const ddId=pfx==='e'?'e-p-dd':'p-dd',btnId=pfx==='e'?'e-p-btn':'p-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open')}}
+function closeProbDD(pfx){const dd=document.getElementById(pfx==='e'?'e-p-dd':'p-dd'),btn=document.getElementById(pfx==='e'?'e-p-btn':'p-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
+function togP(ev,pfx,p){
+  ev.stopPropagation(); // keep dropdown open
+  if(pfx==='e'){if(eSelProbs.includes(p))eSelProbs=eSelProbs.filter(x=>x!==p);else eSelProbs.push(p);buildPList('e');renderPTags('e');updPLbl('e')}
+  else{if(selProbs.includes(p))selProbs=selProbs.filter(x=>x!==p);else selProbs.push(p);buildPList('n');renderPTags('n');updPLbl('n')}
+}
+function addNewProb(pfx){const inputId=pfx==='e'?'e-p-new':'p-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a problem description','error');return}if(!PROBS.includes(val))PROBS.unshift(val);saveProbs();document.getElementById(inputId).value='';if(pfx==='e'){if(!eSelProbs.includes(val))eSelProbs.push(val);buildPList('e');renderPTags('e');updPLbl('e')}else{if(!selProbs.includes(val))selProbs.push(val);buildPList('n');renderPTags('n');updPLbl('n')}toast('Problem added!')}
+function delProb(ev,pfx,prob){ev.stopPropagation();if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();if(pfx==='e'){eSelProbs=eSelProbs.filter(p=>p!==prob);buildPList('e');renderPTags('e');updPLbl('e')}else{selProbs=selProbs.filter(p=>p!==prob);buildPList('n');renderPTags('n');updPLbl('n')}toast('Deleted.')}
+function updPLbl(pfx){const c=pfx==='e'?eSelProbs.length:selProbs.length;document.getElementById(pfx==='e'?'e-p-lbl':'p-lbl').textContent=c?c+' problem'+(c>1?'s':'')+' selected':'Select problem(s)...'}
+function renderPTags(pfx){const tagsId=pfx==='e'?'e-p-tags':'p-tags';const cur=pfx==='e'?eSelProbs:selProbs;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
+
+// ════════ SAVE JOB ══════════════════════════════════════════════
+function buildPartList(pfx){
+  const cur=pfx==='e'?eSelParts:selParts;
+  const listId=pfx==='e'?'e-pt-list':'pt-list';
+  document.getElementById(listId).innerHTML=PARTS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</button></div>`).join('')
+}
+function togPartDD(pfx){const ddId=pfx==='e'?'e-pt-dd':'pt-dd',btnId=pfx==='e'?'e-pt-btn':'pt-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open')}}
+function closePartDD(pfx){const dd=document.getElementById(pfx==='e'?'e-pt-dd':'pt-dd'),btn=document.getElementById(pfx==='e'?'e-pt-btn':'pt-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
+function togPart(ev,pfx,p){
+  ev.stopPropagation();
+  if(pfx==='e'){if(eSelParts.includes(p))eSelParts=eSelParts.filter(x=>x!==p);else eSelParts.push(p);buildPartList('e');renderPartTags('e');updPartLbl('e')}
+  else{if(selParts.includes(p))selParts=selParts.filter(x=>x!==p);else selParts.push(p);buildPartList('n');renderPartTags('n');updPartLbl('n')}
+}
+function addNewPart(pfx){const inputId=pfx==='e'?'e-pt-new':'pt-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a part name','error');return}if(!PARTS.includes(val))PARTS.unshift(val);saveParts();document.getElementById(inputId).value='';if(pfx==='e'){if(!eSelParts.includes(val))eSelParts.push(val);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{if(!selParts.includes(val))selParts.push(val);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Part added!')}
+function delPart(ev,pfx,part){ev.stopPropagation();if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();if(pfx==='e'){eSelParts=eSelParts.filter(p=>p!==part);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{selParts=selParts.filter(p=>p!==part);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Deleted.')}
+function updPartLbl(pfx){const c=pfx==='e'?eSelParts.length:selParts.length;document.getElementById(pfx==='e'?'e-pt-lbl':'pt-lbl').textContent=c?c+' part'+(c>1?'s':'')+' selected':'Select part(s)...'}
+function renderPartTags(pfx){const tagsId=pfx==='e'?'e-pt-tags':'pt-tags';const cur=pfx==='e'?eSelParts:selParts;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
+
+function saveJob(){
+  const jno=document.getElementById('f-jno').value.trim(),imei=document.getElementById('f-imei').value.trim(),brand=selBrand,model=selModel;
+  if(!jno||!brand||!model||!selProbs.length){toast('Fill all required fields: Job No, Brand, Model, Problem(s)','error');return}
+  if(jobs.find(j=>j.jno===jno)){toast('Job number already exists!','error');return}
+  const payStatus=document.getElementById('f-pay').value;
+  const job={
+    id:Date.now(),jno,imei:imei||'0',brand,model,probs:[...selProbs],parts:[...selParts],
+    cname:document.getElementById('f-cname').value.trim(),cphone:phoneForStorage(document.getElementById('f-cphone').value),
+    est:document.getElementById('f-est').value||'0',
+    notes:document.getElementById('f-notes').value,
+    s:document.getElementById('f-sts').value,pay:payStatus,paidAt:payStatus==='paid'?new Date().toISOString():'',
+    lock:document.getElementById('f-lock').value,
+    lockValue:document.getElementById('f-lock-value').value.trim(),
+    sim1:document.getElementById('f-sim1').checked,sim2:document.getElementById('f-sim2').checked,mmc:document.getElementById('f-mmc').checked,
+    dt:dtISO||new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+  jobs.unshift(job);saveJobs();updNC();
+  toast('Job #'+jno+' saved!');
+  syncJobToSheet(job);
+  sendWA(job);
+  go('jobList');renderList();
+}
+function cancelJob(){reset();go('dashboard');renderDash()}
+
+// ════════ WHATSAPP ══════════════════════════════════════════════
+function sendWA(job){if(!job.cphone)return;const msg=buildWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);setTimeout(()=>{if(confirm('Send WhatsApp message to +91 '+job.cphone+'?\n\n'+msg.slice(0,300))){window.open(url,'_blank')}},600)}
+function buildWAMsg(job){return(waTemplate||WA_DEFAULT).replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,job.brand+' '+job.model).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{ESTIMATE_TIME}/g,waTime||'2-3 hours').replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
+function buildDoneWAMsg(job){return(waDoneTemplate||WA_DONE_DEFAULT).replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,job.brand+' '+job.model).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
+function sendDoneWA(job){if(!job||!job.cphone)return;const msg=buildDoneWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);window.open(url,'_blank')}
+function openWASettings(){document.getElementById('wa-template').value=waTemplate||WA_DEFAULT;document.getElementById('wa-done-template').value=waDoneTemplate||WA_DONE_DEFAULT;document.getElementById('wa-time').value=waTime||'2-3 hours';populateDoneWAJobs();updateWAPreview();updateDoneWAPreview();document.getElementById('wa-modal').classList.add('open')}
+function updateWAPreview(){const t=document.getElementById('wa-template').value,tm=document.getElementById('wa-time').value;document.getElementById('wa-preview-text').textContent=t.replace(/{JOB_NO}/g,'00001').replace(/{MODEL}/g,'Samsung Galaxy S24').replace(/{PROBLEMS}/g,'Screen Cracked').replace(/{ESTIMATE}/g,'1,500.00').replace(/{ESTIMATE_TIME}/g,tm||'2-3 hours').replace(/{CUSTOMER_NAME}/g,'Rahul')}
+function populateDoneWAJobs(){const s=document.getElementById('wa-done-job');const sendable=sortedJobs().filter(j=>j.cphone);s.innerHTML=sendable.length?sendable.map(j=>`<option value="${j.id}">#${e(j.jno)} - ${e(j.cname||'Customer')} - ${e(j.brand)} ${e(j.model)}</option>`).join(''):'<option value="">No jobs with phone number</option>'}
+function updateDoneWAPreview(){const tmpl=document.getElementById('wa-done-template')?.value||WA_DONE_DEFAULT;const id=Number(document.getElementById('wa-done-job')?.value||0);const job=jobs.find(j=>j.id===id)||{jno:'00001',brand:'Samsung',model:'Galaxy S24',probs:['Screen Cracked'],est:'1500',cname:'Rahul'};document.getElementById('wa-done-preview-text').textContent=tmpl.replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,(job.brand||'')+' '+(job.model||'')).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
+function sendSelectedDoneWA(){waDoneTemplate=document.getElementById('wa-done-template').value;lsSet('tg_wa_done_tmpl',waDoneTemplate);const id=Number(document.getElementById('wa-done-job').value||0);const job=jobs.find(j=>j.id===id);if(!job){toast('Select a job with phone number','error');return}sendDoneWA(job)}
+function saveWASettings(){waTemplate=document.getElementById('wa-template').value;waDoneTemplate=document.getElementById('wa-done-template').value;waTime=document.getElementById('wa-time').value;lsSet('tg_wa_tmpl',waTemplate);lsSet('tg_wa_done_tmpl',waDoneTemplate);lsSet('tg_wa_time',waTime);document.getElementById('wa-modal').classList.remove('open');toast('WA templates saved!')}
+function resetWATemplate(){document.getElementById('wa-template').value=WA_DEFAULT;document.getElementById('wa-time').value='2-3 hours';updateWAPreview();toast('Reset!')}
+function resetDoneWATemplate(){document.getElementById('wa-done-template').value=WA_DONE_DEFAULT;updateDoneWAPreview();toast('Done message reset!')}
+
+// ════════ JOB LIST ══════════════════════════════════════════════
+function popBFilter(){const s=document.getElementById('s-brd');s.innerHTML='<option value="all">All Brands</option>'+BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('')}
+function mkTog(id,field){
+  const j=jobs.find(j=>j.id===id);if(!j)return'';
+  const on=j.pay==='paid';
+  return`<div class="tog-wrap" onclick="event.stopPropagation();togField(${id},'${field}')" title="Toggle">
+    <div class="tog-track${on?' on-green':''}"><div class="tog-thumb"></div></div>
+    <span class="tog-label" style="color:${on?'var(--green)':'var(--muted)'}">${on?'Paid':'Unpaid'}</span>
+  </div>`
+}
+function statusSelect(id,status){const s=status||'pending';return`<select class="status-select ${s}" onchange="event.stopPropagation();setJobStatus(${id},this.value)" onclick="event.stopPropagation()"><option value="pending" ${s==='pending'?'selected':''}>Pending</option><option value="done" ${s==='done'?'selected':''}>Done</option><option value="returned" ${s==='returned'?'selected':''}>Returned</option></select>`}
+function setJobStatus(id,status){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;changedJob={...j,s:status,updatedAt:now};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
+function togField(id,field){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;const newS=field==='s'?(j.s==='done'?'pending':'done'):j.s;changedJob={...j,updatedAt:now,s:newS,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
+function renderList(){
+  const q=document.getElementById('s-inp').value.toLowerCase(),fs=document.getElementById('s-sts').value,fb=document.getElementById('s-brd').value,fp=document.getElementById('s-pay').value;
+  const f=sortedJobs().filter(j=>{const ms=!q||(j.jno||'').includes(q)||(j.imei||'').includes(q)||(j.brand||'').toLowerCase().includes(q)||(j.model||'').toLowerCase().includes(q)||(j.cname||'').toLowerCase().includes(q)||(j.cphone||'').includes(q)||(j.notes||'').toLowerCase().includes(q)||(j.probs||[]).join(' ').toLowerCase().includes(q)||(j.parts||[]).join(' ').toLowerCase().includes(q);return ms&&(fs==='all'||j.s===fs)&&(fb==='all'||j.brand===fb)&&(fp==='all'||j.pay===fp)});
+  document.getElementById('jl-cnt').textContent='('+f.length+')';
+  const tb=document.getElementById('j-tbody'),em=document.getElementById('j-empty');
+  if(!f.length){tb.innerHTML='';em.style.display='block';return}em.style.display='none';
+  tb.innerHTML=f.map(j=>`<tr class="jr" onclick="openDet(${j.id})">
+    <td class="j-no" data-label="Job #">#${e(j.jno)}</td>
+    <td class="j-dt" data-label="Date">${fD(j.dt)}</td>
+    <td data-label="Customer"><div style="font-weight:600;font-size:12px;text-align:left">${e(j.cname||'—')}</div><div class="j-im" style="text-align:left">${j.cphone?'+91 '+e(j.cphone):''}</div></td>
+    <td class="j-br" data-label="Device">${e(j.brand)}<br><span style="color:var(--muted);font-size:10px;font-weight:500">${e(j.model)}</span></td>
+    <td class="j-pr" data-label="Problems">${e((j.probs||[]).join(', '))}</td>
+    <td class="j-pr" data-label="Parts">${e((j.parts||[]).join(', '))}</td>
+    <td data-label="Status" onclick="event.stopPropagation()">${statusSelect(j.id,j.s)}</td>
+    <td class="j-est" data-label="Estimate">&#8377;${fR(j.est)}</td>
+    <td data-label="Payment" onclick="event.stopPropagation()">${mkTog(j.id,'pay')}</td>
+    <td data-label="Actions" onclick="event.stopPropagation()" style="white-space:nowrap">
+      <button class="btn btn-sm btn-ol" onclick="openEditModal(${j.id})">✏️</button>
+      <button class="btn btn-sm btn-re" onclick="deleteJob(${j.id})" style="margin-left:3px">🗑</button>
+      ${j.cphone?`<button class="btn btn-sm btn-wa" onclick="reSendWA(${j.id})" style="margin-left:3px">💬</button>`:''}
+    </td>
+  </tr>`).join('')
+}
+function reSendWA(id){const j=jobs.find(j=>j.id===id);if(j)sendWA(j)}
+function deleteJob(id){if(!confirm('Delete this job?'))return;const now=new Date().toISOString();jobs=jobs.map(j=>j.id===id?{...j,deleted:true,updatedAt:now}:j).filter(j=>!j.deleted);saveJobs();syncDeleteToSheet(id);updNC();toast('Deleted.','error');renderList();renderDash();if(selJob===id){selJob=null;go('jobList')}}
+
+// ════════ JOB DETAIL ════════════════════════════════════════════
+function openDet(id){selJob=id;renderDet(jobs.find(j=>j.id===id));go('jobDetail')}
+function renderDet(j){
+  if(!j)return;
+  document.getElementById('d-title').innerHTML='Job <span class="ac">#'+j.jno+'</span>';
+  const st=document.getElementById('d-stag');st.className='tag tag-'+j.s;st.textContent=j.s.toUpperCase();
+  const locks={nil:'None',pin:'PIN',pattern:'Pattern',password:'Password'};
+  const lockText=(locks[j.lock]||'None')+(j.lockValue?' ('+e(j.lockValue)+')':'');
+  const sims=[j.sim1?'SIM 1':'',j.sim2?'SIM 2':'',j.mmc?'MMC':''].filter(Boolean).join(', ')||'None';
+  document.getElementById('d-top').innerHTML=`
+    <div class="df"><div class="dfl">Date &amp; Time</div><div class="dfv">${fDT(j.dt)}</div></div>
+    <div class="df"><div class="dfl">Job No</div><div class="dfv ac">#${e(j.jno)}</div></div>
+    <div class="df"><div class="dfl">Customer</div><div class="dfv">${e(j.cname||'—')}</div></div>
+    <div class="df"><div class="dfl">Contact</div><div class="dfv" style="font-size:12px">${j.cphone?`<a href="tel:+91${e(j.cphone)}" style="color:var(--accent);text-decoration:none">+91 ${e(j.cphone)}</a>`:'—'}</div></div>
+    <div class="df"><div class="dfl">IMEI</div><div class="dfv" style="font-size:11px;word-break:break-all">${e(j.imei)||'—'}</div></div>
+    <div class="df"><div class="dfl">Device Lock</div><div class="dfv">${lockText}</div></div>
+    <div class="df"><div class="dfl">SIM / Storage</div><div class="dfv">${sims}</div></div>
+    <div class="df"><div class="dfl">Payment</div><div class="dfv"><span class="pay-badge pay-${j.pay||'unpaid'}" onclick="togField(${j.id},'pay')" style="cursor:pointer">${j.pay==='paid'?'✓ Paid':'✗ Unpaid'}</span></div></div>`;
+  document.getElementById('d-main').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:20px">
+    <div><div class="card-title" style="margin-bottom:3px">Brand</div><div style="font-size:14px;font-weight:700">${e(j.brand)}</div></div>
+    <div><div class="card-title" style="margin-bottom:3px">Model</div><div style="font-size:14px;font-weight:700">${e(j.model)}</div></div>
+    <div><div class="card-title" style="margin-bottom:3px">Estimate</div><div style="font-size:18px;font-weight:900;color:var(--green)">&#8377;${fR(j.est)}</div></div>
+    ${j.cphone?`<div><div class="card-title" style="margin-bottom:3px">WhatsApp</div><button class="btn btn-wa btn-sm" onclick="reSendWA(${j.id})">💬 Send</button></div>`:''}
+  </div>`;
+  const pc=document.getElementById('d-prob-card'),pd=document.getElementById('d-probs');
+  if(j.probs&&j.probs.length){pc.style.display='';pd.innerHTML=j.probs.map(p=>`<span class="ptag" style="cursor:default">${e(p)}</span>`).join('')}else pc.style.display='none';
+  const ptc=document.getElementById('d-parts-card'),ptd=document.getElementById('d-parts');
+  if(j.parts&&j.parts.length){ptc.style.display='';ptd.innerHTML=j.parts.map(p=>`<span class="ptag" style="cursor:default">${e(p)}</span>`).join('')}else ptc.style.display='none';
+  const nc=document.getElementById('d-note-card');if(j.notes){nc.style.display='';document.getElementById('d-note').textContent=j.notes}else nc.style.display='none';
+  const tb=document.getElementById('d-tog');if(j.s==='done'){tb.className='btn btn-ye';tb.textContent='↩ Mark Pending'}else{tb.className='btn btn-gr';tb.textContent='✅ Mark Done'}
+}
+function togCurSts(){if(selJob)togField(selJob,'s')}
+function delCurJob(){if(!selJob||!confirm('Delete this job permanently?'))return;deleteJob(selJob);selJob=null}
+
+// ════════ EDIT MODAL ════════════════════════════════════════════
+function openEditModal(id){
+  const j=jobs.find(j=>j.id===id);if(!j)return;
+  eJobId=id;eSelBrand=j.brand||'';eSelModel=j.model||'';eSelProbs=[...(j.probs||[])];eSelParts=[...(j.parts||[])];eDTISO=j.dt||new Date().toISOString();eSimAllState=false;
+  document.getElementById('edit-modal-jno').textContent='#'+j.jno;
+  document.getElementById('e-jno').value=j.jno;document.getElementById('e-dt').value=fDT(eDTISO);
+  document.getElementById('e-imei').value=j.imei||'';document.getElementById('e-cname').value=j.cname||'';document.getElementById('e-cphone').value=j.cphone?'+91 '+j.cphone:'';
+  document.getElementById('e-b-lbl').textContent=eSelBrand||'Select Brand';document.getElementById('e-m-lbl').textContent=eSelModel||'Select Model';
+  updPLbl('e');
+  updPartLbl('e');
+  document.getElementById('e-est').value=j.est||'';document.getElementById('e-lock').value=j.lock||'nil';document.getElementById('e-lock-value').value=j.lockValue||'';toggleLockValue('e');document.getElementById('e-pay').value=j.pay||'unpaid';
+  document.getElementById('e-sim1').checked=!!j.sim1;document.getElementById('e-sim2').checked=!!j.sim2;document.getElementById('e-mmc').checked=!!j.mmc;
+  document.getElementById('e-sts').value=j.s||'pending';document.getElementById('e-notes').value=j.notes||'';
+  document.getElementById('e-dte-wrap').style.display='none';document.getElementById('e-dte-btn').classList.remove('ed');document.getElementById('e-dte-btn').textContent='✏️';
+  buildBList('e');buildMList('e',BM[eSelBrand]||[]);buildPList('e');renderPTags('e');buildPartList('e');renderPartTags('e');
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');eJobId=null;closeAll()}
+function toggleEditDTE(){const w=document.getElementById('e-dte-wrap'),b=document.getElementById('e-dte-btn');if(w.style.display==='none'){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('e-dtm').value=eDTISO?new Date(eDTISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
+function applyEditDTM(){const v=document.getElementById('e-dtm').value;if(v){eDTISO=new Date(v).toISOString();document.getElementById('e-dt').value=fDT(eDTISO)}}
+function saveEdit(){
+  if(!eJobId)return;
+  if(!eSelBrand||!eSelModel||!eSelProbs.length){toast('Brand, Model and Problem(s) required','error');return}
+  const newJno=document.getElementById('e-jno').value.trim();
+  if(!newJno){toast('Job number required','error');return}
+  if(jobs.find(j=>j.id!==eJobId&&j.jno===newJno)){toast('Job number already exists!','error');return}
+  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
+  jobs=updJob;saveJobs();
+  const updated=jobs.find(j=>j.id===eJobId);if(updated)syncJobToSheet(updated);
+  closeEditModal();toast('Job updated!');if(selJob===eJobId)renderDet(jobs.find(j=>j.id===eJobId));renderDash();renderList();
+}
+
+// ════════ MANAGE LISTS ══════════════════════════════════════════
+function openManageLists(){const sel=document.getElementById('manage-brand');sel.innerHTML=BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('');renderManageModels();renderManageProbs();renderManageParts();switchTab('models');document.getElementById('manage-modal').classList.add('open')}
+function switchTab(tab){
+  document.getElementById('tab-models-content').style.display=tab==='models'?'block':'none';
+  document.getElementById('tab-probs-content').style.display=tab==='probs'?'block':'none';
+  document.getElementById('tab-parts-content').style.display=tab==='parts'?'block':'none';
+  document.getElementById('tab-models').className='btn '+(tab==='models'?'btn-pr':'btn-gh');
+  document.getElementById('tab-probs').className='btn '+(tab==='probs'?'btn-pr':'btn-gh');
+  document.getElementById('tab-parts').className='btn '+(tab==='parts'?'btn-pr':'btn-gh');
+  if(tab==='parts')renderManageParts();
+}
+function renderManageParts(){const el=document.getElementById('manage-parts-list');el.innerHTML=PARTS.map((p,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--light)"><span style="flex:1;font-size:12px">${e(p)}</span><button class="btn btn-sm btn-gh" title="Move up" onclick="manageMovePart(${i},-1)" ${i===0?'disabled style="opacity:.35;cursor:not-allowed"':''}>↑</button><button class="btn btn-sm btn-gh" title="Move down" onclick="manageMovePart(${i},1)" ${i===PARTS.length-1?'disabled style="opacity:.35;cursor:not-allowed"':''}>↓</button><button class="cs-item-del" onclick="manageDelPart('${jsq(p)}')">✕ Delete</button></div>`).join('')||'<div class="cs-none">No parts listed.</div>';}
+function manageAddPart(){const val=document.getElementById('manage-part-new').value.trim();if(!val)return;if(!PARTS.includes(val))PARTS.push(val);saveParts();document.getElementById('manage-part-new').value='';renderManageParts();toast('Part added!');}
+function manageMovePart(i,dir){const ni=i+dir;if(ni<0||ni>=PARTS.length)return;[PARTS[i],PARTS[ni]]=[PARTS[ni],PARTS[i]];saveParts();renderManageParts();buildPartList('n');buildPartList('e');}
+function manageDelPart(part){if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();renderManageParts();toast('Deleted.');}
+function jsq(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+function renderManageModels(){const brand=document.getElementById('manage-brand').value;const models=BM[brand]||[];const el=document.getElementById('manage-models-list');el.innerHTML=models.length?models.map((m,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--light)"><span style="flex:1;font-size:12px">${e(m)}</span><button class="btn btn-sm btn-gh" title="Move up" onclick="manageMoveModel('${jsq(brand)}',${i},-1)" ${i===0?'disabled style="opacity:.35;cursor:not-allowed"':''}>↑</button><button class="btn btn-sm btn-gh" title="Move down" onclick="manageMoveModel('${jsq(brand)}',${i},1)" ${i===models.length-1?'disabled style="opacity:.35;cursor:not-allowed"':''}>↓</button><button class="cs-item-del" onclick="manageDelModel('${jsq(brand)}','${jsq(m)}')">✕ Delete</button></div>`).join(''):'<div class="cs-none">No models for this brand.</div>'}
+function manageAddModel(){const brand=document.getElementById('manage-brand').value;const val=document.getElementById('manage-model-new').value.trim();if(!val)return;if(!BM[brand])BM[brand]=[];if(!BM[brand].includes(val))BM[brand].push(val);saveBM();document.getElementById('manage-model-new').value='';renderManageModels();toast('Model added!')}
+function manageMoveModel(brand,i,dir){const arr=BM[brand]||[],ni=i+dir;if(ni<0||ni>=arr.length)return;[arr[i],arr[ni]]=[arr[ni],arr[i]];saveBM();renderManageModels();buildMList('m',BM[selBrand]||[]);buildMList('e',BM[eSelBrand]||[])}
+function manageDelModel(brand,model){if(!confirm('Delete "'+model+'"?'))return;BM[brand]=(BM[brand]||[]).filter(m=>m!==model);saveBM();renderManageModels();toast('Deleted.')}
+function renderManageProbs(){const el=document.getElementById('manage-probs-list');el.innerHTML=PROBS.map((p,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--light)"><span style="flex:1;font-size:12px">${e(p)}</span><button class="btn btn-sm btn-gh" title="Move up" onclick="manageMoveProb(${i},-1)" ${i===0?'disabled style="opacity:.35;cursor:not-allowed"':''}>↑</button><button class="btn btn-sm btn-gh" title="Move down" onclick="manageMoveProb(${i},1)" ${i===PROBS.length-1?'disabled style="opacity:.35;cursor:not-allowed"':''}>↓</button><button class="cs-item-del" onclick="manageDelProb('${jsq(p)}')">✕ Delete</button></div>`).join('')||'<div class="cs-none">No problems listed.</div>'}
+function manageAddProb(){const val=document.getElementById('manage-prob-new').value.trim();if(!val)return;if(!PROBS.includes(val))PROBS.push(val);saveProbs();document.getElementById('manage-prob-new').value='';renderManageProbs();toast('Problem added!')}
+function manageMoveProb(i,dir){const ni=i+dir;if(ni<0||ni>=PROBS.length)return;[PROBS[i],PROBS[ni]]=[PROBS[ni],PROBS[i]];saveProbs();renderManageProbs();buildPList('n');buildPList('e')}
+function manageDelProb(prob){if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();renderManageProbs();toast('Deleted.')}
+
+// ════════ SCANNER ════════════════════════════════════════════════
+function openScan(){document.getElementById('scan-ov').classList.add('open');document.getElementById('scan-err').style.display='none';document.getElementById('scan-vid').style.display='block';startCam()}
+async function startCam(){try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});scanStr=st;const v=document.getElementById('scan-vid');v.srcObject=st;await v.play();startDet(v)}catch{scanErr('Camera access denied. Type IMEI manually.')}}
+function startDet(v){if(!('BarcodeDetector'in window)){scanErr('Not supported. Use Chrome on Android.');return}const d=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix']});scanRun=true;const lp=async()=>{if(!scanRun)return;try{const c=await d.detect(v);if(c.length){document.getElementById('f-imei').value=c[0].rawValue;closeScan();toast('Barcode scanned!');return}}catch{}requestAnimationFrame(lp)};requestAnimationFrame(lp)}
+function scanErr(msg){document.getElementById('scan-vid').style.display='none';const er=document.getElementById('scan-err');er.style.display='block';er.textContent=msg}
+function closeScan(){scanRun=false;document.getElementById('scan-ov').classList.remove('open');if(scanStr){scanStr.getTracks().forEach(t=>t.stop());scanStr=null}}
+
+// ════════ UTILS ══════════════════════════════════════════════════
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=(type==='error'?'⚠ ':type==='info'?'ℹ ':' ✓ ')+msg;el.className='show '+type;clearTimeout(tTimer);tTimer=setTimeout(()=>{el.className=''},3500)}
+function fDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function fD(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
+function fR(v){return parseFloat(v||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+</script>
+</body>
+</html>
