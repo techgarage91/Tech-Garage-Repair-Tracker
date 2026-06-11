@@ -46,8 +46,12 @@ textarea{resize:vertical}
 .cs-btn.open .arr{transform:rotate(180deg)}
 .cs-dd{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--accent);border-radius:12px;z-index:500;box-shadow:0 8px 28px rgba(0,0,0,.13);overflow:hidden;flex-direction:column}
 .cs-dd.open{display:flex}
-.cs-sw{padding:7px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
-.cs-sw input{background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 9px;font-size:12px;width:100%}
+.cs-sw{padding:7px 8px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:5px;align-items:center}
+.cs-sw input{background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 9px;font-size:12px;flex:1;min-width:0}
+.cs-add{padding:7px 11px;font-size:11px;border-radius:7px;background:var(--accent);color:#fff;border:none;font-family:'Montserrat',sans-serif;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.cs-add:hover{background:var(--accent2)}
+.addnum-link{background:none;border:none;color:var(--accent);font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;cursor:pointer;padding:7px 0 0;display:inline-block}
+.addnum-link:hover{text-decoration:underline}
 .cs-list{overflow-y:auto;max-height:200px}
 .cs-item{padding:9px 11px;cursor:pointer;font-size:13px;font-weight:500;transition:background .12s;border-bottom:1px solid var(--light);display:flex;justify-content:space-between;align-items:center}
 .cs-item:last-child{border-bottom:none}
@@ -277,6 +281,7 @@ table{min-width:900px}
   .dg{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <nav>
@@ -286,10 +291,12 @@ table{min-width:900px}
   <button class="nav-btn" onclick="go('jobList');renderList()">All Jobs</button>
   <button class="nav-btn" onclick="openWASettings()">💬 WA</button>
   <button class="nav-btn" onclick="openManageLists()">⚙️ Lists</button>
+  <button class="nav-btn" onclick="openShopSettings()">🏪 Shop</button>
   <span id="sync-nav" class="sync-badge sync-ok" style="margin-left:6px;cursor:pointer" onclick="syncFromSheet()" title="Sync from Google Sheets">☁ Synced</span>
   <span class="nav-count" id="nav-count">0 jobs</span>
 </nav>
 <div id="toast"></div>
+<div id="qr-stage" style="display:none"></div>
 
 <!-- SCANNER -->
 <div id="scan-ov">
@@ -316,27 +323,27 @@ table{min-width:900px}
     </div>
     <div class="form-row">
       <div><label class="fl">Customer Name</label><input type="text" id="e-cname" placeholder="Customer name"/></div>
-      <div><label class="fl">Contact Number</label><input type="tel" id="e-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="e-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/><div id="e-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="e-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"/></div><button type="button" class="addnum-link" id="e-addnum" onclick="toggleSecondPhone('e')">+ Add another number</button></div>
     </div>
     <div class="form-row"><div style="grid-column:1/-1"><label class="fl">IMEI</label><input type="text" id="e-imei"/></div></div>
     <div class="form-row">
       <div>
         <label class="fl">Brand</label>
-        <div class="cs-wrap" id="e-bw"><button class="cs-btn" id="e-b-btn" onclick="togDD('e-b')"><span id="e-b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="e-b-dd"><div class="cs-sw"><input type="text" id="e-b-srch" placeholder="Search..." oninput="filtList('e-b')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="e-b-list"></div></div></div>
+        <div class="cs-wrap" id="e-bw"><button class="cs-btn" id="e-b-btn" onclick="togDD('e-b')"><span id="e-b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="e-b-dd"><div class="cs-sw"><input type="text" id="e-b-srch" placeholder="Search or type new brand..." oninput="csSearch('e-b')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-b-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-b')">Add +</button></div><div class="cs-list" id="e-b-list"></div></div></div>
       </div>
       <div>
         <label class="fl">Model</label>
-        <div class="cs-wrap" id="e-mw"><button class="cs-btn" id="e-m-btn" onclick="togDD('e-m')"><span id="e-m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="e-m-dd"><div class="cs-sw"><input type="text" id="e-m-srch" placeholder="Search..." oninput="filtList('e-m')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="e-m-list"></div><div class="cs-new-wrap"><input type="text" id="e-m-new" placeholder="Add new model..."/><button onclick="addNewModel('e')">+ Add</button></div></div></div>
+        <div class="cs-wrap" id="e-mw"><button class="cs-btn" id="e-m-btn" onclick="togDD('e-m')"><span id="e-m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="e-m-dd"><div class="cs-sw"><input type="text" id="e-m-srch" placeholder="Search or type new model..." oninput="csSearch('e-m')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-m-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-m')">Add +</button></div><div class="cs-list" id="e-m-list"></div></div></div>
       </div>
     </div>
     <div style="margin-bottom:11px">
       <label class="fl">Problem(s)</label>
-      <div class="prob-wrap"><button class="cs-btn" id="e-p-btn" onclick="togProbDD('e')"><span id="e-p-lbl">Select...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-p-dd"><div class="pd-list" id="e-p-list"></div><div class="prob-new-wrap"><input type="text" id="e-p-new" placeholder="Add new problem..."/><button onclick="addNewProb('e')">+ Add</button></div></div></div>
+      <div class="prob-wrap"><button class="cs-btn" id="e-p-btn" onclick="togProbDD('e')"><span id="e-p-lbl">Select...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-p-dd"><div class="cs-sw"><input type="text" id="e-p-srch" placeholder="Search or type new problem..." oninput="probSearch('e')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('e')">Add +</button></div><div class="pd-list" id="e-p-list"></div></div></div>
       <div class="prob-tags" id="e-p-tags"></div>
     </div>
     <div style="margin-bottom:11px">
       <label class="fl">Part to be Change / Repair</label>
-      <div class="prob-wrap"><button class="cs-btn" id="e-pt-btn" onclick="togPartDD('e')"><span id="e-pt-lbl">Select part(s)...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-pt-dd"><div class="pd-list" id="e-pt-list"></div><div class="prob-new-wrap"><input type="text" id="e-pt-new" placeholder="Add new part..."/><button onclick="addNewPart('e')">+ Add</button></div></div></div>
+      <div class="prob-wrap"><button class="cs-btn" id="e-pt-btn" onclick="togPartDD('e')"><span id="e-pt-lbl">Select part(s)...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-pt-dd"><div class="cs-sw"><input type="text" id="e-pt-srch" placeholder="Search or type new part..." oninput="partSearch('e')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('e')">Add +</button></div><div class="pd-list" id="e-pt-list"></div></div></div>
       <div class="prob-tags" id="e-pt-tags"></div>
     </div>
     <div class="form-row">
@@ -419,7 +426,6 @@ table{min-width:900px}
     <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
       <button class="btn btn-pr" id="tab-models" onclick="switchTab('models')">📱 Models</button>
       <button class="btn btn-gh" id="tab-probs" onclick="switchTab('probs')">🔧 Problems</button>
-      <button class="btn btn-gh" id="tab-parts" onclick="switchTab('parts')">🔩 Parts</button>
     </div>
     <div id="tab-models-content">
       <div style="margin-bottom:9px"><label class="fl">Brand</label><select id="manage-brand" onchange="renderManageModels()"></select></div>
@@ -430,10 +436,30 @@ table{min-width:900px}
       <div id="manage-probs-list" style="max-height:290px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
       <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-prob-new" placeholder="Add new problem..."/><button onclick="manageAddProb()">+ Add</button></div>
     </div>
-    <div id="tab-parts-content" style="display:none">
-      <div id="manage-parts-list" style="max-height:290px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
-      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-part-new" placeholder="Add new part..."/><button onclick="manageAddPart()">+ Add</button></div>
+    <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+      <button class="btn btn-pr" style="width:100%" onclick="exportApp()">⬇️ Save App File (bake my lists into the code)</button>
+      <p style="color:var(--muted);font-size:10px;margin-top:7px;line-height:1.6">Downloads a fresh <b>TechGarage.html</b> that already contains every brand, model, problem and part you have added — so new copies keep your data. Replace your old file with this one.</p>
     </div>
+  </div>
+</div>
+
+<!-- SHOP SETTINGS MODAL -->
+<div class="modal-bg" id="shop-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="document.getElementById('shop-modal').classList.remove('open')">✕</button>
+    <h3>🏪 Shop Details</h3>
+    <p style="color:var(--muted);font-size:11px;margin-bottom:14px;line-height:1.6">These appear on the printed job ticket header. Set them once.</p>
+    <div class="form-row">
+      <div><label class="fl">Shop Name</label><input type="text" id="sh-name" placeholder="Tech Garage"/></div>
+      <div><label class="fl">Tagline</label><input type="text" id="sh-tag" placeholder="Mobile & Tablet Repair"/></div>
+    </div>
+    <div style="margin-bottom:11px"><label class="fl">Address</label><textarea id="sh-addr" rows="2" placeholder="Shop address..."></textarea></div>
+    <div class="form-row">
+      <div><label class="fl">Phone</label><input type="text" id="sh-phone" placeholder="+91 98765 43210"/></div>
+      <div><label class="fl">GST / Reg No (optional)</label><input type="text" id="sh-gst" placeholder=""/></div>
+    </div>
+    <div style="margin-bottom:4px"><label class="fl">Ticket Footer Note</label><textarea id="sh-footer" rows="2" placeholder="Please keep this receipt safe to collect your device."></textarea></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveShopSettings()">💾 Save</button><button class="btn btn-gh" onclick="document.getElementById('shop-modal').classList.remove('open')">Cancel</button></div>
   </div>
 </div>
 
@@ -457,7 +483,7 @@ table{min-width:900px}
   <div class="card">
     <div class="card-title">Job Identification</div>
     <div class="form-row">
-      <div><label class="fl">Job Number *</label><div class="igrp"><input type="text" id="f-jno" placeholder="e.g. 00001" oninput="jnoChg()" onblur="lockJno()"/><button class="btn btn-ol btn-sm" onclick="autoJno()" id="btn-auto" style="padding:0 11px">AUTO</button></div></div>
+      <div><label class="fl">Job Number *</label><div class="igrp"><input type="text" id="f-jno" placeholder="e.g. 35" oninput="jnoChg()" onblur="lockJno()"/><button class="btn btn-ol btn-sm" onclick="autoJno()" id="btn-auto" style="padding:0 11px">AUTO</button></div></div>
       <div>
         <label class="fl">Date &amp; Time</label>
         <div class="dt-row"><input type="text" id="f-dt" placeholder="Auto-fills after Job No" style="color:var(--dim)" readonly/><button class="dt-eb" id="btn-dte" onclick="toggleDTE()">✏️</button></div>
@@ -469,7 +495,7 @@ table{min-width:900px}
     <div class="card-title">Customer Identification</div>
     <div class="form-row">
       <div><label class="fl">Customer Name</label><input type="text" id="f-cname" placeholder="Full name"/></div>
-      <div><label class="fl">Contact Number</label><input type="tel" id="f-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="f-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/><div id="f-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="f-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"/></div><button type="button" class="addnum-link" id="f-addnum" onclick="toggleSecondPhone('f')">+ Add another number</button></div>
     </div>
   </div>
   <div class="card">
@@ -478,11 +504,11 @@ table{min-width:900px}
     <div class="form-row">
       <div>
         <label class="fl">Brand *</label>
-        <div class="cs-wrap" id="bw"><button class="cs-btn" id="b-btn" onclick="togDD('b')"><span id="b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="b-dd"><div class="cs-sw"><input type="text" id="b-srch" placeholder="Search..." oninput="filtList('b')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="b-list"></div></div></div>
+        <div class="cs-wrap" id="bw"><button class="cs-btn" id="b-btn" onclick="togDD('b')"><span id="b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="b-dd"><div class="cs-sw"><input type="text" id="b-srch" placeholder="Search or type new brand..." oninput="csSearch('b')" onclick="event.stopPropagation()"/><button class="cs-add" id="b-add" style="display:none" onclick="event.stopPropagation();quickAddCS('b')">Add +</button></div><div class="cs-list" id="b-list"></div></div></div>
       </div>
       <div>
         <label class="fl">Model *</label>
-        <div class="cs-wrap" id="mw"><button class="cs-btn" id="m-btn" onclick="togDD('m')"><span id="m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="m-dd"><div class="cs-sw"><input type="text" id="m-srch" placeholder="Search..." oninput="filtList('m')" onclick="event.stopPropagation()"/></div><div class="cs-list" id="m-list"></div><div class="cs-new-wrap"><input type="text" id="m-new" placeholder="Add new model..."/><button onclick="addNewModel('n')">+ Add</button></div></div></div>
+        <div class="cs-wrap" id="mw"><button class="cs-btn" id="m-btn" onclick="togDD('m')"><span id="m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="m-dd"><div class="cs-sw"><input type="text" id="m-srch" placeholder="Search or type new model..." oninput="csSearch('m')" onclick="event.stopPropagation()"/><button class="cs-add" id="m-add" style="display:none" onclick="event.stopPropagation();quickAddCS('m')">Add +</button></div><div class="cs-list" id="m-list"></div></div></div>
       </div>
     </div>
     <div class="form-row">
@@ -503,8 +529,8 @@ table{min-width:900px}
     <div class="prob-wrap">
       <button class="cs-btn" id="p-btn" onclick="togProbDD('n')"><span id="p-lbl">Select problem(s)...</span><span class="arr">▼</span></button>
       <div class="prob-dd" id="p-dd">
+        <div class="cs-sw"><input type="text" id="p-srch" placeholder="Search or type new problem..." oninput="probSearch('n')" onclick="event.stopPropagation()"/><button class="cs-add" id="p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('n')">Add +</button></div>
         <div class="pd-list" id="p-list"></div>
-        <div class="prob-new-wrap"><input type="text" id="p-new" placeholder="Add new problem..."/><button onclick="addNewProb('n')">+ Add</button></div>
       </div>
     </div>
     <div class="prob-tags" id="p-tags"></div>
@@ -513,8 +539,8 @@ table{min-width:900px}
     <div class="prob-wrap">
       <button class="cs-btn" id="pt-btn" onclick="togPartDD('n')"><span id="pt-lbl">Select part(s)...</span><span class="arr">▼</span></button>
       <div class="prob-dd" id="pt-dd">
+        <div class="cs-sw"><input type="text" id="pt-srch" placeholder="Search or type new part..." oninput="partSearch('n')" onclick="event.stopPropagation()"/><button class="cs-add" id="pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('n')">Add +</button></div>
         <div class="pd-list" id="pt-list"></div>
-        <div class="prob-new-wrap"><input type="text" id="pt-new" placeholder="Add new part..."/><button onclick="addNewPart('n')">+ Add</button></div>
       </div>
     </div>
     <div class="prob-tags" id="pt-tags"></div>
@@ -558,6 +584,7 @@ table{min-width:900px}
   <div class="card" id="d-parts-card" style="display:none"><div class="card-title">Part to be Change / Repair</div><div id="d-parts" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <div class="card" id="d-note-card" style="display:none"><div class="card-title">Notes</div><div id="d-note" style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:12px"></div></div>
   <div class="btn-row">
+    <button class="btn btn-pr" onclick="genTicket(selJob)">🎫 Print Ticket</button>
     <button class="btn btn-ol" onclick="openEditModal(selJob)">✏️ Edit</button>
     <button class="btn" id="d-tog" onclick="togCurSts()"></button>
     <button class="btn btn-re" onclick="delCurJob()">🗑 Delete</button>
@@ -578,6 +605,7 @@ function normalizeJobForSync(job) {
     dt: job.dt || now,
     cname: job.cname || "",
     cphone: job.cphone || "",
+    cphone2: job.cphone2 || "",
     imei: job.imei || "0",
     brand: job.brand || "",
     model: job.model || "",
@@ -599,7 +627,7 @@ function normalizeJobForSync(job) {
 }
 
 function normalizeRemoteJob(row) {
-  return {
+  const o = {
     id: parseInt(row.id, 10) || Number(row.id) || Date.now(),
     jno: row.jno || "",
     dt: row.dt || new Date().toISOString(),
@@ -623,6 +651,8 @@ function normalizeRemoteJob(row) {
     deleted: row.deleted === true || row.deleted === "true",
     updatedAt: row.updatedAt || row.dt || new Date().toISOString()
   };
+  if(row.cphone2!==undefined) o.cphone2 = row.cphone2;
+  return o;
 }
 
 function newerThan(a, b) {
@@ -718,6 +748,7 @@ function setSyncBadge(state) {
 }
 
 // ════════ DATA ═════════════════════════════════════════════════
+/*TG_SEED_START*/
 const BM_DEFAULT={
   Apple:["iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Plus","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],
   Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20"],
@@ -735,8 +766,12 @@ const BM_DEFAULT={
 };
 const PROBS_DEFAULT=["Screen Cracked / Broken","Screen Not Displaying","Touch Screen Not Working","Battery Draining Fast","Battery Not Charging","Swollen Battery","Charging Port Damaged","Wireless Charging Issue","Speaker Not Working","Earpiece Not Working","Microphone Issue","Front Camera Not Working","Rear Camera Not Working","Camera Blurry / Foggy","Back Glass Broken","Frame / Body Damaged","Water / Liquid Damage","Corrosion Damage","Phone Not Turning On","Boot Loop / Stuck on Logo","Software Crash / Hang","Power Button Not Working","Volume Buttons Not Working","Home Button Issue","Fingerprint Sensor Issue","Face ID Not Working","Wi-Fi Not Working","Bluetooth Issue","Mobile Data Issue","SIM Card Not Detected","SIM Tray Damaged","Overheating","Phone Restarting Randomly","No Sound / Audio Issue","GPS Not Working","Vibration Not Working"];
 const PARTS_DEFAULT=["Display / Screen Replacement","Touch Glass Replacement","Battery Replacement","Charging Port Repair / Replacement","Speaker Repair / Replacement","Earpiece Repair / Replacement","Microphone Repair / Replacement","Front Camera Replacement","Rear Camera Replacement","Camera Lens / Glass Replacement","Back Glass Replacement","Middle Frame / Housing Replacement","Power Button Flex Repair / Replacement","Volume Button Flex Repair / Replacement","Fingerprint Sensor Repair / Replacement","Face ID / Sensor Repair","SIM Tray Replacement","SIM Slot Repair","Memory Card Slot Repair","Motherboard Repair","IC Replacement","Water Damage Cleaning / Repair","Software Repair / Flashing","Wi-Fi / Bluetooth Antenna Repair","Network Antenna Repair","Vibration Motor Replacement","Receiver Mesh Cleaning / Replacement","Tempered Glass Installation"];
+const SHOP_DEFAULT={name:'Tech Garage',tagline:'Mobile & Tablet Repair',addr:'',phone:'',gst:'',footer:'Please keep this receipt safe to collect your device.'};
+/*TG_SEED_END*/
 const WA_DEFAULT="Hello {CUSTOMER_NAME}! 👋\n\nThank you for choosing Tech Garage for your repair.\n\n📋 *Job Details:*\n• Job No: *#{JOB_NO}*\n• Device: *{MODEL}*\n• Issue: {PROBLEMS}\n\n💰 Estimate: ₹{ESTIMATE}\n⏱ Expected repair time: *{ESTIMATE_TIME}*\n\nWe will keep you updated. Please keep this message for reference.\n\nThank you! 🙏";
 const WA_DONE_DEFAULT="Hello {CUSTOMER_NAME}!\n\nYour repair job is completed and ready for pickup.\n\nJob No: #{JOB_NO}\nDevice: {MODEL}\nIssue: {PROBLEMS}\nAmount: Rs. {ESTIMATE}\n\nThank you for choosing Tech Garage.";
+
+let shop={...SHOP_DEFAULT};
 
 // ════════ STATE ════════════════════════════════════════════════
 let BM,PROBS,PARTS,jobs=[],selJob=null,jLocked=false,selBrand='',selModel='',selProbs=[],selParts=[],dtISO='',dtEdit=false,scanStr=null,scanRun=false,tTimer=null;
@@ -754,6 +789,7 @@ function loadAll(){
   waTemplate=lsGet('tg_wa_tmpl',WA_DEFAULT);
   waDoneTemplate=lsGet('tg_wa_done_tmpl',WA_DONE_DEFAULT);
   waTime=lsGet('tg_wa_time','2-3 hours');
+  shop=Object.assign({...SHOP_DEFAULT},lsGet('tg_shop',{}));
 }
 function saveJobs(){lsSet('tg_jobs_v3',jobs)}
 function saveBM(){lsSet('tg_bm',BM)}
@@ -849,8 +885,8 @@ function showFilterModal(type){
 function openNewJob(){reset();go('newJob');autoJno()}
 function reset(){
   jLocked=false;selBrand='';selModel='';selProbs=[];selParts=[];dtISO='';dtEdit=false;simAllState=false;
-  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
-  document.getElementById('f-cphone').value='+91 ';
+  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('f-cphone').value='+91 ';document.getElementById('f-cphone2').value='+91 ';document.getElementById('f-cphone2-wrap').style.display='none';document.getElementById('f-addnum').textContent='+ Add another number';
   const dt=document.getElementById('f-dt');dt.value='';dt.style.color='var(--dim)';
   document.getElementById('dte-wrap').style.display='none';document.getElementById('btn-dte').classList.remove('ed');document.getElementById('btn-dte').textContent='✏️';
   document.getElementById('btn-auto').style.display='';document.getElementById('f-jno').readOnly=false;
@@ -864,7 +900,7 @@ function reset(){
 }
 function jnoChg(){jLocked=false;document.getElementById('btn-auto').style.display=''}
 function lockJno(){const v=document.getElementById('f-jno').value.trim();if(v&&!jLocked){jLocked=true;setDT();document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true}}
-function autoJno(){const max=jobs.reduce((m,j)=>Math.max(m,parseInt(j.jno)||0),0);document.getElementById('f-jno').value=String(max+1).padStart(5,'0');jLocked=true;document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true;setDT()}
+function autoJno(){const max=jobs.reduce((m,j)=>Math.max(m,parseInt(j.jno)||0),0);document.getElementById('f-jno').value=String(max+1);jLocked=true;document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true;setDT()}
 function setDT(){const now=new Date();dtISO=now.toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--green)'}
 function toggleDTE(){dtEdit=!dtEdit;const w=document.getElementById('dte-wrap'),b=document.getElementById('btn-dte');if(dtEdit){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('f-dtm').value=dtISO?new Date(dtISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
 function applyDTM(){const v=document.getElementById('f-dtm').value;if(v){dtISO=new Date(v).toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--accent)'}}
@@ -884,11 +920,11 @@ function toggleAllSIMEdit(){
 }
 
 // ════════ BRAND/MODEL DROPDOWNS ════════════════════════════════
-function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" onclick="selB('${pfx}','${b}')"><span>${b}</span></div>`).join('')}
-function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span>${m}</span><button class="cs-item-del" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')}
-function togDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn'),isO=dd.classList.contains('open');closeAll();if(!isO){dd.classList.add('open');btn.classList.add('open');const s=document.getElementById(pfx+'-srch');if(s)s.focus()}}
+function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" data-val="${e(b)}" onclick="selB('${pfx}','${jsq(b)}')"><span>${e(b)}</span></div>`).join('')}
+function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" data-val="${e(m)}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span>${m}</span><button class="cs-item-del" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')}
+function togDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn'),isO=dd.classList.contains('open');closeAll();if(!isO){dd.classList.add('open');btn.classList.add('open');const s=document.getElementById(pfx+'-srch');if(s){s.value='';csSearch(pfx);s.focus()}}}
 function closeDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
-function filtList(pfx){const q=document.getElementById(pfx+'-srch').value.toLowerCase(),items=document.querySelectorAll('#'+pfx+'-list .cs-item');let v=0;items.forEach(i=>{const s=i.textContent.toLowerCase().includes(q);i.style.display=s?'':'none';if(s)v++});let em=document.getElementById(pfx+'-list-empty');if(!em){em=document.createElement('div');em.className='cs-none';em.id=pfx+'-list-empty';document.getElementById(pfx+'-list').appendChild(em)}em.style.display=v===0?'block':'none';if(v===0)em.textContent='No results found.'}
+function filtList(pfx){const q=document.getElementById(pfx+'-srch').value.toLowerCase(),items=document.querySelectorAll('#'+pfx+'-list .cs-item');let v=0;items.forEach(i=>{const s=i.textContent.toLowerCase().includes(q);i.style.display=s?'':'none';if(s)v++});let em=document.getElementById(pfx+'-list-empty');if(!em){em=document.createElement('div');em.className='cs-none';em.id=pfx+'-list-empty';document.getElementById(pfx+'-list').appendChild(em)}em.style.display=v===0?'block':'none';if(v===0)em.textContent='No results. Add below ↓'}
 function selB(pfx,brand){if(pfx==='e'){eSelBrand=brand;eSelModel='';document.getElementById('e-b-lbl').textContent=brand;document.getElementById('e-m-lbl').textContent='Select Model';closeDD('e-b');buildMList('e',BM[brand]||[]);document.getElementById('e-b-srch').value='';buildBList('e')}else{selBrand=brand;selModel='';document.getElementById('b-lbl').textContent=brand;document.getElementById('m-lbl').textContent='Select Model';closeDD('b');buildMList('m',BM[brand]||[]);document.getElementById('b-srch').value='';buildBList('b')}}
 function selM(pfx,model){if(pfx==='e'){eSelModel=model;document.getElementById('e-m-lbl').textContent=model;closeDD('e-m');document.getElementById('e-m-srch').value='';buildMList('e',BM[eSelBrand]||[])}else{selModel=model;document.getElementById('m-lbl').textContent=model;closeDD('m');document.getElementById('m-srch').value='';buildMList('m',BM[selBrand]||[])}}
 function addNewModel(pfx){const inputId=pfx==='e'?'e-m-new':'m-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a model name','error');return}const brand=pfx==='e'?eSelBrand:selBrand;if(!brand){toast('Select a brand first','error');return}if(!BM[brand])BM[brand]=[];if(!BM[brand].includes(val))BM[brand].unshift(val);saveBM();document.getElementById(inputId).value='';if(pfx==='e'){eSelModel=val;document.getElementById('e-m-lbl').textContent=val;closeDD('e-m');buildMList('e',BM[brand])}else{selModel=val;document.getElementById('m-lbl').textContent=val;closeDD('m');buildMList('m',BM[brand])}toast('Model "'+val+'" added!')}
@@ -898,14 +934,15 @@ function delModel(ev,pfx,model){ev.stopPropagation();const brand=pfx==='e'?eSelB
 function buildPList(pfx){
   const cur=pfx==='e'?eSelProbs:selProbs;
   const listId=pfx==='e'?'e-p-list':'p-list';
-  document.getElementById(listId).innerHTML=PROBS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delProb(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')
+  document.getElementById(listId).innerHTML=PROBS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" data-val="${e(p)}" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delProb(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')
 }
-function togProbDD(pfx){const ddId=pfx==='e'?'e-p-dd':'p-dd',btnId=pfx==='e'?'e-p-btn':'p-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open')}}
+function togProbDD(pfx){const ddId=pfx==='e'?'e-p-dd':'p-dd',btnId=pfx==='e'?'e-p-btn':'p-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open');const sr=document.getElementById((pfx==='e'?'e-p':'p')+'-srch');if(sr){sr.value='';probSearch(pfx);sr.focus()}}}
 function closeProbDD(pfx){const dd=document.getElementById(pfx==='e'?'e-p-dd':'p-dd'),btn=document.getElementById(pfx==='e'?'e-p-btn':'p-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
 function togP(ev,pfx,p){
   ev.stopPropagation(); // keep dropdown open
   if(pfx==='e'){if(eSelProbs.includes(p))eSelProbs=eSelProbs.filter(x=>x!==p);else eSelProbs.push(p);buildPList('e');renderPTags('e');updPLbl('e')}
   else{if(selProbs.includes(p))selProbs=selProbs.filter(x=>x!==p);else selProbs.push(p);buildPList('n');renderPTags('n');updPLbl('n')}
+  probSearch(pfx);
 }
 function addNewProb(pfx){const inputId=pfx==='e'?'e-p-new':'p-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a problem description','error');return}if(!PROBS.includes(val))PROBS.unshift(val);saveProbs();document.getElementById(inputId).value='';if(pfx==='e'){if(!eSelProbs.includes(val))eSelProbs.push(val);buildPList('e');renderPTags('e');updPLbl('e')}else{if(!selProbs.includes(val))selProbs.push(val);buildPList('n');renderPTags('n');updPLbl('n')}toast('Problem added!')}
 function delProb(ev,pfx,prob){ev.stopPropagation();if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();if(pfx==='e'){eSelProbs=eSelProbs.filter(p=>p!==prob);buildPList('e');renderPTags('e');updPLbl('e')}else{selProbs=selProbs.filter(p=>p!==prob);buildPList('n');renderPTags('n');updPLbl('n')}toast('Deleted.')}
@@ -916,14 +953,15 @@ function renderPTags(pfx){const tagsId=pfx==='e'?'e-p-tags':'p-tags';const cur=p
 function buildPartList(pfx){
   const cur=pfx==='e'?eSelParts:selParts;
   const listId=pfx==='e'?'e-pt-list':'pt-list';
-  document.getElementById(listId).innerHTML=PARTS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</button></div>`).join('')
+  document.getElementById(listId).innerHTML=PARTS.map(p=>`<div class="pd-item${cur.includes(p)?' sel':''}" data-val="${e(p)}" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" ><div class="pd-chk">${cur.includes(p)?'✓':''}</div><span style="flex:1">${p}</span><button class="pd-del" onclick="delPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</button></div>`).join('')
 }
-function togPartDD(pfx){const ddId=pfx==='e'?'e-pt-dd':'pt-dd',btnId=pfx==='e'?'e-pt-btn':'pt-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open')}}
+function togPartDD(pfx){const ddId=pfx==='e'?'e-pt-dd':'pt-dd',btnId=pfx==='e'?'e-pt-btn':'pt-btn';const dd=document.getElementById(ddId),btn=document.getElementById(btnId);if(dd.classList.contains('open')){dd.classList.remove('open');btn.classList.remove('open')}else{closeAll();dd.classList.add('open');btn.classList.add('open');const sr=document.getElementById((pfx==='e'?'e-pt':'pt')+'-srch');if(sr){sr.value='';partSearch(pfx);sr.focus()}}}
 function closePartDD(pfx){const dd=document.getElementById(pfx==='e'?'e-pt-dd':'pt-dd'),btn=document.getElementById(pfx==='e'?'e-pt-btn':'pt-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
 function togPart(ev,pfx,p){
   ev.stopPropagation();
   if(pfx==='e'){if(eSelParts.includes(p))eSelParts=eSelParts.filter(x=>x!==p);else eSelParts.push(p);buildPartList('e');renderPartTags('e');updPartLbl('e')}
   else{if(selParts.includes(p))selParts=selParts.filter(x=>x!==p);else selParts.push(p);buildPartList('n');renderPartTags('n');updPartLbl('n')}
+  partSearch(pfx);
 }
 function addNewPart(pfx){const inputId=pfx==='e'?'e-pt-new':'pt-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a part name','error');return}if(!PARTS.includes(val))PARTS.unshift(val);saveParts();document.getElementById(inputId).value='';if(pfx==='e'){if(!eSelParts.includes(val))eSelParts.push(val);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{if(!selParts.includes(val))selParts.push(val);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Part added!')}
 function delPart(ev,pfx,part){ev.stopPropagation();if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();if(pfx==='e'){eSelParts=eSelParts.filter(p=>p!==part);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{selParts=selParts.filter(p=>p!==part);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Deleted.')}
@@ -937,7 +975,7 @@ function saveJob(){
   const payStatus=document.getElementById('f-pay').value;
   const job={
     id:Date.now(),jno,imei:imei||'0',brand,model,probs:[...selProbs],parts:[...selParts],
-    cname:document.getElementById('f-cname').value.trim(),cphone:phoneForStorage(document.getElementById('f-cphone').value),
+    cname:document.getElementById('f-cname').value.trim(),cphone:phoneForStorage(document.getElementById('f-cphone').value),cphone2:phoneForStorage(document.getElementById('f-cphone2').value),
     est:document.getElementById('f-est').value||'0',
     notes:document.getElementById('f-notes').value,
     s:document.getElementById('f-sts').value,pay:payStatus,paidAt:payStatus==='paid'?new Date().toISOString():'',
@@ -981,7 +1019,7 @@ function mkTog(id,field){
 }
 function statusSelect(id,status){const s=status||'pending';return`<select class="status-select ${s}" onchange="event.stopPropagation();setJobStatus(${id},this.value)" onclick="event.stopPropagation()"><option value="pending" ${s==='pending'?'selected':''}>Pending</option><option value="done" ${s==='done'?'selected':''}>Done</option><option value="returned" ${s==='returned'?'selected':''}>Returned</option></select>`}
 function setJobStatus(id,status){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;changedJob={...j,s:status,updatedAt:now};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
-function togField(id,field){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;const newS=field==='s'?(j.s==='done'?'pending':'done'):j.s;changedJob={...j,updatedAt:now,s:newS,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
+function togField(id,field){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;changedJob={...j,updatedAt:now,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
 function renderList(){
   const q=document.getElementById('s-inp').value.toLowerCase(),fs=document.getElementById('s-sts').value,fb=document.getElementById('s-brd').value,fp=document.getElementById('s-pay').value;
   const f=sortedJobs().filter(j=>{const ms=!q||(j.jno||'').includes(q)||(j.imei||'').includes(q)||(j.brand||'').toLowerCase().includes(q)||(j.model||'').toLowerCase().includes(q)||(j.cname||'').toLowerCase().includes(q)||(j.cphone||'').includes(q)||(j.notes||'').toLowerCase().includes(q)||(j.probs||[]).join(' ').toLowerCase().includes(q)||(j.parts||[]).join(' ').toLowerCase().includes(q);return ms&&(fs==='all'||j.s===fs)&&(fb==='all'||j.brand===fb)&&(fp==='all'||j.pay===fp)});
@@ -999,6 +1037,7 @@ function renderList(){
     <td class="j-est" data-label="Estimate">&#8377;${fR(j.est)}</td>
     <td data-label="Payment" onclick="event.stopPropagation()">${mkTog(j.id,'pay')}</td>
     <td data-label="Actions" onclick="event.stopPropagation()" style="white-space:nowrap">
+      <button class="btn btn-sm btn-pr" onclick="genTicket(${j.id})" title="Print ticket">🎫</button>
       <button class="btn btn-sm btn-ol" onclick="openEditModal(${j.id})">✏️</button>
       <button class="btn btn-sm btn-re" onclick="deleteJob(${j.id})" style="margin-left:3px">🗑</button>
       ${j.cphone?`<button class="btn btn-sm btn-wa" onclick="reSendWA(${j.id})" style="margin-left:3px">💬</button>`:''}
@@ -1021,7 +1060,7 @@ function renderDet(j){
     <div class="df"><div class="dfl">Date &amp; Time</div><div class="dfv">${fDT(j.dt)}</div></div>
     <div class="df"><div class="dfl">Job No</div><div class="dfv ac">#${e(j.jno)}</div></div>
     <div class="df"><div class="dfl">Customer</div><div class="dfv">${e(j.cname||'—')}</div></div>
-    <div class="df"><div class="dfl">Contact</div><div class="dfv" style="font-size:12px">${j.cphone?`<a href="tel:+91${e(j.cphone)}" style="color:var(--accent);text-decoration:none">+91 ${e(j.cphone)}</a>`:'—'}</div></div>
+    <div class="df"><div class="dfl">Contact</div><div class="dfv" style="font-size:12px">${j.cphone?`<a href="tel:+91${e(j.cphone)}" style="color:var(--accent);text-decoration:none">+91 ${e(j.cphone)}</a>`:'—'}${j.cphone2?`<br><a href="tel:+91${e(j.cphone2)}" style="color:var(--accent);text-decoration:none">+91 ${e(j.cphone2)}</a>`:''}</div></div>
     <div class="df"><div class="dfl">IMEI</div><div class="dfv" style="font-size:11px;word-break:break-all">${e(j.imei)||'—'}</div></div>
     <div class="df"><div class="dfl">Device Lock</div><div class="dfv">${lockText}</div></div>
     <div class="df"><div class="dfl">SIM / Storage</div><div class="dfv">${sims}</div></div>
@@ -1048,7 +1087,7 @@ function openEditModal(id){
   eJobId=id;eSelBrand=j.brand||'';eSelModel=j.model||'';eSelProbs=[...(j.probs||[])];eSelParts=[...(j.parts||[])];eDTISO=j.dt||new Date().toISOString();eSimAllState=false;
   document.getElementById('edit-modal-jno').textContent='#'+j.jno;
   document.getElementById('e-jno').value=j.jno;document.getElementById('e-dt').value=fDT(eDTISO);
-  document.getElementById('e-imei').value=j.imei||'';document.getElementById('e-cname').value=j.cname||'';document.getElementById('e-cphone').value=j.cphone?'+91 '+j.cphone:'';
+  document.getElementById('e-imei').value=j.imei||'';document.getElementById('e-cname').value=j.cname||'';document.getElementById('e-cphone').value=j.cphone?'+91 '+j.cphone:'';var _c2=j.cphone2||'';document.getElementById('e-cphone2').value=_c2?'+91 '+_c2:'+91 ';document.getElementById('e-cphone2-wrap').style.display=_c2?'block':'none';document.getElementById('e-addnum').textContent=_c2?'– Remove second number':'+ Add another number';
   document.getElementById('e-b-lbl').textContent=eSelBrand||'Select Brand';document.getElementById('e-m-lbl').textContent=eSelModel||'Select Model';
   updPLbl('e');
   updPartLbl('e');
@@ -1068,27 +1107,15 @@ function saveEdit(){
   const newJno=document.getElementById('e-jno').value.trim();
   if(!newJno){toast('Job number required','error');return}
   if(jobs.find(j=>j.id!==eJobId&&j.jno===newJno)){toast('Job number already exists!','error');return}
-  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
+  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),cphone2:phoneForStorage(document.getElementById('e-cphone2').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
   jobs=updJob;saveJobs();
   const updated=jobs.find(j=>j.id===eJobId);if(updated)syncJobToSheet(updated);
   closeEditModal();toast('Job updated!');if(selJob===eJobId)renderDet(jobs.find(j=>j.id===eJobId));renderDash();renderList();
 }
 
 // ════════ MANAGE LISTS ══════════════════════════════════════════
-function openManageLists(){const sel=document.getElementById('manage-brand');sel.innerHTML=BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('');renderManageModels();renderManageProbs();renderManageParts();switchTab('models');document.getElementById('manage-modal').classList.add('open')}
-function switchTab(tab){
-  document.getElementById('tab-models-content').style.display=tab==='models'?'block':'none';
-  document.getElementById('tab-probs-content').style.display=tab==='probs'?'block':'none';
-  document.getElementById('tab-parts-content').style.display=tab==='parts'?'block':'none';
-  document.getElementById('tab-models').className='btn '+(tab==='models'?'btn-pr':'btn-gh');
-  document.getElementById('tab-probs').className='btn '+(tab==='probs'?'btn-pr':'btn-gh');
-  document.getElementById('tab-parts').className='btn '+(tab==='parts'?'btn-pr':'btn-gh');
-  if(tab==='parts')renderManageParts();
-}
-function renderManageParts(){const el=document.getElementById('manage-parts-list');el.innerHTML=PARTS.map((p,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--light)"><span style="flex:1;font-size:12px">${e(p)}</span><button class="btn btn-sm btn-gh" title="Move up" onclick="manageMovePart(${i},-1)" ${i===0?'disabled style="opacity:.35;cursor:not-allowed"':''}>↑</button><button class="btn btn-sm btn-gh" title="Move down" onclick="manageMovePart(${i},1)" ${i===PARTS.length-1?'disabled style="opacity:.35;cursor:not-allowed"':''}>↓</button><button class="cs-item-del" onclick="manageDelPart('${jsq(p)}')">✕ Delete</button></div>`).join('')||'<div class="cs-none">No parts listed.</div>';}
-function manageAddPart(){const val=document.getElementById('manage-part-new').value.trim();if(!val)return;if(!PARTS.includes(val))PARTS.push(val);saveParts();document.getElementById('manage-part-new').value='';renderManageParts();toast('Part added!');}
-function manageMovePart(i,dir){const ni=i+dir;if(ni<0||ni>=PARTS.length)return;[PARTS[i],PARTS[ni]]=[PARTS[ni],PARTS[i]];saveParts();renderManageParts();buildPartList('n');buildPartList('e');}
-function manageDelPart(part){if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();renderManageParts();toast('Deleted.');}
+function openManageLists(){const sel=document.getElementById('manage-brand');sel.innerHTML=BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('');renderManageModels();renderManageProbs();switchTab('models');document.getElementById('manage-modal').classList.add('open')}
+function switchTab(tab){document.getElementById('tab-models-content').style.display=tab==='models'?'block':'none';document.getElementById('tab-probs-content').style.display=tab==='probs'?'block':'none';document.getElementById('tab-models').className='btn '+(tab==='models'?'btn-pr':'btn-gh');document.getElementById('tab-probs').className='btn '+(tab==='probs'?'btn-pr':'btn-gh')}
 function jsq(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
 function renderManageModels(){const brand=document.getElementById('manage-brand').value;const models=BM[brand]||[];const el=document.getElementById('manage-models-list');el.innerHTML=models.length?models.map((m,i)=>`<div style="display:flex;align-items:center;gap:6px;padding:9px 11px;border-bottom:1px solid var(--light)"><span style="flex:1;font-size:12px">${e(m)}</span><button class="btn btn-sm btn-gh" title="Move up" onclick="manageMoveModel('${jsq(brand)}',${i},-1)" ${i===0?'disabled style="opacity:.35;cursor:not-allowed"':''}>↑</button><button class="btn btn-sm btn-gh" title="Move down" onclick="manageMoveModel('${jsq(brand)}',${i},1)" ${i===models.length-1?'disabled style="opacity:.35;cursor:not-allowed"':''}>↓</button><button class="cs-item-del" onclick="manageDelModel('${jsq(brand)}','${jsq(m)}')">✕ Delete</button></div>`).join(''):'<div class="cs-none">No models for this brand.</div>'}
 function manageAddModel(){const brand=document.getElementById('manage-brand').value;const val=document.getElementById('manage-model-new').value.trim();if(!val)return;if(!BM[brand])BM[brand]=[];if(!BM[brand].includes(val))BM[brand].push(val);saveBM();document.getElementById('manage-model-new').value='';renderManageModels();toast('Model added!')}
@@ -1105,6 +1132,189 @@ async function startCam(){try{const st=await navigator.mediaDevices.getUserMedia
 function startDet(v){if(!('BarcodeDetector'in window)){scanErr('Not supported. Use Chrome on Android.');return}const d=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix']});scanRun=true;const lp=async()=>{if(!scanRun)return;try{const c=await d.detect(v);if(c.length){document.getElementById('f-imei').value=c[0].rawValue;closeScan();toast('Barcode scanned!');return}}catch{}requestAnimationFrame(lp)};requestAnimationFrame(lp)}
 function scanErr(msg){document.getElementById('scan-vid').style.display='none';const er=document.getElementById('scan-err');er.style.display='block';er.textContent=msg}
 function closeScan(){scanRun=false;document.getElementById('scan-ov').classList.remove('open');if(scanStr){scanStr.getTracks().forEach(t=>t.stop());scanStr=null}}
+
+// ════════ SHOP SETTINGS ══════════════════════════════════════════
+function openShopSettings(){document.getElementById('sh-name').value=shop.name||'';document.getElementById('sh-tag').value=shop.tagline||'';document.getElementById('sh-addr').value=shop.addr||'';document.getElementById('sh-phone').value=shop.phone||'';document.getElementById('sh-gst').value=shop.gst||'';document.getElementById('sh-footer').value=shop.footer||'';document.getElementById('shop-modal').classList.add('open')}
+function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!')}
+
+// ════════ JOB TICKET (80mm thermal) ══════════════════════════════
+function makeQRDataURL(text){
+  try{
+    if(typeof QRCode==='undefined')return'';
+    const stage=document.getElementById('qr-stage');stage.innerHTML='';
+    new QRCode(stage,{text:String(text||'-'),width:180,height:180,correctLevel:QRCode.CorrectLevel.M});
+    const cv=stage.querySelector('canvas');
+    if(cv){try{return cv.toDataURL('image/png')}catch(e){}}
+    const im=stage.querySelector('img');
+    return im?im.src:'';
+  }catch(e){return''}
+}
+function genTicket(id){
+  const j=jobs.find(x=>x.id===id);
+  if(!j){toast('Job not found','error');return}
+  const qr=makeQRDataURL(j.jno||'');
+  const locks={nil:'',pin:'PIN',pattern:'Pattern',password:'Password'};
+  const lockTxt=j.lock&&j.lock!=='nil'?(locks[j.lock]||'')+(j.lockValue?' • '+e(j.lockValue):''):'';
+  const sims=[j.sim1?'SIM 1':'',j.sim2?'SIM 2':'',j.mmc?'MMC':''].filter(Boolean).join(', ');
+  const probsHtml=(j.probs&&j.probs.length)?j.probs.map(p=>'<div class="li">• '+e(p)+'</div>').join(''):'<div class="li">—</div>';
+  const partsHtml=(j.parts&&j.parts.length)?j.parts.map(p=>'<div class="li">• '+e(p)+'</div>').join(''):'';
+  const stsMap={pending:'Pending',done:'Done',returned:'Returned'};
+  const payTxt=(j.pay==='paid'?'PAID':'UNPAID');
+  const device=(e(j.brand||'')+' '+e(j.model||'')).trim()||'—';
+  const T=`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ticket #${e(j.jno)}</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@page{size:80mm auto;margin:0}
+html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Arial,sans-serif}
+.t{width:80mm;padding:5mm 4mm 6mm;font-size:11px;line-height:1.42}
+.c{text-align:center}
+.shop{font-size:17px;font-weight:800;letter-spacing:.4px}
+.tag{font-size:10px;color:#333;margin-top:1px}
+.meta{font-size:10px;color:#333;margin-top:2px}
+.hr{border:none;border-top:1px dashed #000;margin:7px 0}
+.big{font-size:15px;font-weight:800}
+.row{display:flex;justify-content:space-between;gap:10px;margin:2px 0}
+.row .k{color:#444;font-weight:600;white-space:nowrap}
+.row .v{text-align:right;font-weight:700;word-break:break-word}
+.sec{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#555;font-weight:700;margin:7px 0 2px}
+.li{font-size:11px;margin:1px 0}
+.qr{margin:7px auto 2px;display:block;image-rendering:pixelated}
+.est{font-size:18px;font-weight:900}
+.foot{font-size:9.5px;color:#333;text-align:center;line-height:1.5;margin-top:5px}
+.noprint{margin:8px;text-align:center}
+.noprint button{font:inherit;padding:8px 16px;border:1px solid #1a1aff;background:#1a1aff;color:#fff;border-radius:8px;font-weight:700;cursor:pointer}
+@media print{.noprint{display:none}}
+</style></head><body>
+<div class="t">
+  <div class="c shop">${e(shop.name||'Tech Garage')}</div>
+  ${shop.tagline?`<div class="c tag">${e(shop.tagline)}</div>`:''}
+  ${shop.addr?`<div class="c meta">${e(shop.addr).replace(/\n/g,'<br>')}</div>`:''}
+  ${shop.phone?`<div class="c meta">☎ ${e(shop.phone)}</div>`:''}
+  ${shop.gst?`<div class="c meta">${e(shop.gst)}</div>`:''}
+  <hr class="hr">
+  <div class="c sec">Repair Job Ticket</div>
+  <div class="c big">Job #${e(j.jno)}</div>
+  <div class="c meta">${fDT(j.dt)}</div>
+  ${qr?`<img class="qr" src="${qr}" width="120" height="120" alt="QR">`:''}
+  <div class="c meta">Job No: ${e(j.jno)}</div>
+  <hr class="hr">
+  <div class="row"><span class="k">Customer</span><span class="v">${e(j.cname||'—')}</span></div>
+  ${j.cphone?`<div class="row"><span class="k">Phone</span><span class="v">+91 ${e(j.cphone)}</span></div>`:''}
+  ${j.cphone2?`<div class="row"><span class="k">Alt Phone</span><span class="v">+91 ${e(j.cphone2)}</span></div>`:''}
+  <div class="row"><span class="k">Device</span><span class="v">${device}</span></div>
+  ${j.imei&&j.imei!=='0'?`<div class="row"><span class="k">IMEI</span><span class="v">${e(j.imei)}</span></div>`:''}
+  ${lockTxt?`<div class="row"><span class="k">Lock</span><span class="v">${lockTxt}</span></div>`:''}
+  ${sims?`<div class="row"><span class="k">SIM/Storage</span><span class="v">${sims}</span></div>`:''}
+  <div class="sec">Problem(s) Reported</div>
+  ${probsHtml}
+  ${partsHtml?`<div class="sec">Part(s) to Repair</div>${partsHtml}`:''}
+  ${j.notes?`<div class="sec">Notes</div><div class="li">${e(j.notes).replace(/\n/g,'<br>')}</div>`:''}
+  <hr class="hr">
+  <div class="row"><span class="k">Status</span><span class="v">${stsMap[j.s]||'Pending'}</span></div>
+  <div class="row"><span class="k">Payment</span><span class="v">${payTxt}</span></div>
+  <div class="row"><span class="k big">Estimate</span><span class="v est">₹${fR(j.est)}</span></div>
+  <hr class="hr">
+  <div class="foot">${e(shop.footer||'Please keep this receipt safe to collect your device.')}</div>
+  <div class="foot" style="margin-top:3px">Thank you for choosing ${e(shop.name||'Tech Garage')}!</div>
+</div>
+<div class="noprint"><button onclick="window.print()">🖨 Print Ticket</button></div>
+<script>window.onload=function(){setTimeout(function(){window.focus();try{window.print()}catch(e){}},350)}<\/script>
+</body></html>`;
+  const w=window.open('','_blank','width=380,height=680');
+  if(!w){toast('Allow pop-ups to print the ticket','error');return}
+  w.document.open();w.document.write(T);w.document.close();
+  toast('Ticket generated');
+}
+
+// ════════ SEARCH + QUICK ADD (brand/model/problem/part) ═══════════
+function isBrandPfx(pfx){return pfx==='b'||pfx==='e-b'}
+function csSearch(pfx){
+  const inp=document.getElementById(pfx+'-srch');if(!inp)return;
+  const raw=inp.value.trim(),q=raw.toLowerCase();
+  const items=document.querySelectorAll('#'+pfx+'-list .cs-item');let vis=0;
+  items.forEach(i=>{const ok=(i.getAttribute('data-val')||'').toLowerCase().includes(q);i.style.display=ok?'':'none';if(ok)vis++});
+  let arr;
+  if(isBrandPfx(pfx))arr=BRANDS();
+  else{const br=pfx==='e-m'?eSelBrand:selBrand;arr=BM[br]||[]}
+  const exact=arr.some(x=>String(x).toLowerCase()===q);
+  const btn=document.getElementById(pfx+'-add');
+  if(btn){btn.style.display=(raw&&!exact)?'':'none'}
+  let em=document.getElementById(pfx+'-list-empty');
+  if(!em){em=document.createElement('div');em.className='cs-none';em.id=pfx+'-list-empty';const L=document.getElementById(pfx+'-list');if(L)L.appendChild(em)}
+  if(em){em.style.display=vis===0?'block':'none';if(vis===0)em.textContent=raw?'No match — tap Add +':'No items'}
+}
+function quickAddCS(pfx){
+  const inp=document.getElementById(pfx+'-srch');if(!inp)return;const val=inp.value.trim();if(!val){toast('Type a name first','error');return}
+  if(isBrandPfx(pfx)){
+    if(!BM[val])BM[val]=[];saveBM();popBFilter();
+    if(pfx==='e-b'){eSelBrand=val;eSelModel='';document.getElementById('e-b-lbl').textContent=val;document.getElementById('e-m-lbl').textContent='Select Model';buildBList('e');buildMList('e',BM[val]);closeDD('e-b')}
+    else{selBrand=val;selModel='';document.getElementById('b-lbl').textContent=val;document.getElementById('m-lbl').textContent='Select Model';buildBList('b');buildMList('m',BM[val]);closeDD('b')}
+    toast('Brand "'+val+'" added!');
+  }else{
+    const br=pfx==='e-m'?eSelBrand:selBrand;
+    if(!br){toast('Select a brand first','error');return}
+    if(!BM[br])BM[br]=[];if(!BM[br].includes(val))BM[br].unshift(val);saveBM();
+    if(pfx==='e-m'){eSelModel=val;document.getElementById('e-m-lbl').textContent=val;buildMList('e',BM[br]);closeDD('e-m')}
+    else{selModel=val;document.getElementById('m-lbl').textContent=val;buildMList('m',BM[br]);closeDD('m')}
+    toast('Model "'+val+'" added!');
+  }
+  inp.value='';const ab=document.getElementById(pfx+'-add');if(ab)ab.style.display='none';
+}
+function probSearch(scope){
+  const idp=scope==='e'?'e-p':'p';const inp=document.getElementById(idp+'-srch');if(!inp)return;
+  const raw=inp.value.trim(),q=raw.toLowerCase();
+  document.querySelectorAll('#'+idp+'-list .pd-item').forEach(it=>{const ok=(it.getAttribute('data-val')||'').toLowerCase().includes(q);it.style.display=ok?'':'none'});
+  const exact=PROBS.some(p=>String(p).toLowerCase()===q);const btn=document.getElementById(idp+'-add');
+  if(btn){btn.style.display=(raw&&!exact)?'':'none'}
+}
+function quickAddProb(scope){
+  const idp=scope==='e'?'e-p':'p';const inp=document.getElementById(idp+'-srch');if(!inp)return;const val=inp.value.trim();if(!val){toast('Type a problem first','error');return}
+  if(!PROBS.includes(val))PROBS.unshift(val);saveProbs();
+  if(scope==='e'){if(!eSelProbs.includes(val))eSelProbs.push(val);buildPList('e');renderPTags('e');updPLbl('e')}
+  else{if(!selProbs.includes(val))selProbs.push(val);buildPList('n');renderPTags('n');updPLbl('n')}
+  inp.value='';const ab=document.getElementById(idp+'-add');if(ab)ab.style.display='none';inp.focus();toast('Problem "'+val+'" added!');
+}
+function partSearch(scope){
+  const idp=scope==='e'?'e-pt':'pt';const inp=document.getElementById(idp+'-srch');if(!inp)return;
+  const raw=inp.value.trim(),q=raw.toLowerCase();
+  document.querySelectorAll('#'+idp+'-list .pd-item').forEach(it=>{const ok=(it.getAttribute('data-val')||'').toLowerCase().includes(q);it.style.display=ok?'':'none'});
+  const exact=PARTS.some(p=>String(p).toLowerCase()===q);const btn=document.getElementById(idp+'-add');
+  if(btn){btn.style.display=(raw&&!exact)?'':'none'}
+}
+function quickAddPart(scope){
+  const idp=scope==='e'?'e-pt':'pt';const inp=document.getElementById(idp+'-srch');if(!inp)return;const val=inp.value.trim();if(!val){toast('Type a part first','error');return}
+  if(!PARTS.includes(val))PARTS.unshift(val);saveParts();
+  if(scope==='e'){if(!eSelParts.includes(val))eSelParts.push(val);buildPartList('e');renderPartTags('e');updPartLbl('e')}
+  else{if(!selParts.includes(val))selParts.push(val);buildPartList('n');renderPartTags('n');updPartLbl('n')}
+  inp.value='';const ab=document.getElementById(idp+'-add');if(ab)ab.style.display='none';inp.focus();toast('Part "'+val+'" added!');
+}
+function toggleSecondPhone(pfx){
+  const w=document.getElementById(pfx+'-cphone2-wrap'),b=document.getElementById(pfx+'-addnum');if(!w)return;
+  const show=(w.style.display==='none'||!w.style.display);
+  w.style.display=show?'block':'none';if(b)b.textContent=show?'– Remove second number':'+ Add another number';
+  const i=document.getElementById(pfx+'-cphone2');
+  if(i){if(show){i.focus()}else{i.value='+91 '}}
+}
+// ════════ EXPORT APP (bake lists into a fresh HTML) ══════════════
+function exportApp(){
+  try{
+    const seed='/*TG_SEED_START*/\n'
+      +'const BM_DEFAULT='+JSON.stringify(BM)+';\n'
+      +'const PROBS_DEFAULT='+JSON.stringify(PROBS)+';\n'
+      +'const PARTS_DEFAULT='+JSON.stringify(PARTS)+';\n'
+      +'const SHOP_DEFAULT='+JSON.stringify(shop)+';\n'
+      +'/*TG_SEED_END*/';
+    const clone=document.documentElement.cloneNode(true);
+    ['recent-list','j-tbody','b-list','m-list','p-list','pt-list','e-b-list','e-m-list','e-p-list','e-pt-list','p-tags','pt-tags','e-p-tags','e-pt-tags','rev-job-list','rev-summary','filter-modal-list','manage-models-list','manage-probs-list','d-top','d-main','d-probs','d-parts','d-note','qr-stage'].forEach(id=>{const el=clone.querySelector('#'+id);if(el)el.innerHTML=''});
+    let src='<!DOCTYPE html>\n'+clone.outerHTML;
+    src=src.replace(/\/\*TG_SEED_START\*\/[\s\S]*?\/\*TG_SEED_END\*\//, function(){return seed});
+    const blob=new Blob([src],{type:'text/html;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='TechGarage.html';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);
+    toast('App file saved — replace your old file with it!');
+  }catch(err){console.error(err);toast('Export failed','error')}
+}
 
 // ════════ UTILS ══════════════════════════════════════════════════
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=(type==='error'?'⚠ ':type==='info'?'ℹ ':' ✓ ')+msg;el.className='show '+type;clearTimeout(tTimer);tTimer=setTimeout(()=>{el.className=''},3500)}
