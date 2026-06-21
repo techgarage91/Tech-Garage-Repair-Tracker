@@ -1,3 +1,2134 @@
+
+Claude finished the response
+index (2).html
+html
+
+what i want you do is change the text to monteserrat for more professional looking dashboard and when i open this app in mobile mode and search something it zooms in on the search bar which it shouldnt and also  you can open both the drawdowns of the parts to be change and problems reported that is a bit unprofessional do it like this only one remains open at a time if we click on another while one is open close that one and open the other one. like any subsciption model and service oor webiste i want a seperate login for every one i sell this service to make a login model for me which will be shown as a profile at the right top corner. serperate profile seperate database and seperate features for the subscription sevice
+
+Show more
+6 days ago
+
+Thought process
+Thought process
+I'll start by reading your current dashboard to understand its structure.
+
+
+Read a file
+Read a file
+Let me read the rest of the file to understand the data storage and dropdown logic before making changes.
+
+
+Read a file, searched code
+Read a file, searched code
+The toggle functions call closeAll() — let me check what that closes, plus the search/focus handling.
+
+
+Searched code
+Searched code
+closeAll() only closes brand/model selects, not the Problems/Parts dropdowns — that's the bug. Now let me check the data storage layer for the login system.
+
+
+Searched code, read a file
+Searched code, read a file
+I've now mapped the whole app. Before I build, here's what I found and a few decisions I need from you.
+
+The first three fixes are clear and I'll just do them:
+
+Font → switch the "Pro theme" (currently Inter / Plus Jakarta Sans) to Montserrat everywhere.
+Mobile zoom on search → the inputs are 14px, which triggers iOS auto-zoom; I'll bump inputs to 16px on mobile + lock the viewport scale.
+Dropdowns both staying open → real bug: closeAll() only closes the Brand/Model selects, not Problems/Parts. I'll make opening one close the other (true accordion).
+The login/subscription piece needs your input first, since it's an architectural choice.
+
+Now I'll read the end of the file to find where to inject the login system and the closing tags.
+
+
+Read a file
+Read a file
+Got it — client-side login, owner admin panel, 3 tiers. Let me set up the task list and copy the file to my workspace to edit.
+
+
+Used 5 tools, loaded tools
+Used 5 tools, loaded tools
+Now copying the file to my workspace so I can edit it.
+
+
+Ran a command, read a file
+Ran a command, read a file
+Task #2 (viewport) first:
+
+
+Edited a file, ran a command
+Edited a file, ran a command
+Now I'll apply all edits via a Python script (the file is sandbox-owned, so I'll edit it in-place there). Marking tasks in progress and doing fonts, mobile zoom, and the accordion fix together.
+
+
+Ran a command, used a tool
+Ran a command, used a tool
+Now injecting the CSS, login/profile/admin HTML, and the auth script.
+
+
+Ran a command
+Ran a command
+All edits applied. Let me validate the JavaScript syntax of every inline script to catch any errors before testing.
+
+
+Ran a command
+Ran a command
+Both scripts are syntactically valid. Let me run the app headlessly with jsdom to verify the login flow, tier gating, and accordion logic actually work.
+
+
+Ran 2 commands
+Ran 2 commands
+The app logic works (login gate triggered correctly). The test error is just because let variables aren't readable as window properties in jsdom — I'll read them via eval. Re-running:
+
+
+Ran a command
+Ran a command
+The test hung fetching external resources. Let me disable resource loading and add a hard exit.
+
+
+Ran a command
+Ran a command
+Everything passes — login gate, owner/customer roles, per-account isolated storage, tier gating (Basic hides WhatsApp/revenue/sync/scanner), upgrade toast, wrong-password error, and the accordion (only one dropdown open). No JS errors. One cosmetic fix: the owner initials render as "O(" from "Owner (You)". Let me fix the initials helper.
+
+
+Ran a command
+Ran a command
+All checks pass. Let me mark the tasks complete and present the file.
+
+
+Used 5 tools, read a file
+Used 5 tools, read a file
+All four changes are done and verified in a headless browser run (no JS errors).
+
+What changed
+
+Montserrat everywhere — overrode the old Inter / Plus Jakarta Sans theme so all text uses Montserrat.
+Mobile zoom fixed — inputs are now 16px on mobile (the real cause of iOS auto-zoom) plus a viewport scale lock, so focusing the search bar no longer zooms.
+Dropdown accordion — the bug was closeAll() only closing Brand/Model. Now opening Parts or Problems closes the other one; only one is ever open.
+Login + subscriptions — a sign-in screen, a profile avatar at the top-right (initials, shop, plan badge, log out), an owner Admin Panel, per-account isolated storage, and 3 tiers gating features.
+How to use it
+
+Open the file and log in as owner: username harkirat, password tech@2026. Change these — they're at the top of the login script (const OWNER_LOGIN).
+From the profile menu (top-right) → Admin Panel, create a login for each shop you sell to and pick their plan.
+Tiers: Basic = dashboard + jobs + lists + shop; Pro = adds revenue, WhatsApp messages, barcode scanner; Premium = adds Google-Sheet sync. Each account only sees its plan's features, and each has its own private data.
+One honest limitation: since this is a single HTML file with no server, the login isn't secure against a technical user and data lives in that browser only (it won't sync across devices, and each customer would need their own copy/device). It's a working prototype of the model — when you're ready for a real multi-customer SaaS, the same UI can be wired to a backend with real auth and a shared database. Happy to write that backend spec whenever you want.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 days ago
+let the user create and account for themselves and store it inside the database for memory usage of their data on the front page.
+
+6 days ago
+
+Thought process
+Thought process
+Good idea — I'll add self sign-up to the login screen. New users register themselves, get saved into the same accounts database (so the owner still sees them in the Admin Panel), start on the Basic plan, and their data persists per-account.
+
+
+Ran a command
+Ran a command
+Now verifying the full sign-up flow in jsdom: self-registration, persistence in the accounts DB, isolated storage, owner visibility, and duplicate/validation guards.
+
+
+Ran a command
+Ran a command
+Done. Self sign-up is now on the login screen and fully tested.
+
+What I added:
+
+A "Create an account" link on the login screen toggles to a sign-up form (name, optional shop label, username, password + confirm).
+New accounts are saved into the same accounts database (tg_auth_users), so the owner still sees them in the Admin Panel and can upgrade their plan.
+New self-signups start on the Basic plan, log in immediately, and get their own private, namespaced storage — so their jobs and data are remembered every time they sign back in.
+Guards are in place: passwords are stored obfuscated (not plain text), duplicate/owner usernames are rejected, and there are minimum-length and password-match checks.
+Verified in a headless run: sign-up → auto login → data persists across re-login → owner sees the new account in admin, with duplicate and mismatch errors firing correctly and no script errors.
+
+The updated TechGarage.html is in your outputs folder (same file I shared above — just reopen it).
+
+One reminder from before still applies: this is client-side, so accounts and data live in that one browser and aren't secure against a technical user or synced across devices. When you want real cross-device accounts, this same UI wires cleanly onto a backend.
+
+6 days ago
+remove the admin login and other things related to this right now but add an option to control inventory with unique barcode for every product help me track all my inventory with it tell me how can i make a seperate database for this and how would you save it in. also make the unique barcodes trackable with scanner option ready to scan any product and feed it inside the database.
+
+6 days ago
+
+Thought process
+Thought process
+I'll do this in two parts: cleanly remove the login/admin system (keeping the font, mobile-zoom, and accordion fixes you liked), then build a proper Inventory module with unique barcodes and scanning. Let me first restart from your original file and inspect the existing scanner so I can reuse it.
+
+
+Ran a command
+Ran a command
+Now applying the full change set: removing nothing-extra (fresh original) + keeping the font/zoom/accordion fixes + adding the Inventory module with its own database and scanner.
+
+
+Used 6 tools, ran a command
+Used 6 tools, ran a command
+Now inserting the Inventory page, product modal, and the inventory JS (with its own tg_inventory database and scanner routing).
+
+
+Ran a command
+Ran a command
+Both scripts valid and the login overlay is gone. Now a headless test of the inventory module: add, scan-new, scan-existing (auto +1), uniqueness, stock adjust, and confirming the separate tg_inventory database.
+
+
+Ran a command
+Ran a command
+All inventory tests pass and there are no script errors (the lone fetch message is the pre-existing Google-Sheet auto-sync, which only matters in a real browser where fetch exists). Marking tasks done and presenting the file.
+
+
+Used 3 tools, read a file
+Used 3 tools, read a file
+Done. The login/admin/subscription system is fully removed (app opens straight to the dashboard again), and I kept the Montserrat font, the mobile no-zoom fix, and the dropdown accordion fix. There's a new Inventory tab.
+
+What the Inventory module does
+
+Add Product — name, category, quantity, low-stock alert level, cost, selling price, supplier, notes.
+Unique barcode per product — type your own, or hit Generate for a guaranteed-unique code (e.g. TG8EBNM). Duplicates are blocked. A scannable QR renders live in the modal, and Label prints a QR sticker (code + name + price).
+Scan Product (camera) — scan any item: if its barcode already exists it auto +1s the stock; if it's new, the Add form opens with the barcode pre-filled so you just add details and save. Inside the form, ▤ Scan captures a barcode straight into the field.
+Live stats — products, total units, stock value (qty × cost), and low-stock count, with a red LOW tag and ± buttons on each row.
+Backup / Restore — export the whole inventory to a JSON file and re-import it (covers your "how do I save it" question for moving between devices).
+How the separate database works (your question)
+Inventory is stored in its own browser localStorage key, tg_inventory, completely separate from the repair jobs (tg_jobs_v3) and lists. Every add/edit/scan calls saveInv(), which writes the full product array to that one key, and loadInv() reads it back on startup — so it persists automatically in that browser, independent of everything else.
+
+Two things worth knowing:
+
+localStorage lives in one browser on one device, so the inventory won't sync to another phone/PC on its own. Use Backup → Restore to move it, and keep periodic backups (clearing browser data wipes it).
+For a true shared, multi-device inventory you'd point saveInv()/loadInv() at a small backend instead — Firebase/Firestore or Supabase are the easiest drop-ins (the data shape is already a plain array of products, so it maps directly to a database table/collection). Say the word and I can wire that up.
+One real-device note: the live camera scanner uses the browser's BarcodeDetector, which works on Chrome for Android; iOS Safari doesn't support it yet, so on iPhone you'd type or generate codes (label printing and everything else still work).
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 days ago
+check why is it not sending the data to google sheets it is not syncing right now also the numbers and keywords are not aligned properly check them and repair it.
+
+2 days ago
+
+Thought process
+Thought process
+Let me inspect the Google Sheets sync code and the table alignment to diagnose both issues.
+
+
+Read 2 files, searched code
+Read 2 files, searched code
+Let me check whether the push-to-sheet function is actually called when jobs are created or saved.
+
+
+Searched 2 patterns
+Searched 2 patterns
+The push-to-sheet calls are wired in correctly (on create, edit, status change, delete). So the issue is likely the endpoint itself. Let me test whether the Google Apps Script endpoint is alive, and check what tooling I have to screenshot the alignment issue.
+
+
+Searched the web
+Searched the web
+The endpoint returned an empty body (no JSON) — that's the smoking gun: an anonymous request gets no valid data back, which means the Apps Script web app is either no longer deployed or not set to public access. That's why sync fails. Let me confirm tooling for a screenshot of the alignment issue.
+
+
+Ran a command
+Ran a command
+I've found the sync problem. Your push-to-Sheet calls are correctly wired (on create, edit, status change, payment, delete), and I checked the Google Apps Script endpoint baked into the app — it returns no data to an anonymous request. That means the script web app is either no longer deployed or isn't set to public ("Anyone") access. That's a server-side thing in the Google account, so it can't be fixed from the HTML alone — but I can make the app point at your own working URL and give you the script to deploy.
+
+For the alignment, I can't see your screen and this build has no screenshot tool, so let me pin down exactly where it looks wrong before I touch the CSS.
+
+Let me try to get a real screenshot so I can see the exact misalignment rather than guess. I'll attempt a headless browser.
+
+
+Ran 2 commands
+Ran 2 commands
+Headless browser can't be installed here (download blocked). I'll diagnose from the code. Let me read the three areas you flagged: stat cards, the mobile job-list rows, and the job detail/ticket.
+
+
+Searched code
+Searched code
+Let me read the detail view and the printed ticket generator, plus re-check the stat-card CSS conflict I suspect.
+
+
+Read 2 files, searched code
+Read 2 files, searched code
+The endpoint is the root cause of the sync failure, and I found a concrete alignment bug too (the ticket's Estimate row mixes a 15px label with an 18px number on a top-aligned flex row). Let me look at the Shop settings functions so I can add the editable sync URL there.
+
+
+Searched code
+Searched code
+I have a clear plan now. Implementing: (1) make the Google Sheet URL editable in Shop Settings with a Test Connection button, and (2) fix the three alignment spots — stat cards (force clean row layout), the ticket rows (baseline-align label vs number), and the phone job-list cells (stop name/phone and brand/model sitting side-by-side).
+
+
+Ran a command
+Ran a command
+Both scripts valid. Quick headless check that the sync URL is now configurable, testSync exists, the Shop modal has the new field, and the app still boots cleanly.
+
+
+Ran a command
+Ran a command
+jsdom got pruned during the puppeteer attempt. Reinstalling and re-running.
+
+
+Ran a command
+Ran a command
+The npm install + node run exceeded the time limit together. Let me run just the test now that jsdom should be installed.
+
+
+Ran 2 commands
+Ran 2 commands
+Everything checks out (the two "x" lines are just my test overwriting GS_URL to probe mutability; the persist/update assertions passed). Presenting the updated file.
+
+
+Read a file
+Read a file
+Done. Here's what I found and fixed.
+
+Why sync wasn't working. The push-to-Sheet code is actually wired in correctly — it fires on create, edit, status change, payment toggle, and delete. The problem is the Google Apps Script URL baked into the app: when I tested it, an anonymous request returned no data, meaning that web app is no longer deployed or isn't set to public access. That's a Google-side issue, not something the HTML can fix on its own — so I made the URL editable so you can point it at your own working deployment.
+
+How to use it: open Shop (settings) → scroll to Google Sheet Sync URL → paste your Apps Script /exec URL → Test Connection (it tells you live whether it connected and how many rows it sees) → Save. It's stored per-browser, so each shop you sell to sets their own Sheet. Two requirements for any URL to work: it must end in /exec, and the Apps Script must be deployed with "Who has access: Anyone." If Test says "reached but no valid data," the deployment access or the script's doGet is the culprit; if it says "could not reach," the URL is wrong or undeployed.
+
+Alignment fixes (the three areas you flagged):
+
+Dashboard stat cards — there were two conflicting CSS rules leaving them half-stacked. I forced the intended clean layout: icon on the left, number and label left-aligned beside it.
+Job ticket — the "Estimate" row mixed a 15px label with an 18px number on a top-aligned row, so they didn't line up. All ticket rows are now baseline-aligned, so every label and its value sit on the same line.
+Job list on phone — the customer name/phone and the brand/model were rendering side-by-side instead of stacked under their labels. I wrapped those values so on mobile they stack neatly to the right of each label, while the desktop table is unchanged.
+All verified in a headless run: URL is now editable and persists, Test Connection works, and the app still boots with inventory intact and no script errors.
+
+If you paste your working URL and Test still fails, tell me what the status message says and I'll pinpoint it — and if you ever want each shop to auto-have its own Sheet, I can give you the Apps Script + deploy steps.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+2 days ago
+its great now let me edit the existing models while making a job. and in the all jobs section fill the entire page with the jobs so that we can see it clearly right now they are sitting in a box in the pc default. also let me edit the job number while making  a new jo because sometimes when we load the website it takes a while to load the information and when we tap on a new job it doesn't load the latest job number
+
+yesterday
+
+Thought process
+Thought process
+Let me look at the job-number logic, the model dropdown, and the All Jobs page structure before changing anything.
+
+
+Searched 2 patterns
+Searched 2 patterns
+Let me use bash to find these functions.
+
+
+Ran 2 commands
+Ran 2 commands
+The sandbox reset and cleared its temp copy. Let me check whether the file still exists on the host side via the Read tool.
+
+
+Read a file
+Read a file
+The temporary file was cleared when the workspace reset between sessions — both the sandbox and host copies are gone, and only your original upload remains. I have every change I made recorded in this conversation, so I'll rebuild the full file from your original (re-applying the Montserrat/mobile/accordion fixes, the Inventory module, the editable sync URL, and the alignment fixes), then add your three new requests. Starting the rebuild.
+
+
+Ran 3 commands
+Ran 3 commands
+Permissions fixed (the reset made it read-only). Re-running the rebuild scripts.
+
+
+Ran 2 commands
+Ran 2 commands
+Now the sync-URL and alignment-markup script (CSS alignment already folded into the first script):
+
+
+Ran a command
+Ran a command
+Reconstruction complete and verified. Now let me look at the model dropdown, job-number logic, and jobList page to implement your three new requests.
+
+
+Ran 2 commands
+Ran 2 commands
+Now I'll implement your three requests: (1) inline model rename in the job form's Model dropdown, (2) full-width All Jobs page, and (3) editable job number + auto-refresh of the latest number after data loads.
+
+
+Ran a command
+Ran a command
+Both scripts valid. Final verification of all three new features plus a regression check on the rebuilt features.
+
+
+Ran a command
+Ran a command
+jsdom was cleared again. Installing then running separately.
+
+
+Ran 2 commands
+Ran 2 commands
+All three features pass, and the rebuilt app is regression-clean (the only console line is jsdom lacking fetch, which exists in real browsers). Presenting the file.
+
+
+Read a file
+Read a file
+All three are done and verified.
+
+Edit existing models while making a job — each model in the Model dropdown now has a small ✎ rename button next to the ✕ delete. Tap it, type the new name, and it updates everywhere (the saved model list, and any existing jobs using that model). Brand list and add-new still work as before.
+
+All Jobs fills the whole page — that screen is no longer boxed into the centered ~1160px column on PC. It now spans the full width and the table lays itself out to fit, so you can see every column clearly without the side scroll. (Phone view is unchanged.)
+
+Editable job number + latest-number refresh — the Job Number field is no longer locked after auto-fill, so you can type over it anytime while creating a job. And because the data sometimes loads a beat after the page opens, tapping New Job now also triggers a quick refresh: as soon as the latest jobs arrive, it bumps the suggested number to the correct next one — unless you've already typed your own, in which case it leaves yours alone.
+
+One important note: when the temporary workspace reset between sessions, the copy of the HTML I'd built got cleared, so I rebuilt the whole file from your original and re-applied everything from our previous rounds (Montserrat, mobile no-zoom, dropdown accordion, the full Inventory module with barcodes/scanner/backup, the editable Google Sheet sync URL + Test button, and the alignment fixes) on top of these three new changes. Your actual jobs and inventory data live in your browser's storage, not in the file itself, so rebuilding the file didn't touch any of your data — just replace your old TechGarage.html with this one and everything will be there.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+yesterday
+2016
+
+Galaxy S7
+Galaxy S7 Edge
+Galaxy Note7
+Galaxy A3 (2016)
+Galaxy A5 (2016)
+Galaxy A7 (2016)
+Galaxy A8 (2016)
+Galaxy A9 (2016)
+Galaxy A9 Pro (2016)
+Galaxy J1 (2016)
+Galaxy J2 (2016)
+Galaxy J3 (2016)
+Galaxy J5 (2016)
+Galaxy J7 (2016)
+Galaxy C5
+Galaxy C7
+Galaxy On5 Pro
+Galaxy On7 Pro
+2017
+
+Galaxy S8
+Galaxy S8+
+Galaxy Note8
+Galaxy A3 (2017)
+Galaxy A5 (2017)
+Galaxy A7 (2017)
+Galaxy J2 Pro
+Galaxy J3 Pro
+Galaxy J5 Pro
+Galaxy J7 Pro
+Galaxy J7 Max
+Galaxy C7 Pro
+Galaxy On Max
+2018
+
+Galaxy S9
+Galaxy S9+
+Galaxy Note9
+Galaxy A6
+Galaxy A6+
+Galaxy A7 (2018)
+Galaxy A8 (2018)
+Galaxy A8+
+Galaxy A9 (2018)
+Galaxy J2 Core
+Galaxy J4
+Galaxy J6
+Galaxy J8
+Galaxy On6
+2019
+
+Galaxy S10e
+Galaxy S10
+Galaxy S10+
+Galaxy S10 5G
+Galaxy Note10
+Galaxy Note10+
+Galaxy A10
+Galaxy A20
+Galaxy A30
+Galaxy A40
+Galaxy A50
+Galaxy A70
+Galaxy A80
+Galaxy M10
+Galaxy M20
+Galaxy M30
+Galaxy Fold
+2020
+
+Galaxy S20
+Galaxy S20+
+Galaxy S20 Ultra
+Galaxy S20 FE
+Galaxy Note20
+Galaxy Note20 Ultra
+Galaxy A01
+Galaxy A11
+Galaxy A21
+Galaxy A31
+Galaxy A41
+Galaxy A51
+Galaxy A71
+Galaxy M01
+Galaxy M11
+Galaxy M21
+Galaxy M31
+Galaxy M51
+Galaxy Z Fold2
+Galaxy Z Flip
+Galaxy Z Flip 5G
+2021
+
+Galaxy S21
+Galaxy S21+
+Galaxy S21 Ultra
+Galaxy S21 FE
+Galaxy A02
+Galaxy A12
+Galaxy A22
+Galaxy A32
+Galaxy A52
+Galaxy A72
+Galaxy M12
+Galaxy M22
+Galaxy M32
+Galaxy M52
+Galaxy F12
+Galaxy F22
+Galaxy Z Fold3
+Galaxy Z Flip3
+2022
+
+Galaxy S22
+Galaxy S22+
+Galaxy S22 Ultra
+Galaxy A03
+Galaxy A13
+Galaxy A23
+Galaxy A33
+Galaxy A53
+Galaxy A73
+Galaxy M13
+Galaxy M23
+Galaxy M33
+Galaxy M53
+Galaxy F13
+Galaxy F23
+Galaxy Z Fold4
+Galaxy Z Flip4
+Galaxy XCover6 Pro
+2023
+
+Galaxy S23
+Galaxy S23+
+Galaxy S23 Ultra
+Galaxy S23 FE
+Galaxy A04
+Galaxy A14
+Galaxy A24
+Galaxy A34
+Galaxy A54
+Galaxy M14
+Galaxy M34
+Galaxy M54
+Galaxy F14
+Galaxy F34
+Galaxy F54
+Galaxy Z Fold5
+Galaxy Z Flip5
+2024
+
+Galaxy S24
+Galaxy S24+
+Galaxy S24 Ultra
+Galaxy S24 FE
+Galaxy A05
+Galaxy A15
+Galaxy A25
+Galaxy A35
+Galaxy A55
+Galaxy M15
+Galaxy M35
+Galaxy F15
+Galaxy F55
+Galaxy Z Fold6
+Galaxy Z Flip6
+2025
+
+Galaxy S25
+Galaxy S25+
+Galaxy S25 Ultra
+Galaxy S25 Edge
+Galaxy S25 FE
+Galaxy A06
+Galaxy A16
+Galaxy A26
+Galaxy A36
+Galaxy A56
+Galaxy M06
+Galaxy M16
+Galaxy M56
+Galaxy F06
+Galaxy F16
+Galaxy F56
+Galaxy Z Fold7
+Galaxy Z Flip7
+Galaxy Z Flip7 FE
+Galaxy Z TriFold
+2026
+
+Galaxy S26
+Galaxy S26+
+Galaxy S26 Ultra
+Galaxy A07
+Galaxy A07 5G
+Galaxy A17
+Galaxy A17 5G
+Galaxy M07
+Galaxy M17 5G
+Galaxy F07
+Galaxy F17 5G
+find out models aren't in the code and 
+then bake them into the code.
+
+Show more
+yesterday
+
+Thought process
+Thought process
+I'll compare your Samsung list against what's already in the code, then bake in the missing ones. Let me pull the current Samsung array from the file.
+
+
+Ran a command
+Ran a command
+Now I'll compute the difference programmatically (normalizing for spacing differences like "Note 20" vs "Note20" so I don't create duplicates) and bake the missing models in.
+
+
+Ran a command
+Ran a command
+117 models were missing — I've baked them into the default Samsung list (new total 183). The comparison correctly skipped the 65 you listed that were already present (including ones spelled differently like "Note20" vs "Note 20", "Fold6" vs "Fold 6").
+
+One important catch: since you've been using the app, your Samsung list is saved in your browser, which overrides the baked-in defaults. So I'll add a one-time merge that pushes the newly added defaults into your existing data (add-only — it won't touch or remove any models you customized).
+
+
+Ran a command
+Ran a command
+Both scripts valid. Let me verify the count and that the one-time merge actually surfaces the new models for an existing user with saved data.
+
+
+Ran a command
+Ran a command
+All verified. Presenting the updated file.
+
+
+Read a file
+Read a file
+Done. Out of the 182 models in your list, 65 were already in the code and 117 were missing — I baked all 117 missing ones in. The Samsung default list went from 66 to 183 models, covering S7 (2016) through the S26 series and everything in between (A, M, F, J, C, On, Z Fold/Flip, XCover, TriFold).
+
+The comparison was done by normalizing spacing so I didn't create near-duplicates — e.g. your "Galaxy Note20", "Galaxy Z Fold6", and "Galaxy A50" were recognized as the existing "Galaxy Note 20", "Galaxy Z Fold 6", and "Galaxy A50" and skipped.
+
+Two things to know about how it takes effect:
+
+Because your Samsung list was already saved in your browser, baking into the defaults alone wouldn't show up for you. So I added a one-time merge that runs once on load: it adds the new default models into your saved data, keeps any models you added or renamed yourself, and never re-adds something later if you delete it.
+Verified on a simulated existing account: custom models preserved, all new models appear, no duplicates, and it only runs once.
+Just replace your old TechGarage.html with this one. When you open it, the full Samsung list will be there in the Model dropdown.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+yesterday
+Vivo 
+X Series
+
+X20
+X20 Plus
+X21
+X21 UD
+X21i
+X23
+X23 Symphony Edition
+X27
+X27 Pro
+X30
+X30 Pro
+X50
+X50 Pro
+X50 Pro+
+X60
+X60 Pro
+X60 Pro+
+X70
+X70 Pro
+X70 Pro+
+X80
+X80 Pro
+X90
+X90 Pro
+X90 Pro+
+X100
+X100 Pro
+X100 Ultra
+X200
+X200 Pro
+X200 Pro Mini
+X200 FE
+X200T
+X300
+X300 Pro
+X300 Ultra
+Vivo V Series
+
+V9
+V9 Pro
+V11
+V11 Pro
+V15
+V15 Pro
+V17
+V17 Pro
+V19
+V20
+V20 Pro
+V21
+V21e
+V23
+V23 Pro
+V25
+V25 Pro
+V27
+V27 Pro
+V29
+V29 Pro
+V30
+V30 Pro
+V30e
+V40
+V40 Pro
+V40e
+V50
+V50e
+V60
+V60e
+V70
+V70 Elite
+Vivo Y Series (major models)
+
+Y81
+Y83
+Y91
+Y91i
+Y93
+Y95
+Y11
+Y12
+Y15
+Y17
+Y19
+Y20
+Y20A
+Y20G
+Y21
+Y21e
+Y21T
+Y22
+Y22s
+Y33s
+Y35
+Y36
+Y56
+Y58
+Y100
+Y100A
+Y100 5G
+Y100e
+Y100i
+Y200
+Y200 5G
+Y200 Pro
+Y300
+Y300 Pro
+Y400
+Y500
+Y500 Pro
+Y05
+Y11 5G
+Y21 5G
+Vivo T Series
+
+T1
+T1 Pro
+T1x
+T2
+T2 Pro
+T2x
+T3
+T3 Lite
+T3 Pro
+T3 Ultra
+T3x
+T4
+T4 Lite
+T4 Pro
+T4 Ultra
+T4x
+T4R
+Vivo Foldables
+
+X Fold
+X Fold+
+X Fold2
+X Fold3
+X Fold3 Pro
+X Fold5
+X Flip
+Vivo NEX Series
+
+NEX
+NEX S
+NEX A
+NEX Dual Display
+NEX 3
+NEX 3 5G
+Vivo S Series (China-focused)
+
+S1
+S1 Pro
+S5
+S6
+S7
+S7e
+S9
+S10
+S10 Pro
+S12
+S12 Pro
+S15
+S15 Pro
+S16
+S16 Pro
+S17
+S17 Pro
+S18
+S18 Pro
+S19
+S19 Pro
+S20
+S20 Pro
+Oppo
+Find X Series
+
+Find X
+Find X Lamborghini Edition
+Find X2
+Find X2 Pro
+Find X2 Neo
+Find X2 Lite
+Find X3
+Find X3 Pro
+Find X3 Neo
+Find X3 Lite
+Find X5
+Find X5 Pro
+Find X5 Lite
+Find X6
+Find X6 Pro
+Find X7
+Find X7 Ultra
+Find X8
+Find X8 Pro
+Find X8 Ultra
+Find X9
+Find X9 Pro
+Find X9 Ultra
+Find X9s
+Find N Foldables
+
+Find N
+Find N2
+Find N2 Flip
+Find N3
+Find N3 Flip
+Find N5
+Reno Series
+
+Reno
+Reno 10x Zoom
+Reno Z
+Reno2
+Reno2 F
+Reno2 Z
+Reno Ace
+Reno3
+Reno3 Pro
+Reno4
+Reno4 Pro
+Reno4 Z
+Reno5
+Reno5 Pro
+Reno5 F
+Reno5 Lite
+Reno5 Z
+Reno6
+Reno6 Pro
+Reno6 Z
+Reno7
+Reno7 Pro
+Reno7 Z
+Reno8
+Reno8 Pro
+Reno8 T
+Reno9
+Reno9 Pro
+Reno9 Pro+
+Reno10
+Reno10 Pro
+Reno10 Pro+
+Reno11
+Reno11 Pro
+Reno12
+Reno12 Pro
+Reno13
+Reno13 Pro
+Reno14
+Reno14 Pro
+Reno15
+Reno15 Pro
+Reno15 Pro Mini
+F Series
+
+F9
+F9 Pro
+F11
+F11 Pro
+F15
+F17
+F17 Pro
+F19
+F19 Pro
+F19 Pro+
+F21 Pro
+F21 Pro 5G
+F23
+F25 Pro
+F27
+F27 Pro+
+F29
+F29 Pro
+F31
+F31 Pro
+F31 Pro+
+K Series
+
+K1
+K3
+K5
+K7
+K9
+K9 Pro
+K10
+K10 5G
+K10 Pro
+K10x
+K11
+K11x
+K12
+K12x
+K13
+K14
+A Series (Major Models)
+
+A1k
+A3s
+A5
+A5s
+A7
+A9
+A11k
+A12
+A15
+A15s
+A16
+A16k
+A17
+A17k
+A18
+A31
+A33
+A53
+A54
+A55
+A57
+A58
+A59
+A60
+A74
+A76
+A77
+A78
+A79
+A80
+A91
+A92
+A93
+A94
+A95
+A96
+A97
+A98
+A3
+A3 Pro
+A5 Pro
+A5x
+A6
+A6 Pro
+A6x
+Redmi Series
+Redmi Number Series
+
+Redmi 3
+Redmi 3S
+Redmi 3X
+Redmi 4
+Redmi 4A
+Redmi 4X
+Redmi 5
+Redmi 5A
+Redmi 6
+Redmi 6A
+Redmi 6 Pro
+Redmi 7
+Redmi 7A
+Redmi 8
+Redmi 8A
+Redmi 9
+Redmi 9A
+Redmi 9C
+Redmi 9 Prime
+Redmi 10
+Redmi 10 Prime
+Redmi 10A
+Redmi 10C
+Redmi 11 Prime
+Redmi 12
+Redmi 12C
+Redmi 13
+Redmi 13C
+Redmi 14C
+Redmi 15
+Redmi 15 5G
+Redmi 15C
+Redmi 15A
+Redmi Note Series
+
+Redmi Note 3
+Redmi Note 3 Pro
+Redmi Note 4
+Redmi Note 4X
+Redmi Note 5
+Redmi Note 5 Pro
+Redmi Note 5A
+Redmi Note 6 Pro
+Redmi Note 7
+Redmi Note 7 Pro
+Redmi Note 8
+Redmi Note 8 Pro
+Redmi Note 9
+Redmi Note 9 Pro
+Redmi Note 9 Pro Max
+Redmi Note 10
+Redmi Note 10S
+Redmi Note 10 Pro
+Redmi Note 10 Pro Max
+Redmi Note 11
+Redmi Note 11S
+Redmi Note 11 Pro
+Redmi Note 11 Pro+
+Redmi Note 12
+Redmi Note 12 Pro
+Redmi Note 12 Pro+
+Redmi Note 12 Turbo
+Redmi Note 13
+Redmi Note 13 Pro
+Redmi Note 13 Pro+
+Redmi Note 14
+Redmi Note 14 Pro
+Redmi Note 14 Pro+
+Redmi Note 15
+Redmi Note 15 5G
+Redmi Note 15 Pro
+Redmi Note 15 Pro+
+Redmi K Series
+
+Redmi K20
+Redmi K20 Pro
+Redmi K30
+Redmi K30 5G
+Redmi K30 Pro
+Redmi K30 Ultra
+Redmi K40
+Redmi K40 Pro
+Redmi K40 Pro+
+Redmi K40 Gaming
+Redmi K50
+Redmi K50 Pro
+Redmi K50 Gaming
+Redmi K50 Ultra
+Redmi K60
+Redmi K60E
+Redmi K60 Pro
+Redmi K60 Ultra
+Redmi K70
+Redmi K70E
+Redmi K70 Pro
+Redmi K70 Ultra
+Redmi K80
+Redmi K80 Pro
+Redmi K90
+Redmi K90 Pro
+Redmi A Series
+
+Redmi A1
+Redmi A1+
+Redmi A2
+Redmi A2+
+Redmi A3
+Redmi A3x
+Redmi A3 Pro
+Redmi A4 5G
+Redmi A5
+Redmi Turbo Series
+
+Redmi Turbo 3
+Redmi Turbo 4
+Redmi Turbo 4 Pro
+Redmi Turbo 5
+Xiaomi (Mi) Series
+Xiaomi / Mi Number Series
+
+Mi 5S
+Mi 5S Plus
+Mi 6
+Mi 6X
+Mi 8
+Mi 8 Lite
+Mi 8 SE
+Mi 8 Pro
+Mi 9
+Mi 9 SE
+Mi 9T
+Mi 9T Pro
+Mi 10
+Mi 10 Pro
+Mi 10 Lite
+Mi 10 Ultra
+Mi 11
+Mi 11 Lite
+Mi 11 Pro
+Mi 11 Ultra
+Mi 11X
+Mi 11X Pro
+Xiaomi 12
+Xiaomi 12 Pro
+Xiaomi 12 Lite
+Xiaomi 12S
+Xiaomi 12S Pro
+Xiaomi 12S Ultra
+Xiaomi 13
+Xiaomi 13 Pro
+Xiaomi 13 Ultra
+Xiaomi 13T
+Xiaomi 13T Pro
+Xiaomi 14
+Xiaomi 14 Pro
+Xiaomi 14 Ultra
+Xiaomi 14T
+Xiaomi 14T Pro
+Xiaomi 15
+Xiaomi 15 Pro
+Xiaomi 15 Ultra
+Xiaomi 15T
+Xiaomi 15T Pro
+Xiaomi 16
+Xiaomi 16 Pro
+Xiaomi 16 Ultra
+Xiaomi 17
+Xiaomi 17 Ultra
+Mi Note Series
+
+Mi Note 2
+Mi Note 3
+Mi Note 10
+Mi Note 10 Lite
+Mi Max Series
+
+Mi Max
+Mi Max Prime
+Mi Max 2
+Mi Max 3
+Android One Series
+
+Mi A1
+Mi A2
+Mi A2 Lite
+Mi A3
+MIX Series
+
+Mi MIX
+Mi MIX 2
+Mi MIX 2S
+Mi MIX 3
+Mi MIX 3 5G
+MIX Alpha
+MIX 4
+MIX Fold Series
+
+MIX Fold
+MIX Fold 2
+MIX Fold 3
+MIX Fold 4
+MIX Fold 5
+MIX Flip Series
+
+MIX Flip
+MIX Flip 2
+POCO
+F Series
+
+POCO F1
+POCO F2 Pro
+POCO F3
+POCO F3 GT
+POCO F4
+POCO F4 GT
+POCO F5
+POCO F5 Pro
+POCO F6
+POCO F6 Pro
+POCO F7
+POCO F7 Pro
+POCO F7 Ultra
+X Series
+
+POCO X2
+POCO X3
+POCO X3 NFC
+POCO X3 Pro
+POCO X3 GT
+POCO X4 Pro 5G
+POCO X4 GT
+POCO X5 5G
+POCO X5 Pro 5G
+POCO X6 5G
+POCO X6 Pro 5G
+POCO X6 Neo
+POCO X7
+POCO X7 Pro
+POCO X7 Neo
+POCO X8 Pro
+POCO X8 Pro Max
+M Series
+
+POCO M2
+POCO M2 Pro
+POCO M3
+POCO M3 Pro 5G
+POCO M4 Pro 4G
+POCO M4 Pro 5G
+POCO M4 5G
+POCO M5
+POCO M5s
+POCO M6
+POCO M6 Pro
+POCO M6 Plus
+POCO M7
+POCO M7 Pro
+C Series
+
+POCO C3
+POCO C31
+POCO C40
+POCO C50
+POCO C51
+POCO C55
+POCO C61
+POCO C65
+POCO C71
+POCO C75
+POCO C85
+Special Models
+
+POCO Pad
+POCO F4 GT Cyber Edition
+POCO X8 Pro Iron Man Edition
+Realme
+Number Series
+
+Realme 1
+Realme 2
+Realme 2 Pro
+Realme 3
+Realme 3 Pro
+Realme 5
+Realme 5 Pro
+Realme 6
+Realme 6i
+Realme 6 Pro
+Realme 7
+Realme 7i
+Realme 7 Pro
+Realme 8
+Realme 8 5G
+Realme 8i
+Realme 8s 5G
+Realme 8 Pro
+Realme 9
+Realme 9 5G
+Realme 9i
+Realme 9 Pro
+Realme 9 Pro+
+Realme 10
+Realme 10 5G
+Realme 10 Pro
+Realme 10 Pro+
+Realme 11
+Realme 11x
+Realme 11 5G
+Realme 11 Pro
+Realme 11 Pro+
+Realme 12
+Realme 12x
+Realme 12 5G
+Realme 12+
+Realme 12 Pro
+Realme 12 Pro+
+Realme 13
+Realme 13+
+Realme 13 Pro
+Realme 13 Pro+
+Realme 14
+Realme 14x
+Realme 14 Pro
+Realme 14 Pro+
+Realme 15
+Realme 15x
+Realme 15 Pro
+Realme 16
+Realme 16 Pro
+Realme 16 Pro+
+Realme 16T 5G
+GT Series
+
+Realme GT
+Realme GT Master Edition
+Realme GT Explorer Master Edition
+Realme GT Neo
+Realme GT Neo 2
+Realme GT Neo 2T
+Realme GT Neo 3
+Realme GT Neo 3T
+Realme GT Neo 5
+Realme GT Neo 5 SE
+Realme GT 2
+Realme GT 2 Pro
+Realme GT 3
+Realme GT 5
+Realme GT 5 Pro
+Realme GT 6
+Realme GT 6T
+Realme GT 7
+Realme GT 7T
+Realme GT 7 Pro
+Realme GT 8 Pro
+X Series
+
+Realme X
+Realme XT
+Realme X2
+Realme X2 Pro
+Realme X3
+Realme X3 SuperZoom
+Realme X7
+Realme X7 Pro
+Realme X7 Max
+Narzo Series
+
+Narzo
+Narzo 10
+Narzo 10A
+Narzo 20
+Narzo 20A
+Narzo 20 Pro
+Narzo 30
+Narzo 30A
+Narzo 30 Pro
+Narzo 30 5G
+Narzo 50
+Narzo 50A
+Narzo 50i
+Narzo 50i Prime
+Narzo 50 Pro
+Narzo 50 5G
+Narzo 60
+Narzo 60x
+Narzo 60 Pro
+Narzo 70
+Narzo 70x
+Narzo 70 Pro
+Narzo N53
+Narzo N55
+Narzo N61
+Narzo N63
+Narzo N65
+Narzo N100
+C Series
+
+Realme C1
+Realme C2
+Realme C3
+Realme C3i
+Realme C11
+Realme C11 (2021)
+Realme C12
+Realme C15
+Realme C17
+Realme C20
+Realme C21
+Realme C21Y
+Realme C25
+Realme C25s
+Realme C25Y
+Realme C30
+Realme C30s
+Realme C31
+Realme C33
+Realme C35
+Realme C51
+Realme C53
+Realme C55
+Realme C61
+Realme C63
+Realme C65
+Realme C67
+Realme C71
+Realme C73
+Realme C75
+Realme C75x
+Realme C85
+P Series
+
+Realme P1
+Realme P1 Pro
+Realme P2
+Realme P2 Pro
+Realme P3
+Realme P3 Pro
+Realme P3 Ultra
+Realme P4
+Realme P4 Lite
+Realme P4 Lite 5G
+Realme P4 Pro
+Realme P4 Power
+Realme P4R
+Realme P4x
+OnePlus 2016: OnePlus 3, 3T 2017: OnePlus 5, 5T 2018: OnePlus 6, 6T, 6T McLaren Edition 2019: OnePlus 7, 7 Pro, 7 Pro 5G, 7T, 7T Pro, 7T Pro McLaren Edition 2020: OnePlus 8, 8 Pro, 8T, Nord 2021: OnePlus 9, 9 Pro, 9R, 9RT, Nord CE 5G, Nord N200 5G, Nord 2 2022: OnePlus 10 Pro, 10T, 10R, 10R 150W, Nord CE 2, Nord CE 2 Lite 5G, Nord 2T, Ace, Ace Pro, Ace Racing Edition 2023: OnePlus 11, 11R, Nord CE 3, Nord CE 3 Lite 5G, Nord 3, Nord N300 5G, Ace 2, Ace 2 Pro, Ace 2V 2024: OnePlus 12, 12R, 13, 13R, Nord 4 CE, Nord 4, Ace 3, Ace 3 Pro, Ace 3V, Ace 3 Racing Edition, Ace 5, Ace 5 Pro 2025: OnePlus 13T, 13s, 15, 15R, Nord 5, Nord CE 5, Ace 5 Ultra, Ace 5 Racing Edition, Ace 6, Ace 6T 2026: OnePlus 15T, Nord 6, Nord CE6, Nord CE6 Lite, Ace 6 Ultra
+Google Pixel 2016: Pixel, Pixel XL 2017: Pixel 2, Pixel 2 XL 2018: Pixel 3, Pixel 3 XL 2019: Pixel 3a, Pixel 3a XL, Pixel 4, Pixel 4 XL 2020: Pixel 4a, Pixel 4a 5G, Pixel 5 2021: Pixel 5a, Pixel 6, Pixel 6 Pro 2022: Pixel 6a, Pixel 7, Pixel 7 Pro 2023: Pixel 7a, Pixel Fold, Pixel 8, Pixel 8 Pro 2024: Pixel 8a, Pixel 9, Pixel 9 Pro, Pixel 9 Pro XL, Pixel 9 Pro Fold 2025: Pixel 9a, Pixel 10, Pixel 10 Pro, Pixel 10 Pro XL, Pixel 10 Pro Fold 2026: Pixel 10a
+Motorola 2016: Moto E3, E3 Power, Moto G4, G4 Play, G4 Plus, Moto M, Moto Z, Z Play, Z Force 2017: Moto E4, E4 Plus, Moto G5, G5 Plus, G5S, G5S Plus, Moto C, C Plus, Moto X4, Moto Z2 Play, Z2 Force 2018: Moto E5, E5 Play, E5 Plus, Moto G6, G6 Play, G6 Plus, Moto Z3, Z3 Play, Motorola One, One Power 2019: Moto E6, E6 Play, E6 Plus, Moto G7, G7 Play, G7 Power, G7 Plus, Moto G8 Play, G8 Plus, Moto Z4, Motorola One Vision, One Action, One Zoom, One Macro, One Hyper, Razr 2020: Moto E6s, Moto E 2020, E7, E7 Plus, Moto G8, G8 Power, G8 Power Lite, G Fast, G Power, G Stylus/G Pro, G 5G Plus, G9/G9 Play, G9 Plus, G9 Power, Motorola Edge, Edge+, One Fusion, One Fusion+, Razr 5G 2021: Moto E6i, E7 Power, E7i Power, E20, E30, E40, Moto G 5G, G Pure, G Play, G Power, G Stylus, G Stylus 5G, G10, G10 Power, G20, G30, G40 Fusion, G50, G50 5G, G60, G60S, G100/Edge S, Edge 20 Lite, Edge 20 Fusion, Edge 20, Edge 20 Pro/Edge S Pro, Edge 2021, Edge S30, Edge X30, Motorola One 5G Ace, Defy 2022: Moto E22, E22s, E32, Moto G Power, G 5G, G Stylus, G Stylus 5G, G31, G41, G51 5G, G71 5G, G200 5G, G22, G52, G52j, G82, G62, G32, G72, Moto S30 Pro, Moto X30 Pro, Edge 2022, Edge+ 2022, Edge 30, 30 Pro, 30 Ultra, 30 Fusion, 30 Neo, Razr 2022, Defy 2 2023: Moto E13, Moto G Play 2023, G 5G 2023, G Power 5G 2023, G Stylus 2023, G Stylus 5G 2023, G53 5G, G13, G23, G53j/G53s/G53y, G73 5G, G14, G34 5G, G84, G54, G54j/G54y, G54 Power Edition, Moto X40, Edge 40, Edge 40 Pro/Edge+ 2023/Edge X40, Edge 40 Neo, Razr 40/Razr 2023, Razr 40 Ultra/Razr+ 2023, ThinkPhone 2024: Moto E14, Moto G04, G04s, G24, G24 Power, G64, G35, G45, G55, G85, G Play 2024, G 5G 2024, G Power 5G 2024, G Stylus 5G 2024, Moto S50, S50 Neo, Moto X50 Ultra, Edge 50, 50 Pro, 50 Fusion, 50 Neo, 50 Ultra, Edge 2024, Razr 50/Razr 2024, Razr 50 Ultra/Razr+ 2024, ThinkPhone 25 2025: Moto E15, Moto G75, G05, G 2025, G Power 2025, G Stylus 2025, G15, G56, G86, G86 Power, G96, G06, G06 Power, G67, G67 Power, G57, G57 Power, Moto X70 Air, Edge 60 Fusion, Edge 60, Edge 60 Stylus, Edge 60 Pro, Edge 60 Neo, Razr 60/Razr 2025, Razr 60 Plus/Razr Plus 2025, Razr 60 Ultra/Razr Ultra 2025 2026: Moto G Play 2026, Moto G 2026, Moto G17, G17 Power, G67 2026, G77, Edge 70, Edge 70 Fusion, Edge 70 Pro
+
+if the brands and models overlap example like if the brand Motorola has a model named moto edge 60 fusion remove the moto from the model name do this with every model.
+
+Show more
+yesterday
+
+Thought process
+Thought process
+This is a big one — multiple full brand catalogs plus a name-cleaning rule. Let me first inspect the current brand list and structure so I integrate it correctly.
+
+
+Ran a command
+Ran a command
+All brands already exist (POCO is the one exception). Let me pull the current model lists for the brands I'll expand, so I can clean and dedupe correctly.
+
+
+Ran a command
+Ran a command
+All target brands already exist (only POCO is new). Here's my plan, which I'll now execute: expand each brand with your full lists, strip the redundant brand word from model names (Moto, Redmi, Xiaomi/Mi, POCO, Realme, OnePlus) per your rule, add a POCO brand, dedupe against what's there, and add a one-time migration so existing data also gets cleaned + the new models. Building it now.
+
+
+Ran a command
+Ran a command
+Brand catalogs baked in. Now updating the one-time migration so existing users get cleaned names + the POCO brand + all new models.
+
+
+Ran a command
+Ran a command
+Both valid. Final verification — checking brand list, name-cleaning, POCO brand, and the existing-user migration (old names cleaned + POCO moved out of Xiaomi).
+
+
+Ran a command
+Ran a command
+All checks pass. Presenting the updated file.
+
+
+Read a file
+Read a file
+Done. I baked in all the brand catalogs, applied your name-cleaning rule, and added a POCO brand. Final model counts per brand:
+
+Brand	Models
+Motorola	212
+Vivo	173
+Oppo	158
+Realme	158
+Redmi	115
+OnePlus	78
+Xiaomi	75
+POCO	64
+Google	34
+The brand-overlap cleaning is applied exactly as you asked — the redundant brand word is stripped from every model name where it overlaps:
+
+Motorola → "Moto Edge 60 Fusion" becomes Edge 60 Fusion, "Moto G85" → G85, "Motorola One" → One
+OnePlus → "OnePlus 13 Pro" → 13 Pro (Nord/Ace kept)
+Redmi → "Redmi Note 14 Pro+" → Note 14 Pro+
+Xiaomi → "Xiaomi 12"/"Mi 6" → 12 / 6
+POCO → "POCO F1" → F1
+Realme → "Realme GT 7" → GT 7 (Narzo kept)
+Vivo, Oppo, and Google models don't contain the brand name, so they're left as-is (Pixel models keep "Pixel"). POCO models that were previously mixed into Xiaomi are now moved into the dedicated POCO brand.
+
+For your existing data: since your saved models live in your browser, I added a one-time migration that runs when you open this version — it cleans your current model names the same way, creates the POCO brand, moves POCO models out of Xiaomi, merges in all the new models, and removes duplicates. Any models you added yourself are preserved. Verified on a simulated existing account: old names like "OnePlus 11" and "Moto G85" became "11" and "G85", POCO split out correctly, customs kept, no duplicates.
+
+Just replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+yesterday
+arrange all the models like this the oldest on the bottom and the latest on the top also the edit button should be beside the cross button in the models section not in the middle also in the brands section the other model should be removed
+
+yesterday
+
+Thought process
+Thought process
+Three changes: newest-on-top ordering, group the edit button next to the delete (it's currently in the middle), and remove the "Other" brand. Let me check the current model-row markup and the "Other" brand first.
+
+
+Ran 3 commands
+Ran 3 commands
+Now I'll apply all three changes: newest-first ordering (reversing within each series so flagships stay on top), grouping the rename button next to the delete, and removing the "Other" brand — plus updating the migration so existing data gets the same treatment.
+
+
+Ran a command
+Ran a command
+Ordering is newest-first now. Applying the button grouping, the "Other" brand removal, and the migration update.
+
+
+Ran a command
+Ran a command
+Both valid. Final verification of all three changes plus the migration.
+
+
+Ran a command
+Ran a command
+All three changes verified. Presenting the updated file.
+
+
+Read a file
+Read a file
+All three done and verified:
+
+Newest on top — every brand's models are now ordered newest-first. Within each lineup the latest model sits at the top and the oldest at the bottom, with the flagship series first. For example Vivo opens with X300 Ultra, Motorola with Edge 70 Pro, Xiaomi with 17 Ultra, POCO with F7 Ultra, Google with Pixel 10a.
+
+Edit button beside the cross — the rename (✎) and delete (✕) buttons are now grouped together on the right edge of each model row, with the model name taking the space on the left. The pencil no longer floats in the middle.
+
+"Other" brand removed — it's gone from the brand dropdown.
+
+And the one-time migration was updated (to version 3) so your existing saved data gets the same treatment when you open this version: it re-sorts your brands to the new newest-first order, drops the "Other" brand, and keeps any models you added yourself (placed at the end of their brand). Verified on a simulated existing account — reorder, Other removal, and custom-model preservation all work, with no script errors.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+yesterday
+TechGarage.html
+html
+
+while i am making a new job fill the job number automatically but also give me an option to edit it by placing an edit button inside the field on the right side itself and instead of making a whole ne html for saving the lists of fields i have  edited you should save a seperate json for models and brands itself
+
+6 hours ago
+
+Thought process
+Thought process
+I'll work from your uploaded current version. Let me copy it and inspect the job-number field and the current "Save App File" feature.
+
+
+Ran 2 commands
+Ran 2 commands
+Let me check all references to the AUTO button and the reset() function so I can cleanly swap in the in-field edit button.
+
+
+Ran a command
+Ran a command
+Now I'll implement both: the in-field edit (pencil) button for the auto-filled job number, and replacing the "Save App File" HTML export with a separate JSON export/import for your lists.
+
+
+Ran a command
+Ran a command
+Both valid. Verifying the job-number behavior and the JSON export/import round-trip.
+
+
+Ran a command
+Ran a command
+All verified. The job number auto-fills (42), shows locked with a pencil inside the field on the right, the pencil unlocks it for editing (and your typed value sticks), and the AUTO button is gone. Lists now export/import as JSON instead of a full HTML rebuild. (The trailing console lines are jsdom test-harness limitations — fetch, revokeObjectURL, and navigation aren't implemented in that simulator — not app bugs.)
+
+
+Read a file
+Read a file
+Both changes are done and verified.
+
+Job number — when you open New Job it auto-fills the next number (e.g. 42) and shows it locked, with a small pencil (✎) button inside the field on the right. Tap the pencil to unlock and edit it (the icon turns to ✓ and the field selects so you can type over it); when you click away it re-locks and keeps your value. The old "AUTO" button is removed.
+
+Lists backup — the "Save App File (bake into code)" option is replaced. In the Lists modal you now have Export Lists (JSON) and Import Lists, which save all your brands, models, problems and parts to a small techgarage-lists.json file and load them back (handy for backup or moving to another device). Your lists still auto-save in the browser as before.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 hours ago
+https://script.google.com/macros/s/AKfycbxhCf0oi0pvHFzgpivLt7VpZXruB1A_DdS0E5tJMO-6xlCb5amE737EsMOX8d39-osh-Q/exec 
+
+check the url in the code because its not sending the second mobile number info right now from the google sheets. when i maark a job returned it should disable the paid button beside it and also removed the unpaid mark from the job in the dashboard instead only show the returned mark.
+
+6 hours ago
+
+Thought process
+Thought process
+Let me check the current file state and the sync/payment code.
+
+
+Ran 2 commands
+Ran 2 commands
+This is the latest file. Let me update the URL and look at the payment toggle + dashboard rendering to handle the "returned" behavior.
+
+
+Ran a command
+Ran a command
+Let me read the dashboard stats logic to handle the unpaid count for returned jobs.
+
+
+Ran a command
+Ran a command
+Now I'll apply: update the Google Sheet URL (and auto-upgrade anyone still on the old broken one), disable the paid toggle on returned jobs, and hide the unpaid badge on the dashboard for returned jobs (showing only the RETURNED mark).
+
+
+Ran a command
+Ran a command
+Both valid. Verifying the URL, cphone2 in the sync payload, and the returned-job behavior.
+
+
+Ran a command
+Ran a command
+All verified. Presenting the updated file.
+
+
+Read a file
+Read a file
+Done — all verified.
+
+Google Sheet URL — updated to your new AKfycbxhCf0... endpoint. I also made it auto-upgrade: if your browser still had the old broken URL saved, it switches to the new one automatically (and if you'd set your own different URL in Shop settings, that's left alone).
+
+Second mobile number — I checked the code, and cphone2 is included in the data sent to the sheet (confirmed in the test payload). It was almost certainly never arriving because the old URL was dead, so nothing synced at all. With the new working URL it'll send. One thing to check on your side: your Google Sheet / Apps Script must have a cphone2 column for it to land — if the Apps Script only writes known columns, add cphone2 there too. If it still doesn't show after that, tell me and I'll look closer.
+
+Returned jobs —
+
+In the All Jobs list, the Paid/Unpaid toggle beside a returned job is now disabled (shows "N/A", greyed out, not clickable), and toggling payment on a returned job is blocked everywhere with a small notice.
+On the dashboard, returned jobs no longer show the Unpaid badge — only the red RETURNED mark. (The "Unpaid" stat count already excluded returned jobs, so that stays correct.)
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 hours ago
+when i open the html it takes me straight towards the manage models and problems list it shouldn't do that it should it should take me to the dashboard only and while i am on the topic i want you to design me a welcome page for this
+
+6 hours ago
+
+Thought process
+Thought process
+Let me find why the manage modal opens on load.
+
+
+Ran 2 commands
+Ran 2 commands
+Found it: in the saved file the manage modal is stuck open, and the active page is "New Job" instead of Dashboard. Let me check the nav/active states fully before fixing.
+
+
+Ran a command
+Ran a command
+Two display-state bugs got baked into the saved file (manage modal stuck open, New Job set as the active page). I'll fix those and add a welcome page. Let me view window.onload to wire in the welcome init.
+
+
+Ran a command
+Ran a command
+Now applying the fixes and the welcome page.
+
+
+Ran a command
+Ran a command
+The toast div markup differs. Let me find it.
+
+
+Ran 2 commands
+Ran 2 commands
+Applied. Verifying startup view, the welcome overlay, and Enter behavior.
+
+
+Ran a command
+Ran a command
+All verified — manage modal no longer opens on load, the dashboard is the active page, and the welcome page works.
+
+
+Read a file
+Read a file
+Done.
+
+Startup bug fixed — the saved file had the "Manage models & problems" modal stuck open and "New Job" set as the active page. I reset it so the app now opens cleanly on the Dashboard (modal closed, Dashboard tab active).
+
+Welcome page added — a branded landing screen that appears when the app opens: the Tech Garage logo and name, your shop's tagline, a time-based greeting with your shop name and today's date ("Good morning, Tech Garage 👋"), quick feature pills (Job Tracking · Inventory · WhatsApp · Revenue · Barcode), and a big Enter Dashboard → button that takes you straight to the dashboard.
+
+If you'd rather it only appear the first time (instead of every open), just say so and I'll make it show once and remember.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 hours ago
+Its good but make the welcome page more appealing like when we enter the an apple website
+
+6 hours ago
+
+Thought process
+Thought process
+Let me pull the current welcome CSS and HTML so I can replace them with a more premium, Apple-style design.
+
+
+Ran 2 commands
+Ran 2 commands
+I'll redo the welcome screen with a premium, Apple-style hero — deep black backdrop with a soft breathing glow, oversized gradient headline, refined typography, staggered fade-up animations, a floating logo, and an Apple-blue pill button.
+
+
+Ran a command
+Ran a command
+Both valid. Quick functional check, then I'll show you a live preview of the new design.
+
+
+Ran a command
+Ran a command
+I've redesigned the welcome screen to feel like an Apple product landing page. Presenting the updated file.
+
+
+Read a file
+Read a file
+Redesigned with an Apple-style feel:
+
+Deep black hero with a soft indigo/cyan glow that slowly breathes in the background — premium and minimal, lots of negative space.
+Oversized headline "Tech Garage" with a subtle silver-to-white gradient text fill and tight letter-spacing (the big-type look Apple uses), scaling responsively from phone to desktop.
+Floating logo that gently rises and settles, with a soft glow.
+Staggered entrance — the logo, title, subtitle, greeting, feature line, button and footer each fade up in sequence with Apple's smooth easing curve.
+Refined details instead of emoji chips: a clean greeting + date line and a small uppercase, letter-spaced feature line (Jobs · Inventory · Messaging · Revenue · Barcode).
+Apple-blue pill button ("Enter Dashboard") with a hover lift and an arrow that slides on hover.
+It still greets you by shop name and shows today's date, and the Enter button takes you straight to the dashboard. Replace your old TechGarage.html with this one to see it.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+6 hours ago
+Good remove the explanation below like jobs inventory etc and remove the name of the firm when greeting only keep good morning afternoon like that. Allow me to put in a password before we enter the password will be nmw123. name the software Repair Tracker
+
+5 hours ago
+
+Thought process
+Thought process
+Let me check the document title and exact CSS anchors before editing.
+
+
+Ran a command
+Ran a command
+Now applying all four changes.
+
+
+Ran a command
+Ran a command
+Both valid. Verifying the password gate, greeting, title, and that the feature line is gone.
+
+
+Ran a command
+Ran a command
+All four changes verified. Presenting the file.
+
+
+Read a file
+Read a file
+Done — all four changes are in and verified:
+
+Feature line removed (Jobs · Inventory · etc.).
+Greeting now shows only the time of day ("Good morning / afternoon / evening") with the date — no firm name.
+Password gate added: you type the password on the welcome screen and press Enter (or the button). Correct password nmw123 takes you to the dashboard; a wrong password shows an "Incorrect password" message and a shake, and won't let you in.
+Renamed to "Repair Tracker" — both the welcome headline and the browser tab title.
+The password field auto-focuses so you can type right away. Replace your old TechGarage.html with this one.
+
+One note: this is a client-side password (stored in the page), so it keeps casual users out but isn't strong security against someone technical who inspects the file. If you ever want it tougher, that needs a backend login — happy to help with that later.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+5 hours ago
+when i enter  a wrong password it should show below the field that its a wrong password with red instead of just hiding the field
+
+5 hours ago
+
+Thought process
+Thought process
+Let me look at the current welcome password markup and error handling to see exactly what's happening.
+
+
+Ran a command
+Ran a command
+Found the real bug. The shake class was being added to the whole password wrapper, and because that wrapper relies on the fade-in animation's forwards to stay visible, the shake animation overrode it and reset the wrapper to opacity:0 — making the field (and error) vanish. Fix: shake only the input, leave the wrapper's visibility intact, and clear the error as you retype.
+
+
+Ran 2 commands
+Ran 2 commands
+5 hours ago
+remove the popup that comes everytime it syncs to google sheets
+
+5 hours ago
+
+Ran a command
+Ran a command
+The recurring popup is the "Synced to Google Sheets" toast that fires on every job change. I'll remove that one (keeping error popups so you still know if a sync fails, and the sync badge still shows status).
+
+
+Ran a command
+Ran a command
+Done. The "Synced to Google Sheets" popup that appeared on every job save/status/payment change is removed. Sync still happens silently in the background, the sync badge still shows status, and error popups remain so you'll still be alerted if a sync fails. (The password-screen fix from before is also in this file — the field no longer disappears on a wrong password; it shows the red message and shakes.)
+
+
+Read a file
+Read a file
+The sync popup is removed — replace your old TechGarage.html with this one. Background syncing and the status badge still work; you just won't get the toast on every change anymore.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+5 hours ago
+The popup shouldn't show up even when i login. also the sync badge should have a better animation than a cloud rotating itself that just looks unprofessional.\
+
+5 hours ago
+
+Ran a command
+Ran a command
+Two fixes: make the login/auto sync silent (no popup), and replace the rotating-cloud with a proper spinner. I'll also silence the manual sync so no sync popups appear at all (the badge shows status).
+
+
+Ran 2 commands
+Ran 2 commands
+Let me confirm no non-silent sync toast path remains reachable.
+
+
+Ran a command
+Ran a command
+All confirmed — every sync call is now silent, so no sync popup appears on login or otherwise, and the rotating cloud is replaced with a clean ring spinner (check when synced, alert on error). Presenting the file.
+
+
+Read a file
+Read a file
+Done — both fixed.
+
+No more sync popups — the sync on login (and the auto/background sync, manual badge click, and shop-settings save) all run silently now. You won't see a sync toast at all. The badge still reflects status, and a genuine failure still alerts you.
+
+Better sync indicator — the rotating cloud is gone. The badge now shows a clean circular ring spinner while syncing, a check when synced, and an alert icon on error — the standard professional look.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+5 hours ago
+Make a settings panel on the upper right side of the panel and fit in whatsapp messages lists and shop info in it also add in a new feature to let me edit my ticket as i like in the settings panel itself. also add in a profile feature beside the settings button that will control my password and that will also feature a logout button in the profile button also.
+
+5 hours ago
+
+Thought process
+Thought process
+This is a meaty one — a consolidated Settings panel (WhatsApp, Lists, Shop, plus a new Ticket editor) and a Profile menu (change password + logout). Let me inspect the nav, the ticket generator, and the password/welcome code so I integrate cleanly.
+
+
+Ran 3 commands
+Ran 3 commands
+This is a large change. Let me capture the exact enterApp block to extend it.
+
+
+Ran a command
+Ran a command
+Now I'll build it all: consolidate Messages/Lists/Shop into a Settings panel, add a Ticket editor, add a Profile menu (change password + logout), and make the password configurable.
+
+
+Ran a command
+Ran a command
+Nav consolidated. Now the CSS, the modals (Settings hub, Ticket editor, Change Password) + Profile menu, and the JS.
+
+
+Ran a command
+Ran a command
+Now wiring the ticket editor settings into the actual ticket generator.
+
+
+Ran a command
+Ran a command
+Both valid. Verifying the whole flow in jsdom — nav, settings hub, profile/password change, logout, and the ticket toggles actually affecting the printed ticket.
+
+
+Ran a command
+Ran a command
+Everything passes. Presenting the file.
+
+
+Read a file
+Read a file
+All built and verified.
+
+Settings panel — the separate Messages, Lists, and Shop nav buttons are gone, replaced by a single Settings (gear) button at the top-right. It opens a clean panel with four cards: WhatsApp Messages, Models & Problems, Shop Info, and Edit Ticket.
+
+Edit Ticket (new) — lets you customize the printed ticket: set the heading text, tick exactly which details print (QR, phone, alt phone, IMEI, lock, SIM, problems, parts, status, payment, estimate), add a custom thank-you line (use {shop} for your shop name), and add a terms/extra note. A Preview button prints a sample using your latest job. Verified: toggling things off actually removes them from the ticket, and custom text shows up.
+
+Profile — a person button beside Settings opens a menu with:
+
+Change Password — checks your current password, then sets a new one (stored, min 4 chars, with confirmation). The welcome screen now uses this saved password.
+Log out — re-locks the app back to the password welcome screen.
+The default password is still nmw123 until you change it. Replace your old TechGarage.html with this one.
+
+Same caveat as before: the password is client-side, so it deters casual access but isn't strong security against someone inspecting the file.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+5 hours ago
+when we click on a name or a number in all jobs section it should show us the whole history for that name or number
+
+
+Thought process
+Thought process
+Let me find the customer cell markup in the All Jobs table.
+
+
+Ran 2 commands
+Ran 2 commands
+I'll make the customer name and phone in the All Jobs table clickable, opening a history of all jobs for that customer (reusing the existing modal).
+
+
+Ran 3 commands
+Ran 3 commands
+All verified. Presenting the file.
+
+
+Read a file
+Read a file
+Done. In the All Jobs table, the customer name and phone number are now clickable links. Clicking either opens a history view for that customer:
+
+Clicking a name shows every job under that exact name.
+Clicking a number shows every job with that phone (matched on the main or alternate number, so it catches repeat customers even if the name was typed slightly differently).
+The history popup shows a quick summary (total visits and total paid amount) plus the full list of jobs — newest first — with device, problem, date, estimate, status and payment. Each entry is clickable to open that job's full detail. Clicking the name/number won't accidentally open the row's job, since those links are handled separately.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+when applying a filter for unpaid jobs remove the ones marked as N/A. do not put them in any category other than returned. also this type of purplish blue is bothering me can you convert this blue to royal blue or somehing.
+
+
+Thought process
+Thought process
+Two things: exclude N/A (returned) jobs from the unpaid filter, and swap the purplish-blue for royal blue. Let me find the All Jobs filter logic first.
+
+
+Ran 2 commands
+Ran 2 commands
+Now applying both: exclude returned (N/A) jobs from the paid/unpaid filters, and convert the purplish-blue accent to royal blue throughout.
+
+
+Ran a command
+Ran a command
+Let me check for any remaining indigo/purple values and verify the filter fix.
+
+
+Ran a command
+Ran a command
+You've hit your session limit · resets 7:20pm (Asia/Calcutta)
+
+Both changes are done and verified.
+
+Unpaid filter — returned jobs (marked N/A) are now excluded from both the Unpaid and Paid filters in All Jobs. They only appear under the Returned status filter (or "all"). Verified: the unpaid filter shows genuine unpaid done-jobs only, and returned jobs still show under the Returned filter.
+
+Royal blue — I converted the purplish-blue (indigo) accent to a royal blue (
+#2f55d4, with a darker 
+#2442b0 for hovers/gradients and a soft 
+#e9eefc tint) across buttons, links, the nav active state, the active job-number/edit accents, settings cards, the welcome logo/glow, and toggles. The leftover 
+#7c3aed is a separate rarely-used --purple variable, not the main accent, so the bothersome blue is gone.
+
+
+Read a file
+Read a file
+Both updates are in the file above — replace your old TechGarage.html with it.
+
+To recap: returned (N/A) jobs no longer appear under the Unpaid or Paid filters (only under Returned), and the purplish-blue accent is now royal blue throughout the app. If the royal blue shade isn't quite what you pictured, tell me and I can nudge it lighter, darker, or more classic (
+#4169E1).
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+change pending to Jobs Pending change completed to Jobs completed change unpaid to Payment Outstanding
+
+
+Ran 3 commands
+Ran 3 commands
+Done. The three dashboard cards now read Jobs Pending, Jobs Completed, and Payment Outstanding.
+
+
+Read a file
+Read a file
+Replace your old TechGarage.html with this one. Want me to update the matching popup titles too (they currently say "Pending Jobs", "Completed Jobs", "Done Unpaid Jobs" when you click those cards)?
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+revert them back
+
+
+Ran a command
+Ran a command
+Reverted — the cards read Pending, Completed, and Unpaid again.
+
+
+Read a file
+Read a file
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+under revenue report there is a section as excluded unpaid remove that and make it outstanding payment track all the jobs and amount that is unpaid during that time period that is selected.
+
+
+Ran 3 commands
+Ran 3 commands
+Now I'll replace the "Excluded Unpaid" with an Outstanding Payment tracker that sums the unpaid jobs in the selected period, plus a toggle to view those unpaid jobs.
+
+
+Ran 2 commands
+Ran 2 commands
+All verified. Presenting the file.
+
+
+Read 2 files
+Read 2 files
+Done. In the Revenue Report, the "Excluded Unpaid" box is gone, replaced by Outstanding Payment which tracks money still owed in the selected period.
+
+For whatever period you pick (Today / Week / Month / Year / All Time), the summary now shows:
+
+Paid Revenue and Paid Jobs (collected money)
+Outstanding Payment and Unpaid Jobs (the total still owed, in red)
+Outstanding counts jobs created in that period that are unpaid, and it correctly excludes returned (N/A) jobs. There's also a Paid / Outstanding toggle above the list so you can switch the table to see exactly which jobs make up the outstanding amount (with customer, device, date and estimate). Verified: paid total, outstanding total, the returned-job exclusion, and the toggle all work.
+
+Replace your old TechGarage.html with this one.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+in the mobile version i can see the whole all jobs section is not looking good the text are all here and there no constant or no singularity they are not perfectly aligned and one job is taking too much space of the screen figure out a way to fix both of these inconsistensies right now
+
+
+Thought process
+Thought process
+Let me examine the mobile card layout for the jobs table and the row markup.
+
+
+Ran a command
+Ran a command
+Let me see the full row template to know every column.
+
+
+Ran 2 commands
+Ran 2 commands
+Let me see the Status/Estimate/Payment/Actions cell contents to lay them out properly.
+
+
+Ran a command
+Ran a command
+The mobile issue is clear: each job row becomes 10 stacked label/value lines (huge height) with inconsistent alignment. I'll redesign the mobile All Jobs card into a compact, aligned layout (scoped to the jobs table so Inventory is unaffected): a header line (Job # + Status), then customer, device, problem, and a tidy footer row (estimate · payment · actions), hiding the redundant Date/Parts lines.
+
+
+Ran a command
+Ran a command
+Let me confirm the app still loads and renders the jobs list cleanly.
+
+
+Ran a command
+Ran a command
+All good — no errors, and the new layout is scoped to the jobs table only (Inventory is untouched). Here's a preview of how one job now looks on mobile:
+
+
+Read a file
+Read a file
+
+
+I rebuilt the mobile All Jobs card so it's compact and consistently aligned, as shown in the preview above.
+
+What changed (mobile only — desktop table and the Inventory list are untouched):
+
+Each job was 10 stacked label/value lines; it's now a tight card of about 5 lines, so far less screen space per job.
+A clear structure: Job # on the left, Status on the right at the top, then customer, device, and problem lines, and a divider above a footer row with estimate · payment · actions neatly aligned.
+Everything is left-aligned in a real grid (no more text scattered right/left), and the redundant Date and Parts rows are hidden to cut clutter (both are still on the full job detail).
+Replace your old TechGarage.html with this one and check it on your phone. If you'd like Parts or Date back on the card, or a different field order, tell me and I'll adjust.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+the way is good but the job number in the mobile format should be a little bit smaller and the name and number should be bigger than that so that they easily visible from a distance too shift the the brand and model on the right side parallel to the brand and model. problems reported and parts to be changed should be displayed right  where they are. they paid unpaid toggle is covering the estimate in the ticket figure out a way nothing overlaps one another.
+
+
+Thought process
+Thought process
+Got it — five fixes to the mobile card: smaller job #, bigger name/number, device on the right parallel to the customer, bring back Parts (with labels), and fix the footer so estimate/payment/actions never overlap. Let me grab the exact current block to replace it.
+
+
+Ran 2 commands
+Ran 2 commands
+Now replacing with the improved layout.
+
+
+Ran a command
+Ran a command
+Applied. Let me verify it loads cleanly, then show the updated preview.
+
+
+Ran a command
+Ran a command
+Verified. Here's the updated mobile card:
+
+
+Read a file
+Read a file
+
+
+All five fixes are in, as shown in the preview:
+
+Job # is smaller now (it's a quiet reference, top-left).
+Name and number are bigger (name 15.5px, number 13px) so they read from a distance.
+Brand & model moved to the right, on the same line as (parallel to) the customer name/number.
+Problems and Parts both show, in place, each with a small label so it's clear which is which (empty ones auto-hide).
+No more overlap — the footer is split into two rows: estimate and the paid/unpaid toggle share a line with space between them, and the action buttons sit on their own line below. Nothing covers anything.
+Replace your old TechGarage.html with this one and check it on your phone.
+
+
+C:\Users\user\AppData\Roaming\Claude\local-agent-mode-sessions\dd9b219a-c024-4ed5-ae63-f637c940403d\48d46b40-30c1-402d-bfac-54a788d42743\local_aa528cb5-fbaa-459d-8fd9-aa254099dc74\outputs\TechGarage.html
+Code 
+
+figure out a way to put to a sign that say assigned to
+
+
+Claude is AI and can make mistakes. Please double-check responses. Give us feedback
+
+
+Techgarage · HTML
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8">
@@ -210,7 +2341,7 @@ tr.jr:hover{background:#f0f4ff}
 .rp-wrap{display:flex;align-items:stretch}
 .rp-sym{padding:9px 10px;background:var(--light);border:1.5px solid var(--border);border-right:none;border-radius:9px 0 0 9px;color:var(--muted);font-weight:700;font-size:13px;display:flex;align-items:center}
 .rp-wrap input{border-radius:0 9px 9px 0;border-left:none}
-
+ 
 /* MOBILE AND TABLET UI OVERRIDE */
 :root{
   --bg:#f6f8fb;--card:#ffffff;--border:#d9e2ef;--border2:#b8c4d6;
@@ -238,7 +2369,7 @@ table{min-width:900px}
 .modal{width:min(720px,96vw);border-radius:14px}
 .modal-bg{align-items:flex-start;padding-top:18px}
 .cs-list{max-height:260px}.pd-list{max-height:260px}
-
+ 
 @media(max-width:720px){
   body{padding-bottom:74px}
   nav{position:fixed;left:0;right:0;top:auto;bottom:0;height:66px;padding:6px 8px;border-top:1px solid var(--border);border-bottom:none;box-shadow:0 -8px 28px rgba(16,24,40,.10);justify-content:space-around;flex-wrap:nowrap}
@@ -273,7 +2404,7 @@ table{min-width:900px}
   .prob-dd{max-height:58vh}
   #scan-ov{align-items:flex-end}.scan-box{width:100vw;border-radius:18px 18px 0 0}
 }
-
+ 
 @media(min-width:721px) and (max-width:1024px){
   nav{height:auto;min-height:62px;padding:8px 14px}
   .page{padding:22px 18px}
@@ -320,7 +2451,7 @@ body{background:
 ::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-thumb{background:#cbd3e6;border-radius:6px;border:2px solid transparent;background-clip:content-box}
 ::-webkit-scrollbar-thumb:hover{background:#aeb8d2;background-clip:content-box}
-
+ 
 /* ── NAVIGATION ─────────────────────────────────────────── */
 nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(14px);
   -webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--border);
@@ -347,7 +2478,7 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .sync-ic{display:inline-flex;align-items:center;line-height:0}
 .sync-spin{animation:spin .75s linear infinite;transform-origin:center}
 @keyframes spin{to{transform:rotate(360deg)}}
-
+ 
 /* ── PAGE / HEADERS ─────────────────────────────────────── */
 .page{max-width:1160px;padding:26px 20px}
 .ph{margin-bottom:20px;gap:12px}
@@ -358,12 +2489,12 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .bk{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:10px;
   width:38px;height:38px;display:grid;place-items:center;font-size:17px;box-shadow:var(--sh-xs);transition:all .18s}
 .bk:hover{border-color:var(--border2);color:var(--text);background:var(--light)}
-
+ 
 /* ── CARDS ──────────────────────────────────────────────── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
   padding:20px;margin-bottom:16px;box-shadow:var(--sh-sm)}
 .card-title{color:var(--muted);font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;margin-bottom:14px}
-
+ 
 /* ── STAT CARDS ─────────────────────────────────────────── */
 .stats-grid{gap:13px;margin-bottom:22px}
 .stat-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--border)!important;
@@ -383,7 +2514,7 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .sc-rev{background:linear-gradient(135deg,#ffffff,#f0fdf4)}
 .sc-rev   .stat-ic{background:var(--green);color:#fff;box-shadow:0 5px 14px rgba(22,163,74,.32)}
 .sc-rev   .stat-val{color:var(--green)}
-
+ 
 /* ── FORMS ──────────────────────────────────────────────── */
 .form-row{gap:14px;margin-bottom:14px}
 label.fl{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:none;margin-bottom:7px}
@@ -400,7 +2531,7 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .dt-eb:hover,.dt-eb.ed{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .addnum-link{color:var(--accent);font-weight:600}
 .igrp{gap:8px}
-
+ 
 /* dropdown popovers */
 .cs-dd,.prob-dd{border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-lg);overflow:hidden}
 .cs-sw{border-bottom:1px solid var(--border);background:var(--card)}
@@ -413,21 +2544,21 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .pd-item.sel .pd-chk{background:var(--accent);border-color:var(--accent)}
 .cs-add,.prob-new-wrap button,.cs-new-wrap button{background:var(--accent);border-radius:8px;font-weight:600}
 .cs-add:hover{background:var(--accent2)}
-
+ 
 /* tags / chips */
 .ptag{background:var(--accent-soft);border:1px solid #bcd0f7;color:var(--accent);border-radius:999px;
   padding:4px 11px;font-size:11.5px;font-weight:600}
 .prob-tags{gap:6px;margin-top:10px}
-
+ 
 /* toggles */
 .tog-track{background:var(--border2)}
 .tog-track.on-green,.tog-track.on-green2{background:var(--green)}
-
+ 
 /* checkboxes */
 .chk-lbl{border:1.5px solid var(--border);border-radius:10px;font-weight:600;font-size:12.5px;background:var(--card);transition:all .15s}
 .chk-lbl:hover{border-color:var(--accent);background:var(--accent-soft)}
 .chk-lbl input[type=checkbox]{accent-color:var(--accent)}
-
+ 
 /* ── BUTTONS ────────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;
   font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1px;padding:10px 16px;
@@ -451,7 +2582,7 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .btn-gh.btn-sm,.btn-ol.btn-sm,.btn-pr.btn-sm,.btn-re.btn-sm,.btn-wa.btn-sm,.btn-gr.btn-sm,.btn-ye.btn-sm{padding:6px 11px;font-size:11px}
 .btn-ic{border:1.5px solid var(--border2);background:var(--card);color:var(--accent)}
 .btn-row{gap:10px}
-
+ 
 /* ── TABLE ──────────────────────────────────────────────── */
 th{color:var(--muted);font-size:10.5px;letter-spacing:.6px;border-bottom:1px solid var(--border);padding:11px 11px}
 td{padding:13px 11px;border-bottom:1px solid var(--light);font-size:13px}
@@ -461,7 +2592,7 @@ tr.jr:hover{background:var(--accent-soft)}
 .j-est{color:var(--green);font-weight:800;font-variant-numeric:tabular-nums}
 .j-pr{color:var(--muted);font-weight:500}
 .j-dt{color:var(--dim);font-variant-numeric:tabular-nums}
-
+ 
 /* status pill (native select) */
 .status-select{border-radius:999px;font-weight:700;font-size:10px;letter-spacing:.4px;border-width:1.5px}
 .status-select.pending{background:var(--amber-soft);border-color:#fde68a;color:var(--amber)}
@@ -474,23 +2605,23 @@ tr.jr:hover{background:var(--accent-soft)}
 .pay-badge{border-radius:999px;font-weight:700;font-size:10px;letter-spacing:.3px;border-width:1.5px}
 .pay-paid{background:var(--green-soft);border-color:#bbf7d0;color:var(--green)}
 .pay-unpaid{background:var(--red-soft);border-color:#fecaca;color:var(--red)}
-
+ 
 /* search bar */
 .sb{gap:11px}
 #s-inp{font-weight:500}
-
+ 
 /* ── DETAIL ─────────────────────────────────────────────── */
 .df{background:var(--light);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
 .dfl{color:var(--dim);font-size:10px;letter-spacing:.8px;font-weight:700}
 .dfv{color:var(--text);font-weight:700;font-size:13.5px}
-
+ 
 /* recent rows */
 .rr{padding:13px 0;border-bottom:1px solid var(--light)}
 .rr-t{font-size:13.5px;font-weight:600}
 .rr-t span{color:var(--accent);font-weight:800}
 .rr-b{color:var(--dim);font-size:11.5px;margin-top:3px}
 .empty{color:var(--dim);padding:40px 20px;font-weight:500;font-size:13px}
-
+ 
 /* ── MODALS ─────────────────────────────────────────────── */
 .modal-bg{background:rgba(15,23,42,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .modal{border-radius:var(--r-xl);box-shadow:var(--sh-pop);padding:24px;border:1px solid rgba(255,255,255,.6)}
@@ -503,29 +2634,29 @@ tr.jr:hover{background:var(--accent-soft)}
 .rev-summary{background:linear-gradient(135deg,var(--accent-soft),#f5f3ff);border:1px solid #e0e7ff;border-radius:14px;padding:16px}
 .rev-sum-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-variant-numeric:tabular-nums}
 .rev-sum-label{color:var(--muted)}
-
+ 
 /* ── TOAST ──────────────────────────────────────────────── */
 #toast{top:74px;border-radius:12px;padding:13px 16px;font-weight:600;font-size:12.5px;box-shadow:var(--sh-lg);
   border-width:1px;display:none}
 #toast.success{background:#fff;border:1px solid #bbf7d0;color:#15803d;border-left:4px solid var(--green)}
 #toast.error{background:#fff;border:1px solid #fecaca;color:#b91c1c;border-left:4px solid var(--red)}
 #toast.info{background:#fff;border:1px solid #bcd0f7;color:var(--accent2);border-left:4px solid var(--accent)}
-
+ 
 /* ── SCANNER ────────────────────────────────────────────── */
 .scan-box{border:none;border-radius:18px;box-shadow:var(--sh-pop)}
 .scan-hd span{color:var(--accent)}
 .scan-ln{background:var(--accent);box-shadow:0 0 12px var(--accent)}
-
+ 
 /* ── FOCUS VISIBILITY (a11y) ────────────────────────────── */
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .nav-btn:focus-visible,.btn:focus-visible{outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
-
+ 
 /* ── TABLET ─────────────────────────────────────────────── */
 @media(min-width:721px) and (max-width:1024px){
   .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-
+ 
 /* ── MOBILE / BOTTOM TAB BAR ────────────────────────────── */
 @media(max-width:720px){
   nav{height:68px;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(16px);
@@ -610,6 +2741,33 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 .cs-acts{display:flex;gap:4px;align-items:center;flex-shrink:0}
 #page-jobList{max-width:none}
 @media(min-width:721px){#page-jobList .tw{overflow-x:visible}#page-jobList table{min-width:0;table-layout:auto}}
+@media(max-width:720px){
+  #page-jobList .tw{margin:0;padding:0}
+  #page-jobList table{font-size:12px}
+  #page-jobList tbody{display:block}
+  #page-jobList tr.jr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"no status" "cust dev" "prob prob" "part part" "est pay" "act act";gap:5px 12px;padding:13px 14px;align-items:start;border:1px solid var(--border);border-radius:14px;margin-bottom:10px;background:#fff}
+  #page-jobList tr.jr td{display:block;border:none!important;padding:0!important;margin:0;white-space:normal;text-align:left;min-width:0}
+  #page-jobList tr.jr td::before{display:none!important}
+  #page-jobList tr.jr td[data-label="Date"]{display:none!important}
+  #page-jobList tr.jr td[data-label="Problems"]:empty,#page-jobList tr.jr td[data-label="Parts"]:empty{display:none!important}
+  #page-jobList tr.jr td[data-label="Job #"]{grid-area:no;align-self:center;font-weight:800;color:var(--accent);font-size:12px}
+  #page-jobList tr.jr td[data-label="Status"]{grid-area:status;justify-self:end;align-self:center}
+  #page-jobList tr.jr td[data-label="Customer"]{grid-area:cust}
+  #page-jobList tr.jr td[data-label="Customer"] .vwrap{text-align:left!important}
+  #page-jobList tr.jr td[data-label="Customer"] .vwrap>div:first-child{font-size:15.5px!important;font-weight:700!important;line-height:1.25}
+  #page-jobList tr.jr td[data-label="Customer"] .j-im{font-size:13px!important;margin-top:2px}
+  #page-jobList tr.jr td[data-label="Device"]{grid-area:dev;justify-self:end;text-align:right;font-weight:700;font-size:13px}
+  #page-jobList tr.jr td[data-label="Device"] .vwrap{text-align:right!important}
+  #page-jobList tr.jr td[data-label="Device"] span{font-weight:500;font-size:12px!important}
+  #page-jobList tr.jr td[data-label="Problems"]{grid-area:prob}
+  #page-jobList tr.jr td[data-label="Parts"]{grid-area:part}
+  #page-jobList tr.jr td[data-label="Problems"],#page-jobList tr.jr td[data-label="Parts"]{color:var(--text);font-size:12px;font-weight:500;line-height:1.4}
+  #page-jobList tr.jr td[data-label="Problems"]::before,#page-jobList tr.jr td[data-label="Parts"]::before{display:block!important;content:attr(data-label);color:var(--dim);font-size:9px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:1px}
+  #page-jobList tr.jr td[data-label="Estimate"]{grid-area:est;align-self:center;color:var(--green)!important;font-weight:800;font-size:15px;border-top:1px solid var(--light)!important;padding-top:10px!important;margin-top:4px}
+  #page-jobList tr.jr td[data-label="Payment"]{grid-area:pay;justify-self:end;align-self:center;border-top:1px solid var(--light)!important;padding-top:10px!important;margin-top:4px}
+  #page-jobList tr.jr td[data-label="Actions"]{grid-area:act;justify-self:end;display:flex!important;gap:6px;white-space:nowrap;margin-top:2px}
+  #page-jobList tr.jr .vwrap{display:block!important;margin:0!important}
+}
 </style>
 </head>
 <body>
@@ -697,7 +2855,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 </div>
 <div id="toast" class=""> ✓ Model "iPhone Air" added!</div>
 <div id="qr-stage" style="display:none"></div>
-
+ 
 <!-- SCANNER -->
 <div id="scan-ov">
   <div class="scan-box">
@@ -707,7 +2865,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="scan-ft">Point camera at barcode or QR code</div>
   </div>
 </div>
-
+ 
 <!-- EDIT MODAL -->
 <div class="modal-bg" id="edit-modal">
   <div class="modal">
@@ -767,7 +2925,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveEdit()">💾 Save Changes</button><button class="btn btn-gh" onclick="closeEditModal()">Cancel</button></div>
   </div>
 </div>
-
+ 
 <!-- REVENUE MODAL -->
 <div class="modal-bg" id="rev-modal">
   <div class="modal">
@@ -785,7 +2943,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="rev-job-list"></div>
   </div>
 </div>
-
+ 
 <!-- FILTER MODAL (pending/done/unpaid) -->
 <div class="modal-bg" id="filter-modal">
   <div class="modal">
@@ -794,7 +2952,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="filter-modal-list"></div>
   </div>
 </div>
-
+ 
 <!-- WA MODAL -->
 <div class="modal-bg" id="wa-modal">
   <div class="modal">
@@ -817,7 +2975,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-wa" onclick="sendSelectedDoneWA()">💬 Send Done Message</button><button class="btn btn-gh" onclick="resetDoneWATemplate()">Reset Done Default</button></div>
   </div>
 </div>
-
+ 
 <!-- MANAGE LISTS MODAL -->
 <div class="modal-bg" id="manage-modal">
   <div class="modal">
@@ -846,7 +3004,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     </div>
   </div>
 </div>
-
+ 
 <!-- SHOP SETTINGS MODAL -->
 <div class="modal-bg" id="shop-modal">
   <div class="modal">
@@ -867,7 +3025,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveShopSettings()">💾 Save</button><button class="btn btn-gh" onclick="document.getElementById('shop-modal').classList.remove('open')">Cancel</button></div>
   </div>
 </div>
-
+ 
 <!-- INVENTORY PAGE -->
 <div class="page" id="page-inventory">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>Inventory <span class="ac">Control</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openInvScan()">▤ Scan Product</button></div>
@@ -923,7 +3081,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="card"><div class="card-title">Recent Jobs</div><div id="recent-list"></div></div>
   <div class="btn-row"><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button><button class="btn btn-ol" onclick="go('jobList');renderList()">View All →</button><button class="btn btn-ol" onclick="go('inventory');renderInv()">📦 Inventory</button></div>
 </div>
-
+ 
 <!-- NEW JOB -->
 <div class="page" id="page-newJob">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>New Repair <span class="ac">Job</span></h2></div>
@@ -1003,7 +3161,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   </div>
   <div class="btn-row"><button class="btn btn-pr" onclick="saveJob()">💾 Save Job</button><button class="btn btn-gh" onclick="cancelJob()">Cancel</button></div>
 </div>
-
+ 
 <!-- ALL JOBS -->
 <div class="page" id="page-jobList">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>All <span class="ac">Jobs</span> <span id="jl-cnt" style="color:var(--dim);font-size:13px;font-weight:600">(65)</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button></div>
@@ -1021,7 +3179,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="j-empty" class="empty" style="display:none">No jobs found.</div>
   </div>
 </div>
-
+ 
 <!-- JOB DETAIL -->
 <div class="page" id="page-jobDetail">
   <div class="ph"><button class="bk" onclick="go('jobList');renderList()">←</button><h2 id="d-title">Job <span class="ac">#—</span></h2><div class="sp"></div><span id="d-stag" class="tag"></span></div>
@@ -1037,13 +3195,13 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <button class="btn btn-re" onclick="delCurJob()">🗑 Delete</button>
   </div>
 </div>
-
+ 
 <script>
 // ════════ GOOGLE SHEETS SYNC ══════════════════════════════════
 let GS_URL = (function(){var NEW="https://script.google.com/macros/s/AKfycbxhCf0oi0pvHFzgpivLt7VpZXruB1A_DdS0E5tJMO-6xlCb5amE737EsMOX8d39-osh-Q/exec",OLD="https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec";try{var st=localStorage.getItem("tg_gs_url");if(!st||st===OLD){localStorage.setItem("tg_gs_url",NEW);return NEW;}return st;}catch(e){return NEW;}})();
 const SYNC_INTERVAL_MS = 45000;
 let syncTimer = null;
-
+ 
 function normalizeJobForSync(job) {
   const now = new Date().toISOString();
   return {
@@ -1072,7 +3230,7 @@ function normalizeJobForSync(job) {
     updatedAt: job.updatedAt || now
   };
 }
-
+ 
 function normalizeRemoteJob(row) {
   const o = {
     id: parseInt(row.id, 10) || Number(row.id) || Date.now(),
@@ -1101,11 +3259,11 @@ function normalizeRemoteJob(row) {
   if(row.cphone2!==undefined) o.cphone2 = row.cphone2;
   return o;
 }
-
+ 
 function newerThan(a, b) {
   return new Date(a || 0).getTime() > new Date(b || 0).getTime();
 }
-
+ 
 function syncJobToSheet(job) {
   const payload = normalizeJobForSync({...job, updatedAt: job.updatedAt || new Date().toISOString()});
   payload.action = "upsert";
@@ -1123,7 +3281,7 @@ function syncJobToSheet(job) {
       console.error(err);
     });
 }
-
+ 
 function syncDeleteToSheet(id) {
   setSyncBadge("ing");
   return fetch(GS_URL, {
@@ -1142,7 +3300,7 @@ function syncDeleteToSheet(id) {
       console.error(err);
     });
 }
-
+ 
 function syncFromSheet(silent = false) {
   setSyncBadge("ing");
   if (!silent) toast("Syncing from Google Sheets...", "info");
@@ -1154,7 +3312,7 @@ function syncFromSheet(silent = false) {
       const deletedIds = new Set((data.deletedIds || []).map(String));
       const byId = new Map(jobs.map(j => [String(j.id), j]));
       let changed = 0;
-
+ 
       remoteJobs.forEach(remote => {
         const key = String(remote.id);
         const local = byId.get(key);
@@ -1168,7 +3326,7 @@ function syncFromSheet(silent = false) {
           changed++;
         }
       });
-
+ 
       jobs = jobs.filter(j => !j.deleted && !deletedIds.has(String(j.id)));
       saveJobs(); updNC(); renderDash(); renderList();
       if (selJob) renderDet(jobs.find(j => j.id === selJob));
@@ -1181,12 +3339,12 @@ function syncFromSheet(silent = false) {
       console.error(err);
     });
 }
-
+ 
 function startAutoSync() {
   if (syncTimer) clearInterval(syncTimer);
   syncTimer = setInterval(() => syncFromSheet(true), SYNC_INTERVAL_MS);
 }
-
+ 
 function setSyncBadge(state) {
   const b = document.getElementById("sync-nav"); if(!b) return;
   b.className = "sync-badge sync-" + state;
@@ -1200,7 +3358,7 @@ function setSyncBadge(state) {
   const label = state === "ok" ? "Synced" : state === "ing" ? "Syncing" : "Sync Error";
   if (txt) { txt.textContent = label; }
 }
-
+ 
 // ════════ DATA ═════════════════════════════════════════════════
 /*TG_SEED_START*/
 const BM_DEFAULT={"Apple":["iPhone 17 Pro Max","iPhone 17 Pro","iPhone Air","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],"Samsung":["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy S7","Galaxy S7 Edge","Galaxy Note7","Galaxy A3 (2016)","Galaxy A5 (2016)","Galaxy A7 (2016)","Galaxy A8 (2016)","Galaxy A9 (2016)","Galaxy A9 Pro (2016)","Galaxy J1 (2016)","Galaxy J2 (2016)","Galaxy J3 (2016)","Galaxy J5 (2016)","Galaxy J7 (2016)","Galaxy C5","Galaxy C7","Galaxy On5 Pro","Galaxy On7 Pro","Galaxy S8","Galaxy S8+","Galaxy Note8","Galaxy A3 (2017)","Galaxy A5 (2017)","Galaxy A7 (2017)","Galaxy J2 Pro","Galaxy J3 Pro","Galaxy J5 Pro","Galaxy J7 Pro","Galaxy J7 Max","Galaxy C7 Pro","Galaxy On Max","Galaxy S9","Galaxy S9+","Galaxy Note9","Galaxy A6","Galaxy A6+","Galaxy A7 (2018)","Galaxy A8 (2018)","Galaxy A8+","Galaxy A9 (2018)","Galaxy J2 Core","Galaxy J4","Galaxy J6","Galaxy J8","Galaxy On6","Galaxy S10e","Galaxy S10","Galaxy S10+","Galaxy S10 5G","Galaxy Note10","Galaxy Note10+","Galaxy A10","Galaxy A20","Galaxy A30","Galaxy A40","Galaxy A70","Galaxy A80","Galaxy M10","Galaxy M20","Galaxy M30","Galaxy Fold","Galaxy A01","Galaxy A11","Galaxy A21","Galaxy A31","Galaxy A41","Galaxy A71","Galaxy M01","Galaxy M11","Galaxy M21","Galaxy M31","Galaxy M51","Galaxy Z Fold2","Galaxy Z Flip","Galaxy Z Flip 5G","Galaxy A02","Galaxy A12","Galaxy A72","Galaxy M12","Galaxy M22","Galaxy M52","Galaxy F12","Galaxy F22","Galaxy A03","Galaxy A73","Galaxy M13","Galaxy M23","Galaxy F13","Galaxy F23","Galaxy XCover6 Pro","Galaxy M14","Galaxy F14","Galaxy F34","Galaxy F54","Galaxy M15","Galaxy F15","Galaxy F55","Galaxy S25 Edge","Galaxy S25 FE","Galaxy A26","Galaxy M06","Galaxy M16","Galaxy F06","Galaxy F16","Galaxy F56","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Flip7 FE","Galaxy Z TriFold","Galaxy A07","Galaxy A07 5G","Galaxy A17","Galaxy A17 5G","Galaxy M07","Galaxy M17 5G","Galaxy F07","Galaxy F17 5G"],"OnePlus":["Nord CE6 Lite","Nord CE6","Nord 6","15T","Nord CE 5","Nord 5","15R","15","13s","13T","Nord 4","Nord 4 CE","13R","13","12R","12","Ace 2","Nord 3","Nord CE 3 Lite 5G","Nord CE3","11R","11","Nord 2T","Nord CE 2 Lite 5G","Nord CE2","10R 150W","10R","10T","10 Pro","Nord 2","Nord N200 5G","Nord CE 5G","9RT","9R","9 Pro","9","Nord","8T","8 Pro","8","7T Pro McLaren Edition","7T Pro","7T","7 Pro 5G","7 Pro","7","6T McLaren Edition","6T","6","5T","5","3T","3","13 Pro","12 Pro","11 Pro","Nord CE4 Lite","Nord CE4","Nord CE3 Lite","Nord CE2 Lite","Nord CE"],"Xiaomi":["17 Ultra","17","16 Ultra","16 Pro","16","15T Pro","15T","15 Ultra","15 Pro","15","14T Pro","14T","14 Ultra","14 Pro","14","13T Pro","13T","13 Ultra","13 Pro","13","12S Ultra","12S Pro","12S","12 Lite","12 Pro","12","11X Pro","11X","11 Ultra","11 Pro","11 Lite","11","10 Ultra","10 Lite","10 Pro","10","9T Pro","9T","9 SE","9","8 Pro","8 SE","8 Lite","8","6X","6","5S Plus","5S","Note 10 Lite","Note 10","Note 3","Note 2","Max 3","Max 2","Max Prime","Max","A3","A2 Lite","A2","A1","MIX 4","MIX Alpha","MIX 3 5G","MIX 3","MIX 2S","MIX 2","MIX","MIX Fold 5","MIX Fold 4","MIX Fold 3","MIX Fold 2","MIX Fold","MIX Flip 2","MIX Flip","12 Ultra"],"Redmi":["15A","15C","15 5G","15","14C","13C","13","12C","12","11 Prime","10C","10A","10 Prime","10","9 Prime","9C","9A","9","8A","8","7A","7","6 Pro","6A","6","5A","5","4X","4A","4","3X","3S","3","Note 15 Pro+","Note 15 Pro","Note 15 5G","Note 15","Note 14 Pro+","Note 14 Pro","Note 14","Note 13 Pro+","Note 13 Pro","Note 13","Note 12 Turbo","Note 12 Pro+","Note 12 Pro","Note 12","Note 11 Pro+","Note 11 Pro","Note 11S","Note 11","Note 10 Pro Max","Note 10 Pro","Note 10S","Note 10","Note 9 Pro Max","Note 9 Pro","Note 9","Note 8 Pro","Note 8","Note 7 Pro","Note 7","Note 6 Pro","Note 5A","Note 5 Pro","Note 5","Note 4X","Note 4","Note 3 Pro","Note 3","K90 Pro","K90","K80 Pro","K80","K70 Ultra","K70 Pro","K70E","K70","K60 Ultra","K60 Pro","K60E","K60","K50 Ultra","K50 Gaming","K50 Pro","K50","K40 Gaming","K40 Pro+","K40 Pro","K40","K30 Ultra","K30 Pro","K30 5G","K30","K20 Pro","K20","A5","A4 5G","A3 Pro","A3x","A3","A2+","A2","A1+","A1","Turbo 5","Turbo 4 Pro","Turbo 4","Turbo 3","Note 14 4G","Note 13 4G","Note 12 4G","Note 11 4G","Note 10 4G","A4"],"Realme":["16T 5G","16 Pro+","16 Pro","16","15 Pro","15x","15","14 Pro+","14 Pro","14x","14","13 Pro+","13 Pro","13+","13","12 Pro+","12 Pro","12+","12 5G","12x","12","11 Pro+","11 Pro","11 5G","11x","11","10 Pro+","10 Pro","10 5G","10","9 Pro+","9 Pro","9i","9 5G","9","8 Pro","8s 5G","8i","8 5G","8","7 Pro","7i","7","6 Pro","6i","6","5 Pro","5","3 Pro","3","2 Pro","2","1","GT 8 Pro","GT 7 Pro","GT 7T","GT 7","GT 6T","GT 6","GT 5 Pro","GT 5","GT 3","GT 2 Pro","GT 2","GT Neo 5 SE","GT Neo 5","GT Neo 3T","GT Neo 3","GT Neo 2T","GT Neo 2","GT Neo","GT Explorer Master Edition","GT Master Edition","GT","X7 Max","X7 Pro","X7","X3 SuperZoom","X3","X2 Pro","X2","XT","X","Narzo N100","Narzo N65","Narzo N63","Narzo N61","Narzo N55","Narzo N53","Narzo 70 Pro","Narzo 70x","Narzo 70","Narzo 60 Pro","Narzo 60x","Narzo 60","Narzo 50 5G","Narzo 50 Pro","Narzo 50i Prime","Narzo 50i","Narzo 50A","Narzo 50","Narzo 30 5G","Narzo 30 Pro","Narzo 30A","Narzo 30","Narzo 20 Pro","Narzo 20A","Narzo 20","Narzo 10A","Narzo 10","Narzo","C85","C75x","C75","C73","C71","C67","C65","C63","C61","C55","C53","C51","C35","C33","C31","C30s","C30","C25Y","C25s","C25","C21Y","C21","C20","C17","C15","C12","C11 (2021)","C11","C3i","C3","C2","C1","P4x","P4R","P4 Power","P4 Pro","P4 Lite 5G","P4 Lite","P4","P3 Ultra","P3 Pro","P3","P2 Pro","P2","P1 Pro","P1","GT Neo 6"],"Oppo":["Find X9s","Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Lite","Find X5 Pro","Find X5","Find X3 Lite","Find X3 Neo","Find X3 Pro","Find X3","Find X2 Lite","Find X2 Neo","Find X2 Pro","Find X2","Find X Lamborghini Edition","Find X","Find N5","Find N3 Flip","Find N3","Find N2 Flip","Find N2","Find N","Reno15 Pro Mini","Reno15 Pro","Reno15","Reno14 Pro","Reno14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","Reno 10 Pro+","Reno 10 Pro","Reno 10","Reno9 Pro+","Reno9 Pro","Reno9","Reno8 T","Reno8 Pro","Reno8","Reno7 Z","Reno7 Pro","Reno7","Reno6 Z","Reno6 Pro","Reno6","Reno5 Z","Reno5 Lite","Reno5 F","Reno5 Pro","Reno5","Reno4 Z","Reno4 Pro","Reno4","Reno3 Pro","Reno3","Reno Ace","Reno2 Z","Reno2 F","Reno2","Reno Z","Reno 10x Zoom","Reno","F31 Pro+","F31 Pro","F31","F29 Pro","F29","F27 Pro+","F27","F25 Pro","F23","F21 Pro 5G","F21 Pro","F19 Pro+","F19 Pro","F19","F17 Pro","F17","F15","F11 Pro","F11","F9 Pro","F9","K14","K13","K12x","K12","K11x","K11","K10x","K10 Pro","K10 5G","K10","K9 Pro","K9","K7","K5","K3","K1","A6x","A6 Pro","A6","A5x","A5 Pro","A3 Pro","A3","A98","A97","A96","A95","A94","A93","A92","A91","A80","A79","A78","A77","A76","A74","A60","A59","A58","A57","A55","A54","A53","A33","A31","A18","A17k","A17","A16k","A16","A15s","A15","A12","A11k","A9","A7","A5s","A5","A3s","A1k","A2 Pro","A2","A38"],"Vivo":["X300 Ultra","X300 Pro","X300","X200T","X200 FE","X200 Pro Mini","X200 Pro","X200","X100 Ultra","X100 Pro","X100","X90 Pro+","X90 Pro","X90","X80 Pro","X80","X70 Pro+","X70 Pro","X70","X60 Pro+","X60 Pro","X60","X50 Pro+","X50 Pro","X50","X30 Pro","X30","X27 Pro","X27","X23 Symphony Edition","X23","X21i","X21 UD","X21","X20 Plus","X20","V70 Elite","V70","V60e","V60","V50e","V50","V40e","V40 Pro","V40","V30e","V30 Pro","V30","V29 Pro","V29","V27 Pro","V27","V25 Pro","V25","V23 Pro","V23","V21e","V21","V20 Pro","V20","V19","V17 Pro","V17","V15 Pro","V15","V11 Pro","V11","V9 Pro","V9","Y21 5G","Y11 5G","Y05","Y500 Pro","Y500","Y400","Y300 Pro","Y300","Y200 Pro","Y200 5G","Y200","Y100i","Y100e","Y100 5G","Y100A","Y100","Y58","Y56","Y36","Y35","Y33s","Y22s","Y22","Y21T","Y21e","Y21","Y20G","Y20A","Y20","Y19","Y17","Y15","Y12","Y11","Y95","Y93","Y91i","Y91","Y83","Y81","T4R","T4x","T4 Ultra","T4 Pro","T4 Lite","T4","T3x","T3 Ultra","T3 Pro","T3 Lite","T3","T2x","T2 Pro","T2","T1x","T1 Pro","T1","X Flip","X Fold5","X Fold3 Pro","X Fold3","X Fold2","X Fold+","X Fold","NEX 3 5G","NEX 3","NEX Dual Display","NEX A","NEX S","NEX","S20 Pro","S20","S19 Pro","S19","S18 Pro","S18","S17 Pro","S17","S16 Pro","S16","S15 Pro","S15","S12 Pro","S12","S10 Pro","S10","S9","S7e","S7","S6","S5","S1 Pro","S1","X200 Ultra","Y300 Pro+","Y78","Y18","iQOO 13","iQOO 12","iQOO 11","iQOO Neo 9 Pro","iQOO Neo 9","iQOO Z9 Pro","iQOO Z9"],"Nokia":["Nokia G42","Nokia G22","Nokia G21","Nokia G20","Nokia G10","Nokia C32","Nokia C22","Nokia C21","Nokia C12","Nokia XR21","Nokia XR20","Nokia 8.3","Nokia 7.3","Nokia 6.3","Nokia 5.4","Nokia 4.3","Nokia 3.4"],"Motorola":["Edge 70 Pro","Edge 70 Fusion","Edge 70","G77","G67 2026","G17 Power","G17","G 2026","G Play 2026","Razr 60 Ultra/Razr Ultra 2025","Razr 60 Plus/Razr Plus 2025","Razr 60/Razr 2025","Edge 60 Neo","Edge 60 Pro","Edge 60 Stylus","Edge 60","Edge 60 Fusion","X70 Air","G57 Power","G57","G67 Power","G67","G06 Power","G06","G96","G86 Power","G86","G56","G15","G Stylus 2025","G Power 2025","G 2025","G05","G75","E15","ThinkPhone 25","Razr 50 Ultra/Razr+ 2024","Razr 50/Razr 2024","Edge 2024","Edge 50 Ultra","Edge 50 Neo","Edge 50 Fusion","Edge 50 Pro","Edge 50","X50 Ultra","S50 Neo","S50","G Stylus 5G 2024","G Power 5G 2024","G 5G 2024","G Play 2024","G85","G55","G45","G35","G64","G24 Power","G24","G04s","G04","E14","ThinkPhone","Razr 40 Ultra/Razr+ 2023","Razr 40/Razr 2023","Edge 40 Neo","Edge 40 Pro/Edge+ 2023/Edge X40","Edge 40","X40","G54 Power Edition","G54j/G54y","G54","G84","G34 5G","G14","G73 5G","G53j/G53s/G53y","G23","G13","G53 5G","G Stylus 5G 2023","G Stylus 2023","G Power 5G 2023","G 5G 2023","G Play 2023","E13","Defy 2","Razr 2022","Edge 30 Neo","Edge 30 Fusion","Edge 30 Ultra","Edge 30 Pro","Edge 30","Edge+ 2022","Edge 2022","X30 Pro","S30 Pro","G72","G32","G62","G82","G52j","G52","G22","G200 5G","G71 5G","G51 5G","G41","G31","E32","E22s","E22","Defy","One 5G Ace","Edge X30","Edge S30","Edge 2021","Edge 20 Pro/Edge S Pro","Edge 20","Edge 20 Fusion","Edge 20 Lite","G100/Edge S","G60S","G60","G50 5G","G50","G40 Fusion","G30","G20","G10 Power","G10","G Stylus 5G","G Stylus","G Play","G Pure","G 5G","E40","E30","E20","E7i Power","E7 Power","E6i","Razr 5G","One Fusion+","One Fusion","Edge+","Edge","G9 Power","G9 Plus","G9/G9 Play","G 5G Plus","G Stylus/G Pro","G Power","G Fast","G8 Power Lite","G8 Power","G8","E7 Plus","E7","E 2020","E6s","Razr","One Hyper","One Macro","One Zoom","One Action","One Vision","Z4","G8 Plus","G8 Play","G7 Plus","G7 Power","G7 Play","G7","E6 Plus","E6 Play","E6","One Power","One","Z3 Play","Z3","G6 Plus","G6 Play","G6","E5 Plus","E5 Play","E5","Z2 Force","Z2 Play","X4","C Plus","C","G5S Plus","G5S","G5 Plus","G5","E4 Plus","E4","Z Force","Z Play","Z","M","G4 Plus","G4 Play","G4","E3 Power","E3","Edge 40 Pro","G34","Razr 50 Ultra","Razr 50","Razr 40 Ultra","Razr 40"],"Sony":["Xperia 1 VI","Xperia 5 VI","Xperia 10 VI","Xperia 1 V","Xperia 5 V","Xperia 10 V","Xperia 1 IV","Xperia 5 IV","Xperia 10 IV"],"Google":["Pixel 10a","Pixel 10 Pro Fold","Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9a","Pixel 9 Pro Fold","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8a","Pixel 8 Pro","Pixel 8","Pixel Fold","Pixel 7a","Pixel 7 Pro","Pixel 7","Pixel 6a","Pixel 6 Pro","Pixel 6","Pixel 5a","Pixel 5","Pixel 4a 5G","Pixel 4a","Pixel 4 XL","Pixel 4","Pixel 3a XL","Pixel 3a","Pixel 3 XL","Pixel 3","Pixel 2 XL","Pixel 2","Pixel XL","Pixel"],"POCO":["F7 Ultra","F7 Pro","F7","F6 Pro","F6","F5 Pro","F5","F4 GT","F4","F3 GT","F3","F2 Pro","F1","X8 Pro Max","X8 Pro","X7 Neo","X7 Pro","X7","X6 Neo","X6 Pro 5G","X6 5G","X5 Pro 5G","X5 5G","X4 GT","X4 Pro 5G","X3 GT","X3 Pro","X3 NFC","X3","X2","M7 Pro","M7","M6 Plus","M6 Pro","M6","M5s","M5","M4 5G","M4 Pro 5G","M4 Pro 4G","M3 Pro 5G","M3","M2 Pro","M2","C85","C75","C71","C65","C61","C55","C51","C50","C40","C31","C3","X8 Pro Iron Man Edition","F4 GT Cyber Edition","Pad","X6 Pro","X6","X5 Pro","X5","M4 Pro","M4"]};
@@ -1210,15 +3368,15 @@ const SHOP_DEFAULT={"name":"Tech Garage","tagline":"Mobile & Tablet Repair","add
 /*TG_SEED_END*/
 const WA_DEFAULT="Hello {CUSTOMER_NAME}! 👋\n\nThank you for choosing Tech Garage for your repair.\n\n📋 *Job Details:*\n• Job No: *#{JOB_NO}*\n• Device: *{MODEL}*\n• Issue: {PROBLEMS}\n\n💰 Estimate: ₹{ESTIMATE}\n⏱ Expected repair time: *{ESTIMATE_TIME}*\n\nWe will keep you updated. Please keep this message for reference.\n\nThank you! 🙏";
 const WA_DONE_DEFAULT="Hello {CUSTOMER_NAME}!\n\nYour repair job is completed and ready for pickup.\n\nJob No: #{JOB_NO}\nDevice: {MODEL}\nIssue: {PROBLEMS}\nAmount: Rs. {ESTIMATE}\n\nThank you for choosing Tech Garage.";
-
+ 
 let shop={...SHOP_DEFAULT};
-
+ 
 // ════════ STATE ════════════════════════════════════════════════
 let BM,PROBS,PARTS,jobs=[],selJob=null,jLocked=false,selBrand='',selModel='',selProbs=[],selParts=[],dtISO='',dtEdit=false,scanStr=null,scanRun=false,tTimer=null;
 let eSelBrand='',eSelModel='',eSelProbs=[],eSelParts=[],eJobId=null,eDTISO='';
 let waTemplate='',waDoneTemplate='',waTime='2-3 hours';
 let simAllState=false, eSimAllState=false;
-
+ 
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
 function loadAll(){
@@ -1261,7 +3419,7 @@ function saveBM(){lsSet('tg_bm',BM)}
 function saveProbs(){lsSet('tg_probs',PROBS)}
 function saveParts(){lsSet('tg_parts',PARTS)}
 const BRANDS=()=>Object.keys(BM);
-
+ 
 window.onload=function(){
   loadAll();loadInv();
   document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
@@ -1320,7 +3478,7 @@ function ensurePhonePrefix(el){if(el.value&&!el.value.startsWith('+91'))el.value
 function sortedJobs(){return jobs.slice().sort((a,b)=>(new Date(b.dt||0).getTime()-new Date(a.dt||0).getTime())||((Number(b.id)||0)-(Number(a.id)||0)))}
 function paidDate(j){return j&&j.paidAt?j.paidAt:(j&&j.dt?j.dt:'')}
 function toggleLockValue(pfx){const sel=document.getElementById(pfx+'-lock'),wrap=document.getElementById(pfx+'-lock-value-wrap'),inp=document.getElementById(pfx+'-lock-value');if(!sel||!wrap||!inp)return;const show=sel.value==='pin'||sel.value==='password';wrap.style.display=show?'block':'none';inp.placeholder=sel.value==='pin'?'Enter PIN':sel.value==='password'?'Enter password':'';if(!show)inp.value=''}
-
+ 
 // ════════ DASHBOARD ════════════════════════════════════════════
 function renderDash(){
   const now=new Date();const todayStr=now.toDateString();
@@ -1333,7 +3491,7 @@ function renderDash(){
   if(!rec.length){el.innerHTML='<div class="empty">No jobs yet!</div>';return}
   el.innerHTML=rec.map(j=>`<div class="rr" onclick="openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'')}${j.cphone?' · '+e(j.cphone):''} · ${fDT(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center">${j.s==='returned'?'':`<span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span>`}<span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')
 }
-
+ 
 // ════════ REVENUE MODAL ════════════════════════════════════════
 let revPeriod='day';
 let revView='paid';
@@ -1383,7 +3541,7 @@ function renderRevModal(){
   if(!jj.length){document.getElementById('rev-job-list').innerHTML=toggle+'<div class="empty">No '+(revView==='outstanding'?'outstanding':'paid')+' jobs for this period.</div>';return}
   document.getElementById('rev-job-list').innerHTML=toggle+`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Job #</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Date</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Customer</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Device</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Estimate</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Payment</th></tr></thead><tbody>${jj.map(j=>`<tr style="border-bottom:1px solid var(--light);cursor:pointer" onclick="document.getElementById('rev-modal').classList.remove('open');openDet(${j.id})"><td style="padding:9px;color:var(--accent);font-weight:800">#${e(j.jno)}</td><td style="padding:9px;color:var(--muted);font-size:11px">${fD(revView==='outstanding'?j.dt:paidDate(j))}</td><td style="padding:9px;font-weight:600">${e(j.cname||'—')}</td><td style="padding:9px">${e(j.brand)} ${e(j.model)}</td><td style="padding:9px;color:var(--green);font-weight:800">&#8377;${fR(j.est)}</td><td style="padding:9px"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span></td></tr>`).join('')}</tbody></table></div>`
 }
-
+ 
 // ════════ FILTER MODAL (pending/done/unpaid/all) ════════════════
 function showFilterModal(type){
   let jj,title;
@@ -1410,7 +3568,7 @@ function showCustomerHistory(kind,val){
   document.getElementById('filter-modal-list').innerHTML=head+list;
   document.getElementById('filter-modal').classList.add('open');
 }
-
+ 
 // ════════ NEW JOB ══════════════════════════════════════════════
 function openNewJob(){reset();go('newJob');autoJno();if(typeof syncFromSheet==='function'){try{var _p=syncFromSheet(true);if(_p&&_p.then)_p.then(function(){if(jnoAuto&&document.getElementById('page-newJob').classList.contains('active'))autoJno()}).catch(function(){})}catch(e){}}}
 function reset(){
@@ -1435,7 +3593,7 @@ function editJno(){const i=document.getElementById('f-jno'),b=document.getElemen
 function setDT(){const now=new Date();dtISO=now.toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--green)'}
 function toggleDTE(){dtEdit=!dtEdit;const w=document.getElementById('dte-wrap'),b=document.getElementById('btn-dte');if(dtEdit){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('f-dtm').value=dtISO?new Date(dtISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
 function applyDTM(){const v=document.getElementById('f-dtm').value;if(v){dtISO=new Date(v).toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--accent)'}}
-
+ 
 // SIM ALL TOGGLE
 function toggleAllSIM(){
   simAllState=!simAllState;
@@ -1449,7 +3607,7 @@ function toggleAllSIMEdit(){
   eSimAllState=!eSimAllState;
   ['e-sim1','e-sim2','e-mmc'].forEach(id=>document.getElementById(id).checked=eSimAllState);
 }
-
+ 
 // ════════ BRAND/MODEL DROPDOWNS ════════════════════════════════
 function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" data-val="${e(b)}" onclick="selB('${pfx}','${jsq(b)}')"><span>${e(b)}</span></div>`).join('')}
 function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" data-val="${e(m)}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m}</span><span class="cs-acts"><button class="cs-item-del" style="color:var(--accent);opacity:.7" title="Rename" onclick="editModel(event,'${pfx}',this)">✎</button><button class="cs-item-del" title="Delete" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></span></div>`).join('')}
@@ -1477,7 +3635,7 @@ function editModel(ev,pfx,btn){
   if(typeof renderList==='function')renderList();
   toast('Renamed to "'+name+'"');
 }
-
+ 
 // ════════ PROBLEMS (stays open on selection) ════════════════════
 function buildPList(pfx){
   const cur=pfx==='e'?eSelProbs:selProbs;
@@ -1496,7 +3654,7 @@ function addNewProb(pfx){const inputId=pfx==='e'?'e-p-new':'p-new';const val=doc
 function delProb(ev,pfx,prob){ev.stopPropagation();if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();if(pfx==='e'){eSelProbs=eSelProbs.filter(p=>p!==prob);buildPList('e');renderPTags('e');updPLbl('e')}else{selProbs=selProbs.filter(p=>p!==prob);buildPList('n');renderPTags('n');updPLbl('n')}toast('Deleted.')}
 function updPLbl(pfx){const c=pfx==='e'?eSelProbs.length:selProbs.length;document.getElementById(pfx==='e'?'e-p-lbl':'p-lbl').textContent=c?c+' problem'+(c>1?'s':'')+' selected':'Select problem(s)...'}
 function renderPTags(pfx){const tagsId=pfx==='e'?'e-p-tags':'p-tags';const cur=pfx==='e'?eSelProbs:selProbs;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
-
+ 
 // ════════ SAVE JOB ══════════════════════════════════════════════
 function buildPartList(pfx){
   const cur=pfx==='e'?eSelParts:selParts;
@@ -1515,7 +3673,7 @@ function addNewPart(pfx){const inputId=pfx==='e'?'e-pt-new':'pt-new';const val=d
 function delPart(ev,pfx,part){ev.stopPropagation();if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();if(pfx==='e'){eSelParts=eSelParts.filter(p=>p!==part);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{selParts=selParts.filter(p=>p!==part);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Deleted.')}
 function updPartLbl(pfx){const c=pfx==='e'?eSelParts.length:selParts.length;document.getElementById(pfx==='e'?'e-pt-lbl':'pt-lbl').textContent=c?c+' part'+(c>1?'s':'')+' selected':'Select part(s)...'}
 function renderPartTags(pfx){const tagsId=pfx==='e'?'e-pt-tags':'pt-tags';const cur=pfx==='e'?eSelParts:selParts;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
-
+ 
 function saveJob(){
   const jno=document.getElementById('f-jno').value.trim(),imei=document.getElementById('f-imei').value.trim(),brand=selBrand,model=selModel;
   if(!jno||!brand||!model||!selProbs.length){toast('Fill all required fields: Job No, Brand, Model, Problem(s)','error');return}
@@ -1540,7 +3698,7 @@ function saveJob(){
   go('jobList');renderList();
 }
 function cancelJob(){reset();go('dashboard');renderDash()}
-
+ 
 // ════════ WHATSAPP ══════════════════════════════════════════════
 function sendWA(job){if(!job.cphone)return;const msg=buildWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);setTimeout(()=>{if(confirm('Send WhatsApp message to +91 '+job.cphone+'?\n\n'+msg.slice(0,300))){window.open(url,'_blank')}},600)}
 function buildWAMsg(job){return(waTemplate||WA_DEFAULT).replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,job.brand+' '+job.model).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{ESTIMATE_TIME}/g,waTime||'2-3 hours').replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
@@ -1554,7 +3712,7 @@ function sendSelectedDoneWA(){waDoneTemplate=document.getElementById('wa-done-te
 function saveWASettings(){waTemplate=document.getElementById('wa-template').value;waDoneTemplate=document.getElementById('wa-done-template').value;waTime=document.getElementById('wa-time').value;lsSet('tg_wa_tmpl',waTemplate);lsSet('tg_wa_done_tmpl',waDoneTemplate);lsSet('tg_wa_time',waTime);document.getElementById('wa-modal').classList.remove('open');toast('WA templates saved!')}
 function resetWATemplate(){document.getElementById('wa-template').value=WA_DEFAULT;document.getElementById('wa-time').value='2-3 hours';updateWAPreview();toast('Reset!')}
 function resetDoneWATemplate(){document.getElementById('wa-done-template').value=WA_DONE_DEFAULT;updateDoneWAPreview();toast('Done message reset!')}
-
+ 
 // ════════ JOB LIST ══════════════════════════════════════════════
 function popBFilter(){const s=document.getElementById('s-brd');s.innerHTML='<option value="all">All Brands</option>'+BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('')}
 function mkTog(id,field){
@@ -1595,7 +3753,7 @@ function renderList(){
 }
 function reSendWA(id){const j=jobs.find(j=>j.id===id);if(j)sendWA(j)}
 function deleteJob(id){if(!confirm('Delete this job?'))return;const now=new Date().toISOString();jobs=jobs.map(j=>j.id===id?{...j,deleted:true,updatedAt:now}:j).filter(j=>!j.deleted);saveJobs();syncDeleteToSheet(id);updNC();toast('Deleted.','error');renderList();renderDash();if(selJob===id){selJob=null;go('jobList')}}
-
+ 
 // ════════ JOB DETAIL ════════════════════════════════════════════
 function openDet(id){selJob=id;renderDet(jobs.find(j=>j.id===id));go('jobDetail')}
 function renderDet(j){
@@ -1629,7 +3787,7 @@ function renderDet(j){
 }
 function togCurSts(){if(selJob)togField(selJob,'s')}
 function delCurJob(){if(!selJob||!confirm('Delete this job permanently?'))return;deleteJob(selJob);selJob=null}
-
+ 
 // ════════ EDIT MODAL ════════════════════════════════════════════
 function openEditModal(id){
   const j=jobs.find(j=>j.id===id);if(!j)return;
@@ -1661,7 +3819,7 @@ function saveEdit(){
   const updated=jobs.find(j=>j.id===eJobId);if(updated)syncJobToSheet(updated);
   closeEditModal();toast('Job updated!');if(selJob===eJobId)renderDet(jobs.find(j=>j.id===eJobId));renderDash();renderList();
 }
-
+ 
 // ════════ MANAGE LISTS ══════════════════════════════════════════
 function openManageLists(){const sel=document.getElementById('manage-brand');sel.innerHTML=BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('');renderManageModels();renderManageProbs();switchTab('models');document.getElementById('manage-modal').classList.add('open')}
 function switchTab(tab){document.getElementById('tab-models-content').style.display=tab==='models'?'block':'none';document.getElementById('tab-probs-content').style.display=tab==='probs'?'block':'none';document.getElementById('tab-models').className='btn '+(tab==='models'?'btn-pr':'btn-gh');document.getElementById('tab-probs').className='btn '+(tab==='probs'?'btn-pr':'btn-gh')}
@@ -1674,18 +3832,18 @@ function renderManageProbs(){const el=document.getElementById('manage-probs-list
 function manageAddProb(){const val=document.getElementById('manage-prob-new').value.trim();if(!val)return;if(!PROBS.includes(val))PROBS.push(val);saveProbs();document.getElementById('manage-prob-new').value='';renderManageProbs();toast('Problem added!')}
 function manageMoveProb(i,dir){const ni=i+dir;if(ni<0||ni>=PROBS.length)return;[PROBS[i],PROBS[ni]]=[PROBS[ni],PROBS[i]];saveProbs();renderManageProbs();buildPList('n');buildPList('e')}
 function manageDelProb(prob){if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();renderManageProbs();toast('Deleted.')}
-
+ 
 // ════════ SCANNER ════════════════════════════════════════════════
 function openScan(){scanMode='imei';document.getElementById('scan-ov').classList.add('open');document.getElementById('scan-err').style.display='none';document.getElementById('scan-vid').style.display='block';startCam()}
 async function startCam(){try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});scanStr=st;const v=document.getElementById('scan-vid');v.srcObject=st;await v.play();startDet(v)}catch{scanErr('Camera access denied. Type IMEI manually.')}}
 function startDet(v){if(!('BarcodeDetector'in window)){scanErr('Not supported. Use Chrome on Android.');return}const d=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix']});scanRun=true;const lp=async()=>{if(!scanRun)return;try{const c=await d.detect(v);if(c.length){var _bc=c[0].rawValue;closeScan();if(typeof scanMode!=='undefined'&&scanMode!=='imei'){handleInvScan(_bc);}else{document.getElementById('f-imei').value=_bc;toast('Barcode scanned!');}return}}catch{}requestAnimationFrame(lp)};requestAnimationFrame(lp)}
 function scanErr(msg){document.getElementById('scan-vid').style.display='none';const er=document.getElementById('scan-err');er.style.display='block';er.textContent=msg}
 function closeScan(){scanRun=false;document.getElementById('scan-ov').classList.remove('open');if(scanStr){scanStr.getTracks().forEach(t=>t.stop());scanStr=null}}
-
+ 
 // ════════ SHOP SETTINGS ══════════════════════════════════════════
 function openShopSettings(){document.getElementById('sh-name').value=shop.name||'';document.getElementById('sh-tag').value=shop.tagline||'';document.getElementById('sh-addr').value=shop.addr||'';document.getElementById('sh-phone').value=shop.phone||'';document.getElementById('sh-gst').value=shop.gst||'';document.getElementById('sh-footer').value=shop.footer||'';var _gu=document.getElementById('sh-gsurl');if(_gu)_gu.value=GS_URL;document.getElementById('shop-modal').classList.add('open')}
 function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);var _gu=document.getElementById('sh-gsurl');if(_gu){var _v=_gu.value.trim();if(_v&&_v!==GS_URL){GS_URL=_v;try{localStorage.setItem('tg_gs_url',_v)}catch(e){}}}document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!');try{syncFromSheet(true)}catch(e){}}
-
+ 
 // ════════ JOB TICKET (80mm thermal) ══════════════════════════════
 function makeQRDataURL(text){
   try{
@@ -1774,7 +3932,7 @@ html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Ar
   w.document.open();w.document.write(T);w.document.close();
   toast('Ticket generated');
 }
-
+ 
 // ════════ SEARCH + QUICK ADD (brand/model/problem/part) ═══════════
 function isBrandPfx(pfx){return pfx==='b'||pfx==='e-b'}
 function csSearch(pfx){
@@ -1893,7 +4051,7 @@ function importLists(inp){
   };
   r.readAsText(f);
 }
-
+ 
 // ════════ UTILS ══════════════════════════════════════════════════
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=(type==='error'?'⚠ ':type==='info'?'ℹ ':' ✓ ')+msg;el.className='show '+type;clearTimeout(tTimer);tTimer=setTimeout(()=>{el.className=''},3500)}
 function fDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
@@ -1901,7 +4059,7 @@ function fD(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('en
 function fR(v){return parseFloat(v||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 </script>
-
+ 
 <script>
 /* ════════ INVENTORY CONTROL ════════ separate DB key: "tg_inventory" */
 var scanMode='imei';
@@ -2018,6 +4176,6 @@ function testSync(){
   }).catch(function(e){if(st){st.style.color='var(--red)';st.textContent='✗ Could not reach the URL. Make sure it ends in /exec and access is set to “Anyone”.';}});
 }
 </script>
-
-
+ 
+ 
 </body></html>
