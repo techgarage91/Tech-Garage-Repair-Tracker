@@ -3,9 +3,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Repair Tracker</title>
+<meta name="theme-color" content="#2f55d4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Repair Tracker">
+<link rel="apple-touch-icon" href="">
+<link rel="manifest" href="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -210,7 +218,7 @@ tr.jr:hover{background:#f0f4ff}
 .rp-wrap{display:flex;align-items:stretch}
 .rp-sym{padding:9px 10px;background:var(--light);border:1.5px solid var(--border);border-right:none;border-radius:9px 0 0 9px;color:var(--muted);font-weight:700;font-size:13px;display:flex;align-items:center}
 .rp-wrap input{border-radius:0 9px 9px 0;border-left:none}
- 
+
 /* MOBILE AND TABLET UI OVERRIDE */
 :root{
   --bg:#f6f8fb;--card:#ffffff;--border:#d9e2ef;--border2:#b8c4d6;
@@ -238,7 +246,7 @@ table{min-width:900px}
 .modal{width:min(720px,96vw);border-radius:14px}
 .modal-bg{align-items:flex-start;padding-top:18px}
 .cs-list{max-height:260px}.pd-list{max-height:260px}
- 
+
 @media(max-width:720px){
   body{padding-bottom:74px}
   nav{position:fixed;left:0;right:0;top:auto;bottom:0;height:66px;padding:6px 8px;border-top:1px solid var(--border);border-bottom:none;box-shadow:0 -8px 28px rgba(16,24,40,.10);justify-content:space-around;flex-wrap:nowrap}
@@ -273,7 +281,7 @@ table{min-width:900px}
   .prob-dd{max-height:58vh}
   #scan-ov{align-items:flex-end}.scan-box{width:100vw;border-radius:18px 18px 0 0}
 }
- 
+
 @media(min-width:721px) and (max-width:1024px){
   nav{height:auto;min-height:62px;padding:8px 14px}
   .page{padding:22px 18px}
@@ -320,7 +328,7 @@ body{background:
 ::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-thumb{background:#cbd3e6;border-radius:6px;border:2px solid transparent;background-clip:content-box}
 ::-webkit-scrollbar-thumb:hover{background:#aeb8d2;background-clip:content-box}
- 
+
 /* ── NAVIGATION ─────────────────────────────────────────── */
 nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(14px);
   -webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--border);
@@ -347,7 +355,7 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .sync-ic{display:inline-flex;align-items:center;line-height:0}
 .sync-spin{animation:spin .75s linear infinite;transform-origin:center}
 @keyframes spin{to{transform:rotate(360deg)}}
- 
+
 /* ── PAGE / HEADERS ─────────────────────────────────────── */
 .page{max-width:1160px;padding:26px 20px}
 .ph{margin-bottom:20px;gap:12px}
@@ -358,12 +366,12 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .bk{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:10px;
   width:38px;height:38px;display:grid;place-items:center;font-size:17px;box-shadow:var(--sh-xs);transition:all .18s}
 .bk:hover{border-color:var(--border2);color:var(--text);background:var(--light)}
- 
+
 /* ── CARDS ──────────────────────────────────────────────── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
   padding:20px;margin-bottom:16px;box-shadow:var(--sh-sm)}
 .card-title{color:var(--muted);font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;margin-bottom:14px}
- 
+
 /* ── STAT CARDS ─────────────────────────────────────────── */
 .stats-grid{gap:13px;margin-bottom:22px}
 .stat-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--border)!important;
@@ -383,7 +391,7 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .sc-rev{background:linear-gradient(135deg,#ffffff,#f0fdf4)}
 .sc-rev   .stat-ic{background:var(--green);color:#fff;box-shadow:0 5px 14px rgba(22,163,74,.32)}
 .sc-rev   .stat-val{color:var(--green)}
- 
+
 /* ── FORMS ──────────────────────────────────────────────── */
 .form-row{gap:14px;margin-bottom:14px}
 label.fl{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:none;margin-bottom:7px}
@@ -400,7 +408,7 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .dt-eb:hover,.dt-eb.ed{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .addnum-link{color:var(--accent);font-weight:600}
 .igrp{gap:8px}
- 
+
 /* dropdown popovers */
 .cs-dd,.prob-dd{border:1px solid var(--border);border-radius:14px;box-shadow:var(--sh-lg);overflow:hidden}
 .cs-sw{border-bottom:1px solid var(--border);background:var(--card)}
@@ -413,21 +421,21 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .pd-item.sel .pd-chk{background:var(--accent);border-color:var(--accent)}
 .cs-add,.prob-new-wrap button,.cs-new-wrap button{background:var(--accent);border-radius:8px;font-weight:600}
 .cs-add:hover{background:var(--accent2)}
- 
+
 /* tags / chips */
 .ptag{background:var(--accent-soft);border:1px solid #bcd0f7;color:var(--accent);border-radius:999px;
   padding:4px 11px;font-size:11.5px;font-weight:600}
 .prob-tags{gap:6px;margin-top:10px}
- 
+
 /* toggles */
 .tog-track{background:var(--border2)}
 .tog-track.on-green,.tog-track.on-green2{background:var(--green)}
- 
+
 /* checkboxes */
 .chk-lbl{border:1.5px solid var(--border);border-radius:10px;font-weight:600;font-size:12.5px;background:var(--card);transition:all .15s}
 .chk-lbl:hover{border-color:var(--accent);background:var(--accent-soft)}
 .chk-lbl input[type=checkbox]{accent-color:var(--accent)}
- 
+
 /* ── BUTTONS ────────────────────────────────────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:10px;
   font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1px;padding:10px 16px;
@@ -451,7 +459,7 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .btn-gh.btn-sm,.btn-ol.btn-sm,.btn-pr.btn-sm,.btn-re.btn-sm,.btn-wa.btn-sm,.btn-gr.btn-sm,.btn-ye.btn-sm{padding:6px 11px;font-size:11px}
 .btn-ic{border:1.5px solid var(--border2);background:var(--card);color:var(--accent)}
 .btn-row{gap:10px}
- 
+
 /* ── TABLE ──────────────────────────────────────────────── */
 th{color:var(--muted);font-size:10.5px;letter-spacing:.6px;border-bottom:1px solid var(--border);padding:11px 11px}
 td{padding:13px 11px;border-bottom:1px solid var(--light);font-size:13px}
@@ -461,7 +469,7 @@ tr.jr:hover{background:var(--accent-soft)}
 .j-est{color:var(--green);font-weight:800;font-variant-numeric:tabular-nums}
 .j-pr{color:var(--muted);font-weight:500}
 .j-dt{color:var(--dim);font-variant-numeric:tabular-nums}
- 
+
 /* status pill (native select) */
 .status-select{border-radius:999px;font-weight:700;font-size:10px;letter-spacing:.4px;border-width:1.5px}
 .status-select.pending{background:var(--amber-soft);border-color:#fde68a;color:var(--amber)}
@@ -474,23 +482,23 @@ tr.jr:hover{background:var(--accent-soft)}
 .pay-badge{border-radius:999px;font-weight:700;font-size:10px;letter-spacing:.3px;border-width:1.5px}
 .pay-paid{background:var(--green-soft);border-color:#bbf7d0;color:var(--green)}
 .pay-unpaid{background:var(--red-soft);border-color:#fecaca;color:var(--red)}
- 
+
 /* search bar */
 .sb{gap:11px}
 #s-inp{font-weight:500}
- 
+
 /* ── DETAIL ─────────────────────────────────────────────── */
 .df{background:var(--light);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
 .dfl{color:var(--dim);font-size:10px;letter-spacing:.8px;font-weight:700}
 .dfv{color:var(--text);font-weight:700;font-size:13.5px}
- 
+
 /* recent rows */
 .rr{padding:13px 0;border-bottom:1px solid var(--light)}
 .rr-t{font-size:13.5px;font-weight:600}
 .rr-t span{color:var(--accent);font-weight:800}
 .rr-b{color:var(--dim);font-size:11.5px;margin-top:3px}
 .empty{color:var(--dim);padding:40px 20px;font-weight:500;font-size:13px}
- 
+
 /* ── MODALS ─────────────────────────────────────────────── */
 .modal-bg{background:rgba(15,23,42,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .modal{border-radius:var(--r-xl);box-shadow:var(--sh-pop);padding:24px;border:1px solid rgba(255,255,255,.6)}
@@ -503,29 +511,29 @@ tr.jr:hover{background:var(--accent-soft)}
 .rev-summary{background:linear-gradient(135deg,var(--accent-soft),#f5f3ff);border:1px solid #e0e7ff;border-radius:14px;padding:16px}
 .rev-sum-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-variant-numeric:tabular-nums}
 .rev-sum-label{color:var(--muted)}
- 
+
 /* ── TOAST ──────────────────────────────────────────────── */
 #toast{top:74px;border-radius:12px;padding:13px 16px;font-weight:600;font-size:12.5px;box-shadow:var(--sh-lg);
   border-width:1px;display:none}
 #toast.success{background:#fff;border:1px solid #bbf7d0;color:#15803d;border-left:4px solid var(--green)}
 #toast.error{background:#fff;border:1px solid #fecaca;color:#b91c1c;border-left:4px solid var(--red)}
 #toast.info{background:#fff;border:1px solid #bcd0f7;color:var(--accent2);border-left:4px solid var(--accent)}
- 
+
 /* ── SCANNER ────────────────────────────────────────────── */
 .scan-box{border:none;border-radius:18px;box-shadow:var(--sh-pop)}
 .scan-hd span{color:var(--accent)}
 .scan-ln{background:var(--accent);box-shadow:0 0 12px var(--accent)}
- 
+
 /* ── FOCUS VISIBILITY (a11y) ────────────────────────────── */
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .nav-btn:focus-visible,.btn:focus-visible{outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
- 
+
 /* ── TABLET ─────────────────────────────────────────────── */
 @media(min-width:721px) and (max-width:1024px){
   .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
- 
+
 /* ── MOBILE / BOTTOM TAB BAR ────────────────────────────── */
 @media(max-width:720px){
   nav{height:68px;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(16px);
@@ -547,6 +555,14 @@ tr.jr:hover{background:var(--accent-soft)}
 /* ════════ MONTSERRAT FONT + MOBILE FIX + INVENTORY ════════ */
 body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-btn,.btn,.rev-period-btn,input,select,textarea,.cs-btn,label.fl,.card-title,.tag,.pay-badge,.status-select,.dfv,.dfl,.rr-t{font-family:'Montserrat',sans-serif}
 @media(max-width:720px){input,select,textarea,.cs-btn{font-size:16px}}
+.ph-grid{display:flex;flex-wrap:wrap;gap:8px}
+.ph-thumb{position:relative;width:74px;height:74px;border-radius:9px;overflow:hidden;border:1px solid var(--border)}
+.ph-thumb img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;display:block}
+.ph-del{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+#d-photos .ph-thumb{width:86px;height:86px}
+#photo-lightbox{display:none;position:fixed;inset:0;z-index:1700;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+#photo-lightbox.open{display:flex}
+#photo-lightbox img{max-width:100%;max-height:100%;border-radius:8px}
 .cust-link{color:var(--accent);cursor:pointer;text-decoration:none;border-bottom:1px dotted transparent}
 .cust-link:hover{border-bottom-color:currentColor}
 .set-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -661,6 +677,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
       <button class="set-card" onclick="closeModal('settings-modal');openManageLists()"><div class="si">📱</div><div class="st">Models &amp; Problems</div><small>Manage brands, models, problems &amp; parts</small></button>
       <button class="set-card" onclick="closeModal('settings-modal');openShopSettings()"><div class="si">🏪</div><div class="st">Shop Info</div><small>Name, address, phone, footer &amp; sync URL</small></button>
       <button class="set-card" onclick="closeModal('settings-modal');openTicketSettings()"><div class="si">🧾</div><div class="st">Edit Ticket</div><small>Customize what prints on the repair ticket</small></button>
+      <button class="set-card" onclick="closeModal('settings-modal');openBackup()"><div class="si">💾</div><div class="st">Backup &amp; Restore</div><small>Save or restore ALL your data to a file</small></button>
     </div>
   </div>
 </div>
@@ -711,20 +728,37 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="pf-item" onclick="openChangePass()">🔒&nbsp; Change Password</div>
   <div class="pf-item danger" onclick="doLogout()">⎋&nbsp; Log out</div>
 </div>
+<div class="modal-bg" id="backup-modal">
+  <div class="modal" style="max-width:420px">
+    <button class="close-btn" onclick="closeModal('backup-modal')">✕</button>
+    <h3>💾 Backup &amp; Restore</h3>
+    <p style="color:var(--muted);font-size:11.5px;margin-bottom:14px;line-height:1.6">Save <b>everything</b> — jobs, inventory, brands/models, problems, parts, templates, shop info &amp; settings — to one file. Keep it safe or load it on another device.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-pr" onclick="exportAll()">⬇️ Export Everything</button>
+      <label class="btn btn-ol" style="cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center">⬆️ Restore Backup<input type="file" accept="application/json,.json" onchange="importAll(this)" style="display:none"></label>
+    </div>
+    <p style="color:var(--dim);font-size:10.5px;margin-top:12px;line-height:1.6">Tip: back up weekly. Your data lives only in this browser, so a cleared browser or new device needs a restore. Restoring replaces current data on this device.</p>
+  </div>
+</div>
+<div id="photo-lightbox" onclick="this.classList.remove('open')"><img id="photo-lightbox-img" src="" alt="device photo"></div>
 <div id="welcome-ov">
   <div class="wc-card">
     <div class="wc-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
     <h1 class="wc-title wc-el">Repair Tracker</h1>
     <div class="wc-sub wc-el" id="wc-tag">Mobile &amp; Tablet Repair Tracker</div>
     <div class="wc-meta wc-el"><span id="wc-greet">Welcome</span><span class="dot">·</span><span id="wc-date"></span></div>
-    <div class="wc-pass-wrap wc-el"><input type="password" id="wc-pass" class="wc-input" placeholder="Enter password" autocomplete="off" oninput="var _e=document.getElementById('wc-err');if(_e)_e.classList.remove('show')" onkeydown="if(event.key==='Enter')enterApp()"><div class="wc-err" id="wc-err">Incorrect password — try again</div></div>
-    <div class="wc-cta wc-el"><button class="wc-btn" onclick="enterApp()">Enter <span class="arr">→</span></button></div>
-    <div class="wc-foot wc-el">Your data stays on this device &nbsp;·&nbsp; Auto-synced to Google Sheets</div>
+    <div class="wc-auth wc-el" style="margin-top:28px">
+      <input type="email" id="au-email" class="wc-input" placeholder="Email" autocomplete="username" oninput="auClearErr()">
+      <input type="password" id="au-pass" class="wc-input" placeholder="Password" autocomplete="current-password" style="margin-top:10px" oninput="auClearErr()" onkeydown="if(event.key==='Enter')doAuth()">
+      <div class="wc-err" id="wc-err">error</div>
+    </div>
+    <div class="wc-cta wc-el"><button class="wc-btn" id="au-btn" onclick="doAuth()"><span id="au-btn-label">Sign In</span> <span class="arr">→</span></button></div>
+    <div class="wc-foot wc-el"><span id="au-toggle-txt">New shop?</span> <a class="cust-link" style="color:#9db8f3;cursor:pointer" onclick="auToggle()" id="au-toggle">Create an account</a></div>
   </div>
 </div>
 <div id="toast" class=""> ✓ Model "iPhone Air" added!</div>
 <div id="qr-stage" style="display:none"></div>
- 
+
 <!-- SCANNER -->
 <div id="scan-ov">
   <div class="scan-box">
@@ -734,7 +768,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="scan-ft">Point camera at barcode or QR code</div>
   </div>
 </div>
- 
+
 <!-- EDIT MODAL -->
 <div class="modal-bg" id="edit-modal">
   <div class="modal">
@@ -782,6 +816,14 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
       <div><label class="fl">Payment</label><select id="e-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
       <div><label class="fl">Job Status</label><select id="e-sts"><option value="pending">⏳ Pending</option><option value="done">✅ Done</option><option value="returned">Returned</option></select></div>
     </div>
+    <div class="form-row">
+      <div><label class="fl">Ready By (promised)</label><input type="date" id="e-readyby"></div>
+      <div><label class="fl">Payment Method</label><select id="e-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Advance / Deposit ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-advance" placeholder="0.00"></div></div>
+      <div><label class="fl">Parts Cost ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-partscost" placeholder="0.00"></div></div>
+    </div>
     <div style="margin-bottom:11px">
       <label class="fl">SIM / Storage</label>
       <div class="chk-row">
@@ -791,10 +833,11 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
       </div>
     </div>
     <div style="margin-bottom:4px"><label class="fl">Notes</label><textarea id="e-notes" rows="3" placeholder="Additional notes..."></textarea></div>
+    <div style="margin-bottom:11px"><label class="fl">Photos</label><div><label class="btn btn-ol btn-sm" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📷 Add Photos<input type="file" accept="image/*" capture="environment" multiple onchange="onPhotoInput(this,'e')" style="display:none"></label></div><div id="e-photos" class="ph-grid" style="margin-top:10px"></div></div>
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveEdit()">💾 Save Changes</button><button class="btn btn-gh" onclick="closeEditModal()">Cancel</button></div>
   </div>
 </div>
- 
+
 <!-- REVENUE MODAL -->
 <div class="modal-bg" id="rev-modal">
   <div class="modal">
@@ -812,7 +855,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="rev-job-list"></div>
   </div>
 </div>
- 
+
 <!-- FILTER MODAL (pending/done/unpaid) -->
 <div class="modal-bg" id="filter-modal">
   <div class="modal">
@@ -821,7 +864,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="filter-modal-list"></div>
   </div>
 </div>
- 
+
 <!-- WA MODAL -->
 <div class="modal-bg" id="wa-modal">
   <div class="modal">
@@ -830,6 +873,11 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <p style="color:var(--muted);font-size:11px;margin-bottom:12px;line-height:1.6">Placeholders: <code style="background:var(--light);padding:1px 5px;border-radius:4px">{JOB_NO}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{MODEL}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE_TIME}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{PROBLEMS}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{CUSTOMER_NAME}</code></p>
     <label class="fl">Estimated Repair Time</label>
     <input type="text" id="wa-time" placeholder="e.g. 2-3 hours" style="margin-bottom:11px">
+    <div style="background:var(--light);border-radius:10px;padding:11px;margin-bottom:12px">
+      <div class="card-title" style="margin-bottom:8px">Auto-send WhatsApp</div>
+      <label class="chk-lbl" style="margin-bottom:6px;width:100%"><input type="checkbox" id="wa-auto-created" onchange="saveAutoWA()"> When a NEW job is saved, ask to send the "Received" message</label>
+      <label class="chk-lbl" style="width:100%"><input type="checkbox" id="wa-auto-done" onchange="saveAutoWA()"> When a job is marked DONE, ask to send the "Ready" message</label>
+    </div>
     <label class="fl">Message Template</label>
     <textarea id="wa-template" rows="8" style="font-family:monospace;font-size:12px" oninput="updateWAPreview()"></textarea>
     <div style="margin-top:10px"><label class="fl">Preview</label><div class="wa-preview"><div class="wa-bubble" id="wa-preview-text"></div></div></div>
@@ -844,7 +892,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-wa" onclick="sendSelectedDoneWA()">💬 Send Done Message</button><button class="btn btn-gh" onclick="resetDoneWATemplate()">Reset Done Default</button></div>
   </div>
 </div>
- 
+
 <!-- MANAGE LISTS MODAL -->
 <div class="modal-bg" id="manage-modal">
   <div class="modal">
@@ -873,7 +921,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     </div>
   </div>
 </div>
- 
+
 <!-- SHOP SETTINGS MODAL -->
 <div class="modal-bg" id="shop-modal">
   <div class="modal">
@@ -894,7 +942,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveShopSettings()">💾 Save</button><button class="btn btn-gh" onclick="document.getElementById('shop-modal').classList.remove('open')">Cancel</button></div>
   </div>
 </div>
- 
+
 <!-- INVENTORY PAGE -->
 <div class="page" id="page-inventory">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>Inventory <span class="ac">Control</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openInvScan()">▤ Scan Product</button></div>
@@ -950,7 +998,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="card"><div class="card-title">Recent Jobs</div><div id="recent-list"></div></div>
   <div class="btn-row"><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button><button class="btn btn-ol" onclick="go('jobList');renderList()">View All →</button><button class="btn btn-ol" onclick="go('inventory');renderInv()">📦 Inventory</button></div>
 </div>
- 
+
 <!-- NEW JOB -->
 <div class="page" id="page-newJob">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>New Repair <span class="ac">Job</span></h2></div>
@@ -1020,17 +1068,30 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="prob-tags" id="pt-tags"></div>
   </div>
   <div class="card">
+    <div class="card-title">Photos</div>
+    <label class="btn btn-ol" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📷 Add Photos<input type="file" accept="image/*" capture="environment" multiple onchange="onPhotoInput(this,'f')" style="display:none"></label>
+    <div id="f-photos" class="ph-grid" style="margin-top:10px"></div>
+  </div>
+  <div class="card">
     <div class="card-title">Financial &amp; Notes</div>
     <div class="form-row">
       <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-est" placeholder="0.00" min="0" step="0.01"></div></div>
       <div><label class="fl">Payment Status</label><select id="f-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
       <div><label class="fl">Job Status</label><select id="f-sts"><option value="pending">⏳ Pending</option><option value="done">✅ Done</option><option value="returned">Returned</option></select></div>
     </div>
+    <div class="form-row">
+      <div><label class="fl">Ready By (promised)</label><input type="date" id="f-readyby"></div>
+      <div><label class="fl">Payment Method</label><select id="f-paymethod"><option value="">— Not set</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="card">Card</option></select></div>
+    </div>
+    <div class="form-row">
+      <div><label class="fl">Advance / Deposit ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-advance" placeholder="0.00" min="0" step="0.01"></div></div>
+      <div><label class="fl">Parts Cost ₹ (your cost)</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-partscost" placeholder="0.00" min="0" step="0.01"></div></div>
+    </div>
     <div><label class="fl">Notes</label><textarea id="f-notes" rows="3" placeholder="Additional notes..."></textarea></div>
   </div>
   <div class="btn-row"><button class="btn btn-pr" onclick="saveJob()">💾 Save Job</button><button class="btn btn-gh" onclick="cancelJob()">Cancel</button></div>
 </div>
- 
+
 <!-- ALL JOBS -->
 <div class="page" id="page-jobList">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>All <span class="ac">Jobs</span> <span id="jl-cnt" style="color:var(--dim);font-size:13px;font-weight:600">(65)</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button></div>
@@ -1048,7 +1109,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div id="j-empty" class="empty" style="display:none">No jobs found.</div>
   </div>
 </div>
- 
+
 <!-- JOB DETAIL -->
 <div class="page" id="page-jobDetail">
   <div class="ph"><button class="bk" onclick="go('jobList');renderList()">←</button><h2 id="d-title">Job <span class="ac">#—</span></h2><div class="sp"></div><span id="d-stag" class="tag"></span></div>
@@ -1057,6 +1118,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="card" id="d-prob-card" style="display:none"><div class="card-title">Problems Reported</div><div id="d-probs" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <div class="card" id="d-parts-card" style="display:none"><div class="card-title">Part to be Change / Repair</div><div id="d-parts" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <div class="card" id="d-note-card" style="display:none"><div class="card-title">Notes</div><div id="d-note" style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:12px"></div></div>
+  <div class="card" id="d-photo-card" style="display:none"><div class="card-title">Photos</div><div id="d-photos" class="ph-grid"></div></div>
   <div class="btn-row">
     <button class="btn btn-pr" onclick="genTicket(selJob)">🎫 Print Ticket</button>
     <button class="btn btn-ol" onclick="openEditModal(selJob)">✏️ Edit</button>
@@ -1064,13 +1126,13 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <button class="btn btn-re" onclick="delCurJob()">🗑 Delete</button>
   </div>
 </div>
- 
+
 <script>
 // ════════ GOOGLE SHEETS SYNC ══════════════════════════════════
 let GS_URL = (function(){var NEW="https://script.google.com/macros/s/AKfycbxhCf0oi0pvHFzgpivLt7VpZXruB1A_DdS0E5tJMO-6xlCb5amE737EsMOX8d39-osh-Q/exec",OLD="https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec";try{var st=localStorage.getItem("tg_gs_url");if(!st||st===OLD){localStorage.setItem("tg_gs_url",NEW);return NEW;}return st;}catch(e){return NEW;}})();
 const SYNC_INTERVAL_MS = 45000;
 let syncTimer = null;
- 
+
 function normalizeJobForSync(job) {
   const now = new Date().toISOString();
   return {
@@ -1099,7 +1161,7 @@ function normalizeJobForSync(job) {
     updatedAt: job.updatedAt || now
   };
 }
- 
+
 function normalizeRemoteJob(row) {
   const o = {
     id: parseInt(row.id, 10) || Number(row.id) || Date.now(),
@@ -1128,11 +1190,11 @@ function normalizeRemoteJob(row) {
   if(row.cphone2!==undefined) o.cphone2 = row.cphone2;
   return o;
 }
- 
+
 function newerThan(a, b) {
   return new Date(a || 0).getTime() > new Date(b || 0).getTime();
 }
- 
+
 function syncJobToSheet(job) {
   const payload = normalizeJobForSync({...job, updatedAt: job.updatedAt || new Date().toISOString()});
   payload.action = "upsert";
@@ -1150,7 +1212,7 @@ function syncJobToSheet(job) {
       console.error(err);
     });
 }
- 
+
 function syncDeleteToSheet(id) {
   setSyncBadge("ing");
   return fetch(GS_URL, {
@@ -1169,7 +1231,7 @@ function syncDeleteToSheet(id) {
       console.error(err);
     });
 }
- 
+
 function syncFromSheet(silent = false) {
   setSyncBadge("ing");
   if (!silent) toast("Syncing from Google Sheets...", "info");
@@ -1181,7 +1243,7 @@ function syncFromSheet(silent = false) {
       const deletedIds = new Set((data.deletedIds || []).map(String));
       const byId = new Map(jobs.map(j => [String(j.id), j]));
       let changed = 0;
- 
+
       remoteJobs.forEach(remote => {
         const key = String(remote.id);
         const local = byId.get(key);
@@ -1195,7 +1257,7 @@ function syncFromSheet(silent = false) {
           changed++;
         }
       });
- 
+
       jobs = jobs.filter(j => !j.deleted && !deletedIds.has(String(j.id)));
       saveJobs(); updNC(); renderDash(); renderList();
       if (selJob) renderDet(jobs.find(j => j.id === selJob));
@@ -1208,12 +1270,12 @@ function syncFromSheet(silent = false) {
       console.error(err);
     });
 }
- 
+
 function startAutoSync() {
   if (syncTimer) clearInterval(syncTimer);
   syncTimer = setInterval(() => syncFromSheet(true), SYNC_INTERVAL_MS);
 }
- 
+
 function setSyncBadge(state) {
   const b = document.getElementById("sync-nav"); if(!b) return;
   b.className = "sync-badge sync-" + state;
@@ -1227,7 +1289,7 @@ function setSyncBadge(state) {
   const label = state === "ok" ? "Synced" : state === "ing" ? "Syncing" : "Sync Error";
   if (txt) { txt.textContent = label; }
 }
- 
+
 // ════════ DATA ═════════════════════════════════════════════════
 /*TG_SEED_START*/
 const BM_DEFAULT={"Apple":["iPhone 17 Pro Max","iPhone 17 Pro","iPhone Air","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],"Samsung":["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy S7","Galaxy S7 Edge","Galaxy Note7","Galaxy A3 (2016)","Galaxy A5 (2016)","Galaxy A7 (2016)","Galaxy A8 (2016)","Galaxy A9 (2016)","Galaxy A9 Pro (2016)","Galaxy J1 (2016)","Galaxy J2 (2016)","Galaxy J3 (2016)","Galaxy J5 (2016)","Galaxy J7 (2016)","Galaxy C5","Galaxy C7","Galaxy On5 Pro","Galaxy On7 Pro","Galaxy S8","Galaxy S8+","Galaxy Note8","Galaxy A3 (2017)","Galaxy A5 (2017)","Galaxy A7 (2017)","Galaxy J2 Pro","Galaxy J3 Pro","Galaxy J5 Pro","Galaxy J7 Pro","Galaxy J7 Max","Galaxy C7 Pro","Galaxy On Max","Galaxy S9","Galaxy S9+","Galaxy Note9","Galaxy A6","Galaxy A6+","Galaxy A7 (2018)","Galaxy A8 (2018)","Galaxy A8+","Galaxy A9 (2018)","Galaxy J2 Core","Galaxy J4","Galaxy J6","Galaxy J8","Galaxy On6","Galaxy S10e","Galaxy S10","Galaxy S10+","Galaxy S10 5G","Galaxy Note10","Galaxy Note10+","Galaxy A10","Galaxy A20","Galaxy A30","Galaxy A40","Galaxy A70","Galaxy A80","Galaxy M10","Galaxy M20","Galaxy M30","Galaxy Fold","Galaxy A01","Galaxy A11","Galaxy A21","Galaxy A31","Galaxy A41","Galaxy A71","Galaxy M01","Galaxy M11","Galaxy M21","Galaxy M31","Galaxy M51","Galaxy Z Fold2","Galaxy Z Flip","Galaxy Z Flip 5G","Galaxy A02","Galaxy A12","Galaxy A72","Galaxy M12","Galaxy M22","Galaxy M52","Galaxy F12","Galaxy F22","Galaxy A03","Galaxy A73","Galaxy M13","Galaxy M23","Galaxy F13","Galaxy F23","Galaxy XCover6 Pro","Galaxy M14","Galaxy F14","Galaxy F34","Galaxy F54","Galaxy M15","Galaxy F15","Galaxy F55","Galaxy S25 Edge","Galaxy S25 FE","Galaxy A26","Galaxy M06","Galaxy M16","Galaxy F06","Galaxy F16","Galaxy F56","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Flip7 FE","Galaxy Z TriFold","Galaxy A07","Galaxy A07 5G","Galaxy A17","Galaxy A17 5G","Galaxy M07","Galaxy M17 5G","Galaxy F07","Galaxy F17 5G"],"OnePlus":["Nord CE6 Lite","Nord CE6","Nord 6","15T","Nord CE 5","Nord 5","15R","15","13s","13T","Nord 4","Nord 4 CE","13R","13","12R","12","Ace 2","Nord 3","Nord CE 3 Lite 5G","Nord CE3","11R","11","Nord 2T","Nord CE 2 Lite 5G","Nord CE2","10R 150W","10R","10T","10 Pro","Nord 2","Nord N200 5G","Nord CE 5G","9RT","9R","9 Pro","9","Nord","8T","8 Pro","8","7T Pro McLaren Edition","7T Pro","7T","7 Pro 5G","7 Pro","7","6T McLaren Edition","6T","6","5T","5","3T","3","13 Pro","12 Pro","11 Pro","Nord CE4 Lite","Nord CE4","Nord CE3 Lite","Nord CE2 Lite","Nord CE"],"Xiaomi":["17 Ultra","17","16 Ultra","16 Pro","16","15T Pro","15T","15 Ultra","15 Pro","15","14T Pro","14T","14 Ultra","14 Pro","14","13T Pro","13T","13 Ultra","13 Pro","13","12S Ultra","12S Pro","12S","12 Lite","12 Pro","12","11X Pro","11X","11 Ultra","11 Pro","11 Lite","11","10 Ultra","10 Lite","10 Pro","10","9T Pro","9T","9 SE","9","8 Pro","8 SE","8 Lite","8","6X","6","5S Plus","5S","Note 10 Lite","Note 10","Note 3","Note 2","Max 3","Max 2","Max Prime","Max","A3","A2 Lite","A2","A1","MIX 4","MIX Alpha","MIX 3 5G","MIX 3","MIX 2S","MIX 2","MIX","MIX Fold 5","MIX Fold 4","MIX Fold 3","MIX Fold 2","MIX Fold","MIX Flip 2","MIX Flip","12 Ultra"],"Redmi":["15A","15C","15 5G","15","14C","13C","13","12C","12","11 Prime","10C","10A","10 Prime","10","9 Prime","9C","9A","9","8A","8","7A","7","6 Pro","6A","6","5A","5","4X","4A","4","3X","3S","3","Note 15 Pro+","Note 15 Pro","Note 15 5G","Note 15","Note 14 Pro+","Note 14 Pro","Note 14","Note 13 Pro+","Note 13 Pro","Note 13","Note 12 Turbo","Note 12 Pro+","Note 12 Pro","Note 12","Note 11 Pro+","Note 11 Pro","Note 11S","Note 11","Note 10 Pro Max","Note 10 Pro","Note 10S","Note 10","Note 9 Pro Max","Note 9 Pro","Note 9","Note 8 Pro","Note 8","Note 7 Pro","Note 7","Note 6 Pro","Note 5A","Note 5 Pro","Note 5","Note 4X","Note 4","Note 3 Pro","Note 3","K90 Pro","K90","K80 Pro","K80","K70 Ultra","K70 Pro","K70E","K70","K60 Ultra","K60 Pro","K60E","K60","K50 Ultra","K50 Gaming","K50 Pro","K50","K40 Gaming","K40 Pro+","K40 Pro","K40","K30 Ultra","K30 Pro","K30 5G","K30","K20 Pro","K20","A5","A4 5G","A3 Pro","A3x","A3","A2+","A2","A1+","A1","Turbo 5","Turbo 4 Pro","Turbo 4","Turbo 3","Note 14 4G","Note 13 4G","Note 12 4G","Note 11 4G","Note 10 4G","A4"],"Realme":["16T 5G","16 Pro+","16 Pro","16","15 Pro","15x","15","14 Pro+","14 Pro","14x","14","13 Pro+","13 Pro","13+","13","12 Pro+","12 Pro","12+","12 5G","12x","12","11 Pro+","11 Pro","11 5G","11x","11","10 Pro+","10 Pro","10 5G","10","9 Pro+","9 Pro","9i","9 5G","9","8 Pro","8s 5G","8i","8 5G","8","7 Pro","7i","7","6 Pro","6i","6","5 Pro","5","3 Pro","3","2 Pro","2","1","GT 8 Pro","GT 7 Pro","GT 7T","GT 7","GT 6T","GT 6","GT 5 Pro","GT 5","GT 3","GT 2 Pro","GT 2","GT Neo 5 SE","GT Neo 5","GT Neo 3T","GT Neo 3","GT Neo 2T","GT Neo 2","GT Neo","GT Explorer Master Edition","GT Master Edition","GT","X7 Max","X7 Pro","X7","X3 SuperZoom","X3","X2 Pro","X2","XT","X","Narzo N100","Narzo N65","Narzo N63","Narzo N61","Narzo N55","Narzo N53","Narzo 70 Pro","Narzo 70x","Narzo 70","Narzo 60 Pro","Narzo 60x","Narzo 60","Narzo 50 5G","Narzo 50 Pro","Narzo 50i Prime","Narzo 50i","Narzo 50A","Narzo 50","Narzo 30 5G","Narzo 30 Pro","Narzo 30A","Narzo 30","Narzo 20 Pro","Narzo 20A","Narzo 20","Narzo 10A","Narzo 10","Narzo","C85","C75x","C75","C73","C71","C67","C65","C63","C61","C55","C53","C51","C35","C33","C31","C30s","C30","C25Y","C25s","C25","C21Y","C21","C20","C17","C15","C12","C11 (2021)","C11","C3i","C3","C2","C1","P4x","P4R","P4 Power","P4 Pro","P4 Lite 5G","P4 Lite","P4","P3 Ultra","P3 Pro","P3","P2 Pro","P2","P1 Pro","P1","GT Neo 6"],"Oppo":["Find X9s","Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Lite","Find X5 Pro","Find X5","Find X3 Lite","Find X3 Neo","Find X3 Pro","Find X3","Find X2 Lite","Find X2 Neo","Find X2 Pro","Find X2","Find X Lamborghini Edition","Find X","Find N5","Find N3 Flip","Find N3","Find N2 Flip","Find N2","Find N","Reno15 Pro Mini","Reno15 Pro","Reno15","Reno14 Pro","Reno14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","Reno 10 Pro+","Reno 10 Pro","Reno 10","Reno9 Pro+","Reno9 Pro","Reno9","Reno8 T","Reno8 Pro","Reno8","Reno7 Z","Reno7 Pro","Reno7","Reno6 Z","Reno6 Pro","Reno6","Reno5 Z","Reno5 Lite","Reno5 F","Reno5 Pro","Reno5","Reno4 Z","Reno4 Pro","Reno4","Reno3 Pro","Reno3","Reno Ace","Reno2 Z","Reno2 F","Reno2","Reno Z","Reno 10x Zoom","Reno","F31 Pro+","F31 Pro","F31","F29 Pro","F29","F27 Pro+","F27","F25 Pro","F23","F21 Pro 5G","F21 Pro","F19 Pro+","F19 Pro","F19","F17 Pro","F17","F15","F11 Pro","F11","F9 Pro","F9","K14","K13","K12x","K12","K11x","K11","K10x","K10 Pro","K10 5G","K10","K9 Pro","K9","K7","K5","K3","K1","A6x","A6 Pro","A6","A5x","A5 Pro","A3 Pro","A3","A98","A97","A96","A95","A94","A93","A92","A91","A80","A79","A78","A77","A76","A74","A60","A59","A58","A57","A55","A54","A53","A33","A31","A18","A17k","A17","A16k","A16","A15s","A15","A12","A11k","A9","A7","A5s","A5","A3s","A1k","A2 Pro","A2","A38"],"Vivo":["X300 Ultra","X300 Pro","X300","X200T","X200 FE","X200 Pro Mini","X200 Pro","X200","X100 Ultra","X100 Pro","X100","X90 Pro+","X90 Pro","X90","X80 Pro","X80","X70 Pro+","X70 Pro","X70","X60 Pro+","X60 Pro","X60","X50 Pro+","X50 Pro","X50","X30 Pro","X30","X27 Pro","X27","X23 Symphony Edition","X23","X21i","X21 UD","X21","X20 Plus","X20","V70 Elite","V70","V60e","V60","V50e","V50","V40e","V40 Pro","V40","V30e","V30 Pro","V30","V29 Pro","V29","V27 Pro","V27","V25 Pro","V25","V23 Pro","V23","V21e","V21","V20 Pro","V20","V19","V17 Pro","V17","V15 Pro","V15","V11 Pro","V11","V9 Pro","V9","Y21 5G","Y11 5G","Y05","Y500 Pro","Y500","Y400","Y300 Pro","Y300","Y200 Pro","Y200 5G","Y200","Y100i","Y100e","Y100 5G","Y100A","Y100","Y58","Y56","Y36","Y35","Y33s","Y22s","Y22","Y21T","Y21e","Y21","Y20G","Y20A","Y20","Y19","Y17","Y15","Y12","Y11","Y95","Y93","Y91i","Y91","Y83","Y81","T4R","T4x","T4 Ultra","T4 Pro","T4 Lite","T4","T3x","T3 Ultra","T3 Pro","T3 Lite","T3","T2x","T2 Pro","T2","T1x","T1 Pro","T1","X Flip","X Fold5","X Fold3 Pro","X Fold3","X Fold2","X Fold+","X Fold","NEX 3 5G","NEX 3","NEX Dual Display","NEX A","NEX S","NEX","S20 Pro","S20","S19 Pro","S19","S18 Pro","S18","S17 Pro","S17","S16 Pro","S16","S15 Pro","S15","S12 Pro","S12","S10 Pro","S10","S9","S7e","S7","S6","S5","S1 Pro","S1","X200 Ultra","Y300 Pro+","Y78","Y18","iQOO 13","iQOO 12","iQOO 11","iQOO Neo 9 Pro","iQOO Neo 9","iQOO Z9 Pro","iQOO Z9"],"Nokia":["Nokia G42","Nokia G22","Nokia G21","Nokia G20","Nokia G10","Nokia C32","Nokia C22","Nokia C21","Nokia C12","Nokia XR21","Nokia XR20","Nokia 8.3","Nokia 7.3","Nokia 6.3","Nokia 5.4","Nokia 4.3","Nokia 3.4"],"Motorola":["Edge 70 Pro","Edge 70 Fusion","Edge 70","G77","G67 2026","G17 Power","G17","G 2026","G Play 2026","Razr 60 Ultra/Razr Ultra 2025","Razr 60 Plus/Razr Plus 2025","Razr 60/Razr 2025","Edge 60 Neo","Edge 60 Pro","Edge 60 Stylus","Edge 60","Edge 60 Fusion","X70 Air","G57 Power","G57","G67 Power","G67","G06 Power","G06","G96","G86 Power","G86","G56","G15","G Stylus 2025","G Power 2025","G 2025","G05","G75","E15","ThinkPhone 25","Razr 50 Ultra/Razr+ 2024","Razr 50/Razr 2024","Edge 2024","Edge 50 Ultra","Edge 50 Neo","Edge 50 Fusion","Edge 50 Pro","Edge 50","X50 Ultra","S50 Neo","S50","G Stylus 5G 2024","G Power 5G 2024","G 5G 2024","G Play 2024","G85","G55","G45","G35","G64","G24 Power","G24","G04s","G04","E14","ThinkPhone","Razr 40 Ultra/Razr+ 2023","Razr 40/Razr 2023","Edge 40 Neo","Edge 40 Pro/Edge+ 2023/Edge X40","Edge 40","X40","G54 Power Edition","G54j/G54y","G54","G84","G34 5G","G14","G73 5G","G53j/G53s/G53y","G23","G13","G53 5G","G Stylus 5G 2023","G Stylus 2023","G Power 5G 2023","G 5G 2023","G Play 2023","E13","Defy 2","Razr 2022","Edge 30 Neo","Edge 30 Fusion","Edge 30 Ultra","Edge 30 Pro","Edge 30","Edge+ 2022","Edge 2022","X30 Pro","S30 Pro","G72","G32","G62","G82","G52j","G52","G22","G200 5G","G71 5G","G51 5G","G41","G31","E32","E22s","E22","Defy","One 5G Ace","Edge X30","Edge S30","Edge 2021","Edge 20 Pro/Edge S Pro","Edge 20","Edge 20 Fusion","Edge 20 Lite","G100/Edge S","G60S","G60","G50 5G","G50","G40 Fusion","G30","G20","G10 Power","G10","G Stylus 5G","G Stylus","G Play","G Pure","G 5G","E40","E30","E20","E7i Power","E7 Power","E6i","Razr 5G","One Fusion+","One Fusion","Edge+","Edge","G9 Power","G9 Plus","G9/G9 Play","G 5G Plus","G Stylus/G Pro","G Power","G Fast","G8 Power Lite","G8 Power","G8","E7 Plus","E7","E 2020","E6s","Razr","One Hyper","One Macro","One Zoom","One Action","One Vision","Z4","G8 Plus","G8 Play","G7 Plus","G7 Power","G7 Play","G7","E6 Plus","E6 Play","E6","One Power","One","Z3 Play","Z3","G6 Plus","G6 Play","G6","E5 Plus","E5 Play","E5","Z2 Force","Z2 Play","X4","C Plus","C","G5S Plus","G5S","G5 Plus","G5","E4 Plus","E4","Z Force","Z Play","Z","M","G4 Plus","G4 Play","G4","E3 Power","E3","Edge 40 Pro","G34","Razr 50 Ultra","Razr 50","Razr 40 Ultra","Razr 40"],"Sony":["Xperia 1 VI","Xperia 5 VI","Xperia 10 VI","Xperia 1 V","Xperia 5 V","Xperia 10 V","Xperia 1 IV","Xperia 5 IV","Xperia 10 IV"],"Google":["Pixel 10a","Pixel 10 Pro Fold","Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9a","Pixel 9 Pro Fold","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8a","Pixel 8 Pro","Pixel 8","Pixel Fold","Pixel 7a","Pixel 7 Pro","Pixel 7","Pixel 6a","Pixel 6 Pro","Pixel 6","Pixel 5a","Pixel 5","Pixel 4a 5G","Pixel 4a","Pixel 4 XL","Pixel 4","Pixel 3a XL","Pixel 3a","Pixel 3 XL","Pixel 3","Pixel 2 XL","Pixel 2","Pixel XL","Pixel"],"POCO":["F7 Ultra","F7 Pro","F7","F6 Pro","F6","F5 Pro","F5","F4 GT","F4","F3 GT","F3","F2 Pro","F1","X8 Pro Max","X8 Pro","X7 Neo","X7 Pro","X7","X6 Neo","X6 Pro 5G","X6 5G","X5 Pro 5G","X5 5G","X4 GT","X4 Pro 5G","X3 GT","X3 Pro","X3 NFC","X3","X2","M7 Pro","M7","M6 Plus","M6 Pro","M6","M5s","M5","M4 5G","M4 Pro 5G","M4 Pro 4G","M3 Pro 5G","M3","M2 Pro","M2","C85","C75","C71","C65","C61","C55","C51","C50","C40","C31","C3","X8 Pro Iron Man Edition","F4 GT Cyber Edition","Pad","X6 Pro","X6","X5 Pro","X5","M4 Pro","M4"]};
@@ -1237,17 +1299,18 @@ const SHOP_DEFAULT={"name":"Tech Garage","tagline":"Mobile & Tablet Repair","add
 /*TG_SEED_END*/
 const WA_DEFAULT="Hello {CUSTOMER_NAME}! 👋\n\nThank you for choosing Tech Garage for your repair.\n\n📋 *Job Details:*\n• Job No: *#{JOB_NO}*\n• Device: *{MODEL}*\n• Issue: {PROBLEMS}\n\n💰 Estimate: ₹{ESTIMATE}\n⏱ Expected repair time: *{ESTIMATE_TIME}*\n\nWe will keep you updated. Please keep this message for reference.\n\nThank you! 🙏";
 const WA_DONE_DEFAULT="Hello {CUSTOMER_NAME}!\n\nYour repair job is completed and ready for pickup.\n\nJob No: #{JOB_NO}\nDevice: {MODEL}\nIssue: {PROBLEMS}\nAmount: Rs. {ESTIMATE}\n\nThank you for choosing Tech Garage.";
- 
+
 let shop={...SHOP_DEFAULT};
- 
+
 // ════════ STATE ════════════════════════════════════════════════
 let BM,PROBS,PARTS,jobs=[],selJob=null,jLocked=false,selBrand='',selModel='',selProbs=[],selParts=[],dtISO='',dtEdit=false,scanStr=null,scanRun=false,tTimer=null;
 let eSelBrand='',eSelModel='',eSelProbs=[],eSelParts=[],eJobId=null,eDTISO='';
 let waTemplate='',waDoneTemplate='',waTime='2-3 hours';
+let autoWA={created:true,done:true};
 let simAllState=false, eSimAllState=false;
- 
+
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{};try{if(typeof cloudPushDebounced==='function')cloudPushDebounced();}catch(e){}}
 function loadAll(){
   jobs=lsGet('tg_jobs_v3',[]);
   BM=lsGet('tg_bm',JSON.parse(JSON.stringify(BM_DEFAULT)));
@@ -1280,6 +1343,7 @@ function loadAll(){
   PARTS=lsGet('tg_parts',[...PARTS_DEFAULT]);
   waTemplate=lsGet('tg_wa_tmpl',WA_DEFAULT);
   waDoneTemplate=lsGet('tg_wa_done_tmpl',WA_DONE_DEFAULT);
+  autoWA=lsGet('tg_auto_wa',{created:true,done:true});
   waTime=lsGet('tg_wa_time','2-3 hours');
   shop=Object.assign({...SHOP_DEFAULT},lsGet('tg_shop',{}));
 }
@@ -1288,36 +1352,90 @@ function saveBM(){lsSet('tg_bm',BM)}
 function saveProbs(){lsSet('tg_probs',PROBS)}
 function saveParts(){lsSet('tg_parts',PARTS)}
 const BRANDS=()=>Object.keys(BM);
- 
-window.onload=function(){
+
+const SUPA_URL='https://ulcdlgxtoilvkbcmynsg.supabase.co';
+const SUPA_KEY='sb_publishable_R-HOcoFy8IoU8hy6EGrREQ_F5eQf4hs';
+let supa=null,CURRENT_UID=null,CURRENT_EMAIL=null,SUB=null,authMode='signin';
+const SYNC_KEYS=['tg_jobs_v3','tg_inventory','tg_bm','tg_bm_seed','tg_probs','tg_parts','tg_wa_tmpl','tg_wa_done_tmpl','tg_wa_time','tg_auto_wa','tg_shop','tg_ticket','tg_gs_url'];
+function supaInit(){try{if(window.supabase&&!supa){supa=window.supabase.createClient(SUPA_URL,SUPA_KEY);}}catch(e){}}
+window.onload=function(){ supaBoot(); };
+function bootRender(){
   loadAll();loadInv();
-  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  var dd=document.getElementById('dash-date');if(dd)dd.textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
   document.addEventListener('click',outClick);
-  wcInit();
-  // Auto sync on load
-  setTimeout(()=>syncFromSheet(true),1500);
+  go('dashboard');renderDash();
+  setTimeout(function(){try{syncFromSheet(true)}catch(e){}},1500);
   startAutoSync();
-};
-function enterApp(){
-  var inp=document.getElementById('wc-pass'),err=document.getElementById('wc-err');
-  var val=inp?inp.value:'';
-  var PW=(function(){try{return localStorage.getItem('tg_pass')||'nmw123'}catch(e){return 'nmw123'}})();
-  if(val!==PW){
-    if(err)err.classList.add('show');
-    if(inp){inp.classList.remove('wc-shake');void inp.offsetWidth;inp.classList.add('wc-shake');inp.focus();try{inp.select()}catch(e){}}
-    return;
-  }
-  if(err)err.classList.remove('show');
-  var o=document.getElementById('welcome-ov');if(o)o.classList.add('hide');
-  try{go('dashboard');renderDash();}catch(e){}
 }
+async function supaBoot(){
+  try{wcInit();}catch(e){} try{pwaInit();}catch(e){}
+  supaInit();
+  if(!supa){ showAuth('Could not load the login service. Check your internet and refresh.'); return; }
+  try{
+    const r=await supa.auth.getSession();
+    const session=r&&r.data?r.data.session:null;
+    if(session&&session.user){ await onSignedIn(session.user); } else { showAuth(); }
+    supa.auth.onAuthStateChange(function(ev){ if(ev==='SIGNED_OUT'){ try{location.reload();}catch(e){} } });
+  }catch(e){ showAuth('Login error: '+((e&&e.message)||e)); }
+}
+async function onSignedIn(user){
+  CURRENT_UID=user.id;CURRENT_EMAIL=user.email;
+  var prev=null;try{prev=localStorage.getItem('tg_uid');}catch(e){}
+  if(prev&&prev!==CURRENT_UID){ SYNC_KEYS.forEach(function(k){try{localStorage.removeItem(k);}catch(e){}}); }
+  try{localStorage.setItem('tg_uid',CURRENT_UID);}catch(e){}
+  try{await cloudPull();}catch(e){}
+  try{await loadSub();}catch(e){}
+  hideAuth();bootRender();
+}
+function showAuth(msg){var o=document.getElementById('welcome-ov');if(o)o.classList.remove('hide');var er=document.getElementById('wc-err');if(er){if(msg){er.textContent=msg;er.classList.add('show');}else{er.classList.remove('show');}}setTimeout(function(){var e=document.getElementById('au-email');if(e)e.focus();},150);}
+function hideAuth(){var o=document.getElementById('welcome-ov');if(o)o.classList.add('hide');}
+function auClearErr(){var er=document.getElementById('wc-err');if(er)er.classList.remove('show');}
+function auToggle(){authMode=(authMode==='signin')?'signup':'signin';var bl=document.getElementById('au-btn-label');if(bl)bl.textContent=authMode==='signin'?'Sign In':'Create Account';var tt=document.getElementById('au-toggle-txt');if(tt)tt.textContent=authMode==='signin'?'New shop?':'Already have an account?';var tg=document.getElementById('au-toggle');if(tg)tg.textContent=authMode==='signin'?'Create an account':'Sign in';var pf=document.getElementById('au-pass');if(pf)pf.setAttribute('autocomplete',authMode==='signin'?'current-password':'new-password');auClearErr();}
+async function doAuth(){
+  var er=document.getElementById('wc-err');function fail(m){if(er){er.textContent=m;er.classList.add('show');}}
+  if(!supa){return fail('Login service not loaded — refresh the page.');}
+  var email=(document.getElementById('au-email').value||'').trim(),pass=document.getElementById('au-pass').value||'';
+  if(!email||!pass){return fail('Enter your email and password.');}
+  var btn=document.getElementById('au-btn');if(btn)btn.style.opacity='.6';
+  try{
+    if(authMode==='signup'){
+      if(pass.length<6){if(btn)btn.style.opacity='';return fail('Password must be at least 6 characters.');}
+      const r=await supa.auth.signUp({email:email,password:pass});
+      if(r.error)throw r.error;
+      if(r.data&&r.data.session&&r.data.user){ await onSignedIn(r.data.user); }
+      else { fail('Account created! Check your email to confirm, then Sign In.'); authMode='signup';auToggle(); }
+    } else {
+      const r=await supa.auth.signInWithPassword({email:email,password:pass});
+      if(r.error)throw r.error;
+      await onSignedIn(r.data.user);
+    }
+  }catch(e){ fail((e&&e.message)||'Authentication failed.'); }
+  if(btn)btn.style.opacity='';
+}
+async function cloudPull(){
+  const r=await supa.from('app_state').select('data').eq('user_id',CURRENT_UID).maybeSingle();
+  const row=r?r.data:null;const cloudObj=row&&row.data?row.data:null;
+  if(cloudObj&&Object.keys(cloudObj).length){ SYNC_KEYS.forEach(function(k){ if(cloudObj[k]!==undefined&&cloudObj[k]!==null){ try{localStorage.setItem(k,typeof cloudObj[k]==='string'?cloudObj[k]:JSON.stringify(cloudObj[k]));}catch(e){} } }); return true; }
+  var localHas=SYNC_KEYS.some(function(k){try{return localStorage.getItem(k)!==null;}catch(e){return false;}});
+  if(localHas){ await cloudPush(); }
+  return false;
+}
+let _pushT=null;
+function cloudPushDebounced(){ if(!CURRENT_UID||!supa)return; clearTimeout(_pushT); _pushT=setTimeout(cloudPush,1500); }
+async function cloudPush(){
+  if(!CURRENT_UID||!supa)return;
+  var obj={};SYNC_KEYS.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)obj[k]=v;}catch(e){}});
+  try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); const r=await supa.from('app_state').upsert({user_id:CURRENT_UID,data:obj,updated_at:new Date().toISOString()}); if(r.error)throw r.error; if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); }
+}
+async function loadSub(){ try{ const r=await supa.from('subscriptions').select('*').eq('user_id',CURRENT_UID).maybeSingle(); SUB=r?r.data:null; updateSubUI(); }catch(e){} }
+function updateSubUI(){ var el=document.getElementById('pf-sub'); if(!el)return; if(SUB){ el.textContent=(SUB.plan||'trial')+' · '+(SUB.status||''); } else { el.textContent=CURRENT_EMAIL||'Signed in'; } }
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open')}
 function openSettings(){document.getElementById('settings-modal').classList.add('open')}
 function toggleProfileMenu(){var m=document.getElementById('profile-menu');if(m)m.classList.toggle('open')}
-function doLogout(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');document.querySelectorAll('.modal-bg.open').forEach(function(m){m.classList.remove('open')});var o=document.getElementById('welcome-ov');if(o)o.classList.remove('hide');var er=document.getElementById('wc-err');if(er)er.classList.remove('show');var pi=document.getElementById('wc-pass');if(pi){pi.value='';setTimeout(function(){try{pi.focus()}catch(e){}},250);}try{window.scrollTo(0,0)}catch(e){}}
+function doLogout(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');if(!confirm('Log out of this account?'))return;try{if(supa)supa.auth.signOut();}catch(e){}setTimeout(function(){try{location.reload();}catch(e){}},250);}
 function openChangePass(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');['pm-cur','pm-new','pm-new2'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});var er=document.getElementById('pass-err');if(er)er.style.display='none';document.getElementById('pass-modal').classList.add('open');}
-function saveNewPass(){var cur=document.getElementById('pm-cur').value,nw=document.getElementById('pm-new').value,nw2=document.getElementById('pm-new2').value;var er=document.getElementById('pass-err');function fail(m){er.textContent=m;er.style.display='block';}var PW=(function(){try{return localStorage.getItem('tg_pass')||'nmw123'}catch(e){return 'nmw123'}})();if(cur!==PW)return fail('Current password is incorrect.');if(nw.length<4)return fail('New password must be at least 4 characters.');if(nw!==nw2)return fail('New passwords do not match.');try{localStorage.setItem('tg_pass',nw)}catch(e){}closeModal('pass-modal');toast('Password updated');}
+async function saveNewPass(){var nw=document.getElementById('pm-new').value,nw2=document.getElementById('pm-new2').value;var er=document.getElementById('pass-err');function fail(m){er.textContent=m;er.style.display='block';}if(nw.length<6)return fail('New password must be at least 6 characters.');if(nw!==nw2)return fail('New passwords do not match.');if(!supa)return fail('Not connected to the login service.');try{var r=await supa.auth.updateUser({password:nw});if(r.error)throw r.error;closeModal('pass-modal');toast('Password updated');}catch(e){fail((e&&e.message)||'Could not update password.');}}
 var TK_KEYS=['showQR','showPhone','showAltPhone','showIMEI','showLock','showSIM','showProblems','showParts','showStatus','showPayment','showEstimate'];
 function _readTK(){var TK={title:document.getElementById('tk-title').value.trim(),thanks:document.getElementById('tk-thanks').value.trim(),terms:document.getElementById('tk-terms').value.trim()};TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);TK[k]=c?c.checked:true;});return TK;}
 function openTicketSettings(){var TK=lsGet('tg_ticket',{});document.getElementById('tk-title').value=TK.title||'';document.getElementById('tk-thanks').value=TK.thanks||'';document.getElementById('tk-terms').value=TK.terms||'';TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);if(c)c.checked=(TK[k]!==false);});document.getElementById('ticket-modal').classList.add('open');}
@@ -1347,7 +1465,7 @@ function ensurePhonePrefix(el){if(el.value&&!el.value.startsWith('+91'))el.value
 function sortedJobs(){return jobs.slice().sort((a,b)=>(new Date(b.dt||0).getTime()-new Date(a.dt||0).getTime())||((Number(b.id)||0)-(Number(a.id)||0)))}
 function paidDate(j){return j&&j.paidAt?j.paidAt:(j&&j.dt?j.dt:'')}
 function toggleLockValue(pfx){const sel=document.getElementById(pfx+'-lock'),wrap=document.getElementById(pfx+'-lock-value-wrap'),inp=document.getElementById(pfx+'-lock-value');if(!sel||!wrap||!inp)return;const show=sel.value==='pin'||sel.value==='password';wrap.style.display=show?'block':'none';inp.placeholder=sel.value==='pin'?'Enter PIN':sel.value==='password'?'Enter password':'';if(!show)inp.value=''}
- 
+
 // ════════ DASHBOARD ════════════════════════════════════════════
 function renderDash(){
   const now=new Date();const todayStr=now.toDateString();
@@ -1360,7 +1478,7 @@ function renderDash(){
   if(!rec.length){el.innerHTML='<div class="empty">No jobs yet!</div>';return}
   el.innerHTML=rec.map(j=>`<div class="rr" onclick="openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'')}${j.cphone?' · '+e(j.cphone):''} · ${fDT(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center">${j.s==='returned'?'':`<span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span>`}<span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')
 }
- 
+
 // ════════ REVENUE MODAL ════════════════════════════════════════
 let revPeriod='day';
 let revView='paid';
@@ -1410,7 +1528,7 @@ function renderRevModal(){
   if(!jj.length){document.getElementById('rev-job-list').innerHTML=toggle+'<div class="empty">No '+(revView==='outstanding'?'outstanding':'paid')+' jobs for this period.</div>';return}
   document.getElementById('rev-job-list').innerHTML=toggle+`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Job #</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Date</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Customer</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Device</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Estimate</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Payment</th></tr></thead><tbody>${jj.map(j=>`<tr style="border-bottom:1px solid var(--light);cursor:pointer" onclick="document.getElementById('rev-modal').classList.remove('open');openDet(${j.id})"><td style="padding:9px;color:var(--accent);font-weight:800">#${e(j.jno)}</td><td style="padding:9px;color:var(--muted);font-size:11px">${fD(revView==='outstanding'?j.dt:paidDate(j))}</td><td style="padding:9px;font-weight:600">${e(j.cname||'—')}</td><td style="padding:9px">${e(j.brand)} ${e(j.model)}</td><td style="padding:9px;color:var(--green);font-weight:800">&#8377;${fR(j.est)}</td><td style="padding:9px"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span></td></tr>`).join('')}</tbody></table></div>`
 }
- 
+
 // ════════ FILTER MODAL (pending/done/unpaid/all) ════════════════
 function showFilterModal(type){
   let jj,title;
@@ -1437,12 +1555,12 @@ function showCustomerHistory(kind,val){
   document.getElementById('filter-modal-list').innerHTML=head+list;
   document.getElementById('filter-modal').classList.add('open');
 }
- 
+
 // ════════ NEW JOB ══════════════════════════════════════════════
 function openNewJob(){reset();go('newJob');autoJno();if(typeof syncFromSheet==='function'){try{var _p=syncFromSheet(true);if(_p&&_p.then)_p.then(function(){if(jnoAuto&&document.getElementById('page-newJob').classList.contains('active'))autoJno()}).catch(function(){})}catch(e){}}}
 function reset(){
   jLocked=false;selBrand='';selModel='';selProbs=[];selParts=[];dtISO='';dtEdit=false;simAllState=false;
-  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','f-readyby','f-advance','f-partscost','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});var _fpm=document.getElementById('f-paymethod');if(_fpm)_fpm.value='';fPhotos=[];renderPhotoPreview('f');
   document.getElementById('f-cphone').value='+91 ';document.getElementById('f-cphone2').value='+91 ';document.getElementById('f-cphone2-wrap').style.display='none';document.getElementById('f-addnum').textContent='+ Add another number';
   const dt=document.getElementById('f-dt');dt.value='';dt.style.color='var(--dim)';
   document.getElementById('dte-wrap').style.display='none';document.getElementById('btn-dte').classList.remove('ed');document.getElementById('btn-dte').textContent='✏️';
@@ -1462,7 +1580,7 @@ function editJno(){const i=document.getElementById('f-jno'),b=document.getElemen
 function setDT(){const now=new Date();dtISO=now.toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--green)'}
 function toggleDTE(){dtEdit=!dtEdit;const w=document.getElementById('dte-wrap'),b=document.getElementById('btn-dte');if(dtEdit){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('f-dtm').value=dtISO?new Date(dtISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
 function applyDTM(){const v=document.getElementById('f-dtm').value;if(v){dtISO=new Date(v).toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--accent)'}}
- 
+
 // SIM ALL TOGGLE
 function toggleAllSIM(){
   simAllState=!simAllState;
@@ -1476,7 +1594,7 @@ function toggleAllSIMEdit(){
   eSimAllState=!eSimAllState;
   ['e-sim1','e-sim2','e-mmc'].forEach(id=>document.getElementById(id).checked=eSimAllState);
 }
- 
+
 // ════════ BRAND/MODEL DROPDOWNS ════════════════════════════════
 function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" data-val="${e(b)}" onclick="selB('${pfx}','${jsq(b)}')"><span>${e(b)}</span></div>`).join('')}
 function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" data-val="${e(m)}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m}</span><span class="cs-acts"><button class="cs-item-del" style="color:var(--accent);opacity:.7" title="Rename" onclick="editModel(event,'${pfx}',this)">✎</button><button class="cs-item-del" title="Delete" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></span></div>`).join('')}
@@ -1504,7 +1622,7 @@ function editModel(ev,pfx,btn){
   if(typeof renderList==='function')renderList();
   toast('Renamed to "'+name+'"');
 }
- 
+
 // ════════ PROBLEMS (stays open on selection) ════════════════════
 function buildPList(pfx){
   const cur=pfx==='e'?eSelProbs:selProbs;
@@ -1523,7 +1641,7 @@ function addNewProb(pfx){const inputId=pfx==='e'?'e-p-new':'p-new';const val=doc
 function delProb(ev,pfx,prob){ev.stopPropagation();if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();if(pfx==='e'){eSelProbs=eSelProbs.filter(p=>p!==prob);buildPList('e');renderPTags('e');updPLbl('e')}else{selProbs=selProbs.filter(p=>p!==prob);buildPList('n');renderPTags('n');updPLbl('n')}toast('Deleted.')}
 function updPLbl(pfx){const c=pfx==='e'?eSelProbs.length:selProbs.length;document.getElementById(pfx==='e'?'e-p-lbl':'p-lbl').textContent=c?c+' problem'+(c>1?'s':'')+' selected':'Select problem(s)...'}
 function renderPTags(pfx){const tagsId=pfx==='e'?'e-p-tags':'p-tags';const cur=pfx==='e'?eSelProbs:selProbs;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togP(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
- 
+
 // ════════ SAVE JOB ══════════════════════════════════════════════
 function buildPartList(pfx){
   const cur=pfx==='e'?eSelParts:selParts;
@@ -1542,7 +1660,7 @@ function addNewPart(pfx){const inputId=pfx==='e'?'e-pt-new':'pt-new';const val=d
 function delPart(ev,pfx,part){ev.stopPropagation();if(!confirm('Delete "'+part+'"?'))return;PARTS=PARTS.filter(p=>p!==part);saveParts();if(pfx==='e'){eSelParts=eSelParts.filter(p=>p!==part);buildPartList('e');renderPartTags('e');updPartLbl('e')}else{selParts=selParts.filter(p=>p!==part);buildPartList('n');renderPartTags('n');updPartLbl('n')}toast('Deleted.')}
 function updPartLbl(pfx){const c=pfx==='e'?eSelParts.length:selParts.length;document.getElementById(pfx==='e'?'e-pt-lbl':'pt-lbl').textContent=c?c+' part'+(c>1?'s':'')+' selected':'Select part(s)...'}
 function renderPartTags(pfx){const tagsId=pfx==='e'?'e-pt-tags':'pt-tags';const cur=pfx==='e'?eSelParts:selParts;document.getElementById(tagsId).innerHTML=cur.map(p=>`<span class="ptag">${e(p)}<span class="ptag-x" onclick="togPart(event,'${pfx}','${p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">×</span></span>`).join('')}
- 
+
 function saveJob(){
   const jno=document.getElementById('f-jno').value.trim(),imei=document.getElementById('f-imei').value.trim(),brand=selBrand,model=selModel;
   if(!jno||!brand||!model||!selProbs.length){toast('Fill all required fields: Job No, Brand, Model, Problem(s)','error');return}
@@ -1552,6 +1670,7 @@ function saveJob(){
     id:Date.now(),jno,imei:imei||'0',brand,model,probs:[...selProbs],parts:[...selParts],
     cname:document.getElementById('f-cname').value.trim(),cphone:phoneForStorage(document.getElementById('f-cphone').value),cphone2:phoneForStorage(document.getElementById('f-cphone2').value),
     est:document.getElementById('f-est').value||'0',
+    readyBy:document.getElementById('f-readyby').value||'',payMethod:document.getElementById('f-paymethod').value||'',advance:document.getElementById('f-advance').value||'0',partsCost:document.getElementById('f-partscost').value||'0',photos:[...fPhotos],
     notes:document.getElementById('f-notes').value,
     s:document.getElementById('f-sts').value,pay:payStatus,paidAt:payStatus==='paid'?new Date().toISOString():'',
     lock:document.getElementById('f-lock').value,
@@ -1567,21 +1686,58 @@ function saveJob(){
   go('jobList');renderList();
 }
 function cancelJob(){reset();go('dashboard');renderDash()}
- 
+
 // ════════ WHATSAPP ══════════════════════════════════════════════
-function sendWA(job){if(!job.cphone)return;const msg=buildWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);setTimeout(()=>{if(confirm('Send WhatsApp message to +91 '+job.cphone+'?\n\n'+msg.slice(0,300))){window.open(url,'_blank')}},600)}
+function sendWA(job){if(!job.cphone||autoWA.created===false)return;const msg=buildWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);setTimeout(()=>{if(confirm('Send WhatsApp message to +91 '+job.cphone+'?\n\n'+msg.slice(0,300))){window.open(url,'_blank')}},600)}
 function buildWAMsg(job){return(waTemplate||WA_DEFAULT).replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,job.brand+' '+job.model).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{ESTIMATE_TIME}/g,waTime||'2-3 hours').replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
 function buildDoneWAMsg(job){return(waDoneTemplate||WA_DONE_DEFAULT).replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,job.brand+' '+job.model).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
 function sendDoneWA(job){if(!job||!job.cphone)return;const msg=buildDoneWAMsg(job);const num='91'+phoneDigits(job.cphone);const url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);window.open(url,'_blank')}
-function openWASettings(){document.getElementById('wa-template').value=waTemplate||WA_DEFAULT;document.getElementById('wa-done-template').value=waDoneTemplate||WA_DONE_DEFAULT;document.getElementById('wa-time').value=waTime||'2-3 hours';populateDoneWAJobs();updateWAPreview();updateDoneWAPreview();document.getElementById('wa-modal').classList.add('open')}
+function openWASettings(){document.getElementById('wa-template').value=waTemplate||WA_DEFAULT;document.getElementById('wa-done-template').value=waDoneTemplate||WA_DONE_DEFAULT;document.getElementById('wa-time').value=waTime||'2-3 hours';populateDoneWAJobs();updateWAPreview();updateDoneWAPreview();var _ac=document.getElementById('wa-auto-created');if(_ac)_ac.checked=autoWA.created!==false;var _ad=document.getElementById('wa-auto-done');if(_ad)_ad.checked=autoWA.done!==false;document.getElementById('wa-modal').classList.add('open')}
 function updateWAPreview(){const t=document.getElementById('wa-template').value,tm=document.getElementById('wa-time').value;document.getElementById('wa-preview-text').textContent=t.replace(/{JOB_NO}/g,'00001').replace(/{MODEL}/g,'Samsung Galaxy S24').replace(/{PROBLEMS}/g,'Screen Cracked').replace(/{ESTIMATE}/g,'1,500.00').replace(/{ESTIMATE_TIME}/g,tm||'2-3 hours').replace(/{CUSTOMER_NAME}/g,'Rahul')}
 function populateDoneWAJobs(){const s=document.getElementById('wa-done-job');const sendable=sortedJobs().filter(j=>j.cphone);s.innerHTML=sendable.length?sendable.map(j=>`<option value="${j.id}">#${e(j.jno)} - ${e(j.cname||'Customer')} - ${e(j.brand)} ${e(j.model)}</option>`).join(''):'<option value="">No jobs with phone number</option>'}
 function updateDoneWAPreview(){const tmpl=document.getElementById('wa-done-template')?.value||WA_DONE_DEFAULT;const id=Number(document.getElementById('wa-done-job')?.value||0);const job=jobs.find(j=>j.id===id)||{jno:'00001',brand:'Samsung',model:'Galaxy S24',probs:['Screen Cracked'],est:'1500',cname:'Rahul'};document.getElementById('wa-done-preview-text').textContent=tmpl.replace(/{JOB_NO}/g,job.jno||'').replace(/{MODEL}/g,(job.brand||'')+' '+(job.model||'')).replace(/{PROBLEMS}/g,(job.probs||[]).join(', ')).replace(/{ESTIMATE}/g,fR(job.est)).replace(/{CUSTOMER_NAME}/g,job.cname||'Customer')}
 function sendSelectedDoneWA(){waDoneTemplate=document.getElementById('wa-done-template').value;lsSet('tg_wa_done_tmpl',waDoneTemplate);const id=Number(document.getElementById('wa-done-job').value||0);const job=jobs.find(j=>j.id===id);if(!job){toast('Select a job with phone number','error');return}sendDoneWA(job)}
+function saveAutoWA(){autoWA={created:document.getElementById('wa-auto-created').checked,done:document.getElementById('wa-auto-done').checked};lsSet('tg_auto_wa',autoWA);toast('Auto-send setting saved');}
+function openBackup(){document.getElementById('backup-modal').classList.add('open');}
+function exportAll(){
+  try{
+    var keys=['tg_jobs_v3','tg_inventory','tg_bm','tg_bm_seed','tg_probs','tg_parts','tg_wa_tmpl','tg_wa_done_tmpl','tg_wa_time','tg_auto_wa','tg_shop','tg_ticket','tg_gs_url','tg_pass'];
+    var out={app:'RepairTracker',type:'full-backup',version:1,exportedAt:new Date().toISOString(),data:{}};
+    keys.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)out.data[k]=v;});
+    var blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='repairtracker-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1200);
+    toast('Full backup downloaded');
+  }catch(e){console.error(e);toast('Backup failed','error');}
+}
+function importAll(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;
+  if(!confirm('Restore from this backup? This REPLACES all current data on this device.')){inp.value='';return;}
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var d=JSON.parse(ev.target.result);var obj=d.data||d;
+      if(!obj||typeof obj!=='object')throw 0;
+      var n=0;Object.keys(obj).forEach(function(k){if(k.indexOf('tg_')===0){var v=obj[k];localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v));n++;}});
+      if(!n){toast('No data found in that file','error');inp.value='';return;}
+      toast('Backup restored — reloading…');setTimeout(function(){location.reload();},900);
+    }catch(err){console.error(err);toast('Invalid backup file','error');}
+    inp.value='';
+  };
+  r.readAsText(f);
+}
+function pwaInit(){try{
+  function icon(sz){var c=document.createElement('canvas');c.width=c.height=sz;var x=c.getContext('2d');if(!x)return'';var g=x.createLinearGradient(0,0,sz,sz);g.addColorStop(0,'#3f63de');g.addColorStop(1,'#2442b0');x.fillStyle=g;if(x.roundRect){x.beginPath();x.roundRect(0,0,sz,sz,sz*0.22);x.fill();}else{x.fillRect(0,0,sz,sz);}x.fillStyle='#fff';x.font='bold '+Math.round(sz*0.5)+'px Montserrat,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('R',sz/2,sz*0.55);return c.toDataURL('image/png');}
+  var i192=icon(192),i512=icon(512);if(!i192)return;
+  var atl=document.querySelector('link[rel="apple-touch-icon"]');if(atl)atl.href=i192;
+  var manifest={name:'Repair Tracker',short_name:'Repair',start_url:'.',display:'standalone',orientation:'portrait',background_color:'#05060a',theme_color:'#2f55d4',icons:[{src:i192,sizes:'192x192',type:'image/png'},{src:i512,sizes:'512x512',type:'image/png'}]};
+  var mb=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  var ml=document.querySelector('link[rel="manifest"]');if(ml)ml.href=URL.createObjectURL(mb);
+}catch(e){}}
 function saveWASettings(){waTemplate=document.getElementById('wa-template').value;waDoneTemplate=document.getElementById('wa-done-template').value;waTime=document.getElementById('wa-time').value;lsSet('tg_wa_tmpl',waTemplate);lsSet('tg_wa_done_tmpl',waDoneTemplate);lsSet('tg_wa_time',waTime);document.getElementById('wa-modal').classList.remove('open');toast('WA templates saved!')}
 function resetWATemplate(){document.getElementById('wa-template').value=WA_DEFAULT;document.getElementById('wa-time').value='2-3 hours';updateWAPreview();toast('Reset!')}
 function resetDoneWATemplate(){document.getElementById('wa-done-template').value=WA_DONE_DEFAULT;updateDoneWAPreview();toast('Done message reset!')}
- 
+
 // ════════ JOB LIST ══════════════════════════════════════════════
 function popBFilter(){const s=document.getElementById('s-brd');s.innerHTML='<option value="all">All Brands</option>'+BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('')}
 function mkTog(id,field){
@@ -1594,7 +1750,7 @@ function mkTog(id,field){
   </div>`
 }
 function statusSelect(id,status){const s=status||'pending';return`<select class="status-select ${s}" onchange="event.stopPropagation();setJobStatus(${id},this.value)" onclick="event.stopPropagation()"><option value="pending" ${s==='pending'?'selected':''}>Pending</option><option value="done" ${s==='done'?'selected':''}>Done</option><option value="returned" ${s==='returned'?'selected':''}>Returned</option></select>`}
-function setJobStatus(id,status){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;changedJob={...j,s:status,updatedAt:now};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
+function setJobStatus(id,status){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;changedJob={...j,s:status,updatedAt:now};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id));if(changedJob&&status==='done'&&autoWA.done!==false&&changedJob.cphone){setTimeout(function(){if(confirm('Send "Ready for pickup" WhatsApp to +91 '+changedJob.cphone+'?')){sendDoneWA(changedJob)}},500)}}
 function togField(id,field){const _jj=jobs.find(x=>x.id===id);if(field==='pay'&&_jj&&_jj.s==='returned'){toast('Returned job — payment disabled','info');return;}let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;changedJob={...j,updatedAt:now,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
 function renderList(){
   const q=document.getElementById('s-inp').value.toLowerCase(),fs=document.getElementById('s-sts').value,fb=document.getElementById('s-brd').value,fp=document.getElementById('s-pay').value;
@@ -1603,7 +1759,7 @@ function renderList(){
   const tb=document.getElementById('j-tbody'),em=document.getElementById('j-empty');
   if(!f.length){tb.innerHTML='';em.style.display='block';return}em.style.display='none';
   tb.innerHTML=f.map(j=>`<tr class="jr" onclick="openDet(${j.id})">
-    <td class="j-no" data-label="Job #">#${e(j.jno)}</td>
+    <td class="j-no" data-label="Job #">#${e(j.jno)}${isOverdue(j)?` <span class="tag tag-returned" style="font-size:8px;padding:1px 5px;vertical-align:middle">OVERDUE</span>`:''}</td>
     <td class="j-dt" data-label="Date">${fD(j.dt)}</td>
     <td data-label="Customer"><div class="vwrap"><div style="font-weight:600;font-size:12px">${j.cname?`<a class="cust-link" data-v="${e(j.cname)}" onclick="event.stopPropagation();showCustomerHistory('name',this.dataset.v)">${e(j.cname)}</a>`:'—'}</div><div class="j-im">${j.cphone?`<a class="cust-link" data-v="${e(j.cphone)}" onclick="event.stopPropagation();showCustomerHistory('phone',this.dataset.v)">+91 ${e(j.cphone)}</a>`:''}</div></div></td>
     <td class="j-br" data-label="Device"><div class="vwrap">${e(j.brand)}<br><span style="color:var(--muted);font-size:10px;font-weight:500">${e(j.model)}</span></div></td>
@@ -1622,9 +1778,16 @@ function renderList(){
 }
 function reSendWA(id){const j=jobs.find(j=>j.id===id);if(j)sendWA(j)}
 function deleteJob(id){if(!confirm('Delete this job?'))return;const now=new Date().toISOString();jobs=jobs.map(j=>j.id===id?{...j,deleted:true,updatedAt:now}:j).filter(j=>!j.deleted);saveJobs();syncDeleteToSheet(id);updNC();toast('Deleted.','error');renderList();renderDash();if(selJob===id){selJob=null;go('jobList')}}
- 
+
 // ════════ JOB DETAIL ════════════════════════════════════════════
 function openDet(id){selJob=id;renderDet(jobs.find(j=>j.id===id));go('jobDetail')}
+function isOverdue(j){if(!j||!j.readyBy)return false;if(j.s==='done'||j.s==='returned')return false;var d=new Date(j.readyBy);if(isNaN(d))return false;var t=new Date();t.setHours(0,0,0,0);return d<t;}
+let fPhotos=[],ePhotos=[];
+function compressImage(file,cb){var rd=new FileReader();rd.onload=function(e){var img=new Image();img.onload=function(){var max=1000,w=img.width,h=img.height;if(w>h&&w>max){h=Math.round(h*max/w);w=max;}else if(h>=w&&h>max){w=Math.round(w*max/h);h=max;}try{var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.7));}catch(err){cb(e.target.result);}};img.onerror=function(){cb(null);};img.src=e.target.result;};rd.readAsDataURL(file);}
+function onPhotoInput(inp,which){var files=inp.files;if(!files||!files.length)return;var arr=which==='e'?ePhotos:fPhotos;for(var i=0;i<files.length;i++){compressImage(files[i],function(durl){if(durl){arr.push(durl);renderPhotoPreview(which);}});}inp.value='';}
+function renderPhotoPreview(which){var arr=which==='e'?ePhotos:fPhotos;var box=document.getElementById(which+'-photos');if(!box)return;box.innerHTML=arr.map(function(dd,i){return '<div class="ph-thumb"><img src="'+dd+'" onclick="openLightbox(this.src)"><button type="button" class="ph-del" onclick="removePhoto(\''+which+'\','+i+')">✕</button></div>';}).join('');}
+function removePhoto(which,i){var arr=which==='e'?ePhotos:fPhotos;arr.splice(i,1);renderPhotoPreview(which);}
+function openLightbox(src){var lb=document.getElementById('photo-lightbox');if(!lb)return;document.getElementById('photo-lightbox-img').src=src;lb.classList.add('open');}
 function renderDet(j){
   if(!j)return;
   document.getElementById('d-title').innerHTML='Job <span class="ac">#'+j.jno+'</span>';
@@ -1632,6 +1795,7 @@ function renderDet(j){
   const locks={nil:'None',pin:'PIN',pattern:'Pattern',password:'Password'};
   const lockText=(locks[j.lock]||'None')+(j.lockValue?' ('+e(j.lockValue)+')':'');
   const sims=[j.sim1?'SIM 1':'',j.sim2?'SIM 2':'',j.mmc?'MMC':''].filter(Boolean).join(', ')||'None';
+  const _est=parseFloat(j.est)||0,_adv=parseFloat(j.advance)||0,_pc=parseFloat(j.partsCost)||0;const _bal=j.pay==='paid'?0:Math.max(0,_est-_adv);const _recv=j.pay==='paid'?_est:_adv;const _profit=_recv-_pc;const _pm={cash:'Cash',upi:'UPI',card:'Card'}[j.payMethod]||'—';
   document.getElementById('d-top').innerHTML=`
     <div class="df"><div class="dfl">Date &amp; Time</div><div class="dfv">${fDT(j.dt)}</div></div>
     <div class="df"><div class="dfl">Job No</div><div class="dfv ac">#${e(j.jno)}</div></div>
@@ -1640,7 +1804,7 @@ function renderDet(j){
     <div class="df"><div class="dfl">IMEI</div><div class="dfv" style="font-size:11px;word-break:break-all">${e(j.imei)||'—'}</div></div>
     <div class="df"><div class="dfl">Device Lock</div><div class="dfv">${lockText}</div></div>
     <div class="df"><div class="dfl">SIM / Storage</div><div class="dfv">${sims}</div></div>
-    <div class="df"><div class="dfl">Payment</div><div class="dfv"><span class="pay-badge pay-${j.pay||'unpaid'}" onclick="togField(${j.id},'pay')" style="cursor:pointer">${j.pay==='paid'?'✓ Paid':'✗ Unpaid'}</span></div></div>`;
+    <div class="df"><div class="dfl">Payment</div><div class="dfv"><span class="pay-badge pay-${j.pay||'unpaid'}" onclick="togField(${j.id},'pay')" style="cursor:pointer">${j.pay==='paid'?'✓ Paid':'✗ Unpaid'}</span></div></div>${j.readyBy?`<div class="df"><div class="dfl">Ready By</div><div class="dfv" style="${isOverdue(j)?'color:var(--red);font-weight:800':''}">${fD(j.readyBy)}${isOverdue(j)?' ⚠':''}</div></div>`:''}${j.payMethod?`<div class="df"><div class="dfl">Method</div><div class="dfv">${_pm}</div></div>`:''}${(_adv>0)?`<div class="df"><div class="dfl">Advance Paid</div><div class="dfv" style="color:var(--green)">₹${fR(_adv)}</div></div>`:''}${(_bal>0)?`<div class="df"><div class="dfl">Balance Due</div><div class="dfv" style="color:var(--red)">₹${fR(_bal)}</div></div>`:''}${(_pc>0)?`<div class="df"><div class="dfl">Parts Cost</div><div class="dfv">₹${fR(_pc)}</div></div>`:''}${(_pc>0||_adv>0)?`<div class="df"><div class="dfl">Profit</div><div class="dfv" style="color:${_profit>=0?'var(--green)':'var(--red)'}">₹${fR(_profit)}</div></div>`:''}`;
   document.getElementById('d-main').innerHTML=`<div style="display:flex;flex-wrap:wrap;gap:20px">
     <div><div class="card-title" style="margin-bottom:3px">Brand</div><div style="font-size:14px;font-weight:700">${e(j.brand)}</div></div>
     <div><div class="card-title" style="margin-bottom:3px">Model</div><div style="font-size:14px;font-weight:700">${e(j.model)}</div></div>
@@ -1652,11 +1816,12 @@ function renderDet(j){
   const ptc=document.getElementById('d-parts-card'),ptd=document.getElementById('d-parts');
   if(j.parts&&j.parts.length){ptc.style.display='';ptd.innerHTML=j.parts.map(p=>`<span class="ptag" style="cursor:default">${e(p)}</span>`).join('')}else ptc.style.display='none';
   const nc=document.getElementById('d-note-card');if(j.notes){nc.style.display='';document.getElementById('d-note').textContent=j.notes}else nc.style.display='none';
+  const _phc=document.getElementById('d-photo-card');if(j.photos&&j.photos.length){_phc.style.display='';document.getElementById('d-photos').innerHTML=j.photos.map(function(dd){return '<div class="ph-thumb"><img src="'+dd+'" onclick="openLightbox(this.src)"></div>';}).join('');}else{_phc.style.display='none';}
   const tb=document.getElementById('d-tog');if(j.s==='done'){tb.className='btn btn-ye';tb.textContent='↩ Mark Pending'}else{tb.className='btn btn-gr';tb.textContent='✅ Mark Done'}
 }
 function togCurSts(){if(selJob)togField(selJob,'s')}
 function delCurJob(){if(!selJob||!confirm('Delete this job permanently?'))return;deleteJob(selJob);selJob=null}
- 
+
 // ════════ EDIT MODAL ════════════════════════════════════════════
 function openEditModal(id){
   const j=jobs.find(j=>j.id===id);if(!j)return;
@@ -1667,7 +1832,7 @@ function openEditModal(id){
   document.getElementById('e-b-lbl').textContent=eSelBrand||'Select Brand';document.getElementById('e-m-lbl').textContent=eSelModel||'Select Model';
   updPLbl('e');
   updPartLbl('e');
-  document.getElementById('e-est').value=j.est||'';document.getElementById('e-lock').value=j.lock||'nil';document.getElementById('e-lock-value').value=j.lockValue||'';toggleLockValue('e');document.getElementById('e-pay').value=j.pay||'unpaid';
+  document.getElementById('e-est').value=j.est||'';document.getElementById('e-readyby').value=j.readyBy||'';document.getElementById('e-paymethod').value=j.payMethod||'';document.getElementById('e-advance').value=j.advance||'';document.getElementById('e-partscost').value=j.partsCost||'';ePhotos=[...(j.photos||[])];renderPhotoPreview('e');document.getElementById('e-lock').value=j.lock||'nil';document.getElementById('e-lock-value').value=j.lockValue||'';toggleLockValue('e');document.getElementById('e-pay').value=j.pay||'unpaid';
   document.getElementById('e-sim1').checked=!!j.sim1;document.getElementById('e-sim2').checked=!!j.sim2;document.getElementById('e-mmc').checked=!!j.mmc;
   document.getElementById('e-sts').value=j.s||'pending';document.getElementById('e-notes').value=j.notes||'';
   document.getElementById('e-dte-wrap').style.display='none';document.getElementById('e-dte-btn').classList.remove('ed');document.getElementById('e-dte-btn').textContent='✏️';
@@ -1683,12 +1848,12 @@ function saveEdit(){
   const newJno=document.getElementById('e-jno').value.trim();
   if(!newJno){toast('Job number required','error');return}
   if(jobs.find(j=>j.id!==eJobId&&j.jno===newJno)){toast('Job number already exists!','error');return}
-  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),cphone2:phoneForStorage(document.getElementById('e-cphone2').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
+  const updJob=jobs.map(j=>{if(j.id!==eJobId)return j;const newPay=document.getElementById('e-pay').value,now=new Date().toISOString();return{...j,jno:newJno,imei:document.getElementById('e-imei').value.trim()||'0',cname:document.getElementById('e-cname').value,cphone:phoneForStorage(document.getElementById('e-cphone').value),cphone2:phoneForStorage(document.getElementById('e-cphone2').value),brand:eSelBrand,model:eSelModel,probs:[...eSelProbs],parts:[...eSelParts],est:document.getElementById('e-est').value||'0',readyBy:document.getElementById('e-readyby').value||'',payMethod:document.getElementById('e-paymethod').value||'',advance:document.getElementById('e-advance').value||'0',partsCost:document.getElementById('e-partscost').value||'0',photos:[...ePhotos],notes:document.getElementById('e-notes').value,s:document.getElementById('e-sts').value,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):'',lock:document.getElementById('e-lock').value,lockValue:document.getElementById('e-lock-value').value.trim(),sim1:document.getElementById('e-sim1').checked,sim2:document.getElementById('e-sim2').checked,mmc:document.getElementById('e-mmc').checked,dt:eDTISO,updatedAt:now}}); 
   jobs=updJob;saveJobs();
   const updated=jobs.find(j=>j.id===eJobId);if(updated)syncJobToSheet(updated);
   closeEditModal();toast('Job updated!');if(selJob===eJobId)renderDet(jobs.find(j=>j.id===eJobId));renderDash();renderList();
 }
- 
+
 // ════════ MANAGE LISTS ══════════════════════════════════════════
 function openManageLists(){const sel=document.getElementById('manage-brand');sel.innerHTML=BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('');renderManageModels();renderManageProbs();switchTab('models');document.getElementById('manage-modal').classList.add('open')}
 function switchTab(tab){document.getElementById('tab-models-content').style.display=tab==='models'?'block':'none';document.getElementById('tab-probs-content').style.display=tab==='probs'?'block':'none';document.getElementById('tab-models').className='btn '+(tab==='models'?'btn-pr':'btn-gh');document.getElementById('tab-probs').className='btn '+(tab==='probs'?'btn-pr':'btn-gh')}
@@ -1701,18 +1866,18 @@ function renderManageProbs(){const el=document.getElementById('manage-probs-list
 function manageAddProb(){const val=document.getElementById('manage-prob-new').value.trim();if(!val)return;if(!PROBS.includes(val))PROBS.push(val);saveProbs();document.getElementById('manage-prob-new').value='';renderManageProbs();toast('Problem added!')}
 function manageMoveProb(i,dir){const ni=i+dir;if(ni<0||ni>=PROBS.length)return;[PROBS[i],PROBS[ni]]=[PROBS[ni],PROBS[i]];saveProbs();renderManageProbs();buildPList('n');buildPList('e')}
 function manageDelProb(prob){if(!confirm('Delete "'+prob+'"?'))return;PROBS=PROBS.filter(p=>p!==prob);saveProbs();renderManageProbs();toast('Deleted.')}
- 
+
 // ════════ SCANNER ════════════════════════════════════════════════
 function openScan(){scanMode='imei';document.getElementById('scan-ov').classList.add('open');document.getElementById('scan-err').style.display='none';document.getElementById('scan-vid').style.display='block';startCam()}
 async function startCam(){try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}}});scanStr=st;const v=document.getElementById('scan-vid');v.srcObject=st;await v.play();startDet(v)}catch{scanErr('Camera access denied. Type IMEI manually.')}}
 function startDet(v){if(!('BarcodeDetector'in window)){scanErr('Not supported. Use Chrome on Android.');return}const d=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','ean_8','upc_a','upc_e','data_matrix']});scanRun=true;const lp=async()=>{if(!scanRun)return;try{const c=await d.detect(v);if(c.length){var _bc=c[0].rawValue;closeScan();if(typeof scanMode!=='undefined'&&scanMode!=='imei'){handleInvScan(_bc);}else{document.getElementById('f-imei').value=_bc;toast('Barcode scanned!');}return}}catch{}requestAnimationFrame(lp)};requestAnimationFrame(lp)}
 function scanErr(msg){document.getElementById('scan-vid').style.display='none';const er=document.getElementById('scan-err');er.style.display='block';er.textContent=msg}
 function closeScan(){scanRun=false;document.getElementById('scan-ov').classList.remove('open');if(scanStr){scanStr.getTracks().forEach(t=>t.stop());scanStr=null}}
- 
+
 // ════════ SHOP SETTINGS ══════════════════════════════════════════
 function openShopSettings(){document.getElementById('sh-name').value=shop.name||'';document.getElementById('sh-tag').value=shop.tagline||'';document.getElementById('sh-addr').value=shop.addr||'';document.getElementById('sh-phone').value=shop.phone||'';document.getElementById('sh-gst').value=shop.gst||'';document.getElementById('sh-footer').value=shop.footer||'';var _gu=document.getElementById('sh-gsurl');if(_gu)_gu.value=GS_URL;document.getElementById('shop-modal').classList.add('open')}
 function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);var _gu=document.getElementById('sh-gsurl');if(_gu){var _v=_gu.value.trim();if(_v&&_v!==GS_URL){GS_URL=_v;try{localStorage.setItem('tg_gs_url',_v)}catch(e){}}}document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!');try{syncFromSheet(true)}catch(e){}}
- 
+
 // ════════ JOB TICKET (80mm thermal) ══════════════════════════════
 function makeQRDataURL(text){
   try{
@@ -1788,6 +1953,7 @@ html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Ar
   <hr class="hr">
   ${TK.showStatus!==false?`<div class="row"><span class="k">Status</span><span class="v">${stsMap[j.s]||'Pending'}</span></div>`:''}
   ${TK.showPayment!==false?`<div class="row"><span class="k">Payment</span><span class="v">${payTxt}</span></div>`:''}
+  ${(parseFloat(j.advance)||0)>0?`<div class="row"><span class="k">Advance</span><span class="v">₹${fR(j.advance)}</span></div><div class="row"><span class="k big">Balance</span><span class="v">₹${fR(Math.max(0,(parseFloat(j.est)||0)-(parseFloat(j.advance)||0)))}</span></div>`:''}
   ${TK.showEstimate!==false?`<div class="row"><span class="k big">Estimate</span><span class="v est">₹${fR(j.est)}</span></div>`:''}
   <hr class="hr">
   <div class="foot">${e(shop.footer||'Please keep this receipt safe to collect your device.')}</div>
@@ -1801,7 +1967,7 @@ html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Ar
   w.document.open();w.document.write(T);w.document.close();
   toast('Ticket generated');
 }
- 
+
 // ════════ SEARCH + QUICK ADD (brand/model/problem/part) ═══════════
 function isBrandPfx(pfx){return pfx==='b'||pfx==='e-b'}
 function csSearch(pfx){
@@ -1920,7 +2086,7 @@ function importLists(inp){
   };
   r.readAsText(f);
 }
- 
+
 // ════════ UTILS ══════════════════════════════════════════════════
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=(type==='error'?'⚠ ':type==='info'?'ℹ ':' ✓ ')+msg;el.className='show '+type;clearTimeout(tTimer);tTimer=setTimeout(()=>{el.className=''},3500)}
 function fDT(iso){if(!iso)return'—';return new Date(iso).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
@@ -1928,7 +2094,7 @@ function fD(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('en
 function fR(v){return parseFloat(v||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 </script>
- 
+
 <script>
 /* ════════ INVENTORY CONTROL ════════ separate DB key: "tg_inventory" */
 var scanMode='imei';
@@ -2045,6 +2211,6 @@ function testSync(){
   }).catch(function(e){if(st){st.style.color='var(--red)';st.textContent='✗ Could not reach the URL. Make sure it ends in /exec and access is set to “Anyone”.';}});
 }
 </script>
- 
- 
+
+
 </body></html>
