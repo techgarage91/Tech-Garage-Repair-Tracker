@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>TECH GARAGE — Mobile Tablet Repair Tracker</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Repair Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -291,7 +290,7 @@ table{min-width:900px}
    ════════════════════════════════════════════════════════════════ */
 :root{
   /* Brand */
-  --accent:#4f46e5; --accent2:#4338ca; --accent-soft:#eef2ff; --ring:rgba(79,70,229,.16);
+  --accent:#2f55d4; --accent2:#2442b0; --accent-soft:#e9eefc; --ring:rgba(47,85,212,.16);
   /* Semantic */
   --green:#16a34a; --green-soft:#ecfdf5;
   --yellow:#d97706; --amber:#d97706; --amber-soft:#fffbeb;
@@ -312,7 +311,7 @@ table{min-width:900px}
 }
 html{scroll-behavior:smooth}
 body{background:
-  radial-gradient(1200px 520px at 100% -10%, rgba(79,70,229,.05), transparent 60%),
+  radial-gradient(1200px 520px at 100% -10%, rgba(47,85,212,.05), transparent 60%),
   radial-gradient(900px 480px at -10% 0%, rgba(34,197,94,.04), transparent 55%),
   var(--bg);
   color:var(--text);font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
@@ -329,14 +328,14 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .logo{display:inline-flex;align-items:center;gap:9px;margin-right:14px;font-family:'Plus Jakarta Sans',sans-serif;
   font-weight:800;font-size:13.5px;letter-spacing:.4px;color:var(--text);text-transform:uppercase}
 .logo-mark{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:#fff;
-  background:linear-gradient(135deg,#6366f1,#4338ca);box-shadow:0 4px 12px rgba(79,70,229,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+  background:linear-gradient(135deg,#3f63de,#2442b0);box-shadow:0 4px 12px rgba(47,85,212,.35),inset 0 1px 0 rgba(255,255,255,.25)}
 .logo-mark svg{width:18px;height:18px}
 .logo-text em{color:var(--accent);font-style:normal}
 .nav-btn{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-family:'Inter',sans-serif;
   font-weight:600;font-size:12.5px;padding:8px 13px;border-radius:10px;transition:all .18s ease;letter-spacing:.1px}
 .nav-btn svg{width:17px;height:17px;flex-shrink:0;opacity:.9}
 .nav-btn:hover:not(.active){background:var(--light);color:var(--text)}
-.nav-btn.active{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(79,70,229,.14)}
+.nav-btn.active{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(47,85,212,.14)}
 .nav-btn.active svg{opacity:1}
 .nav-count{margin-left:auto;color:var(--muted);font-size:11px;font-weight:600;background:var(--light);
   padding:5px 12px;border-radius:999px;border:1px solid var(--border)}
@@ -344,8 +343,9 @@ nav{height:64px;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) 
 .sync-badge svg{width:14px;height:14px}
 .sync-ok{background:var(--green-soft);border:1px solid #bbf7d0;color:var(--green)}
 .sync-err{background:var(--red-soft);border:1px solid #fecaca;color:var(--red)}
-.sync-ing{background:var(--accent-soft);border:1px solid #c7d2fe;color:var(--accent)}
-.sync-ing svg{animation:spin 1s linear infinite}
+.sync-ing{background:var(--accent-soft);border:1px solid #bcd0f7;color:var(--accent)}
+.sync-ic{display:inline-flex;align-items:center;line-height:0}
+.sync-spin{animation:spin .75s linear infinite;transform-origin:center}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── PAGE / HEADERS ─────────────────────────────────────── */
@@ -415,7 +415,7 @@ input[readonly]{background:var(--light);color:var(--muted)}
 .cs-add:hover{background:var(--accent2)}
 
 /* tags / chips */
-.ptag{background:var(--accent-soft);border:1px solid #c7d2fe;color:var(--accent);border-radius:999px;
+.ptag{background:var(--accent-soft);border:1px solid #bcd0f7;color:var(--accent);border-radius:999px;
   padding:4px 11px;font-size:11.5px;font-weight:600}
 .prob-tags{gap:6px;margin-top:10px}
 
@@ -433,9 +433,9 @@ input[readonly]{background:var(--light);color:var(--muted)}
   font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1px;padding:10px 16px;
   transition:transform .14s ease,box-shadow .14s ease,background .14s,border-color .14s,color .14s}
 .btn:active{transform:translateY(1px)}
-.btn-pr{background:linear-gradient(135deg,#5b54ea,#4338ca);color:#fff;
-  box-shadow:0 6px 16px rgba(79,70,229,.30),inset 0 1px 0 rgba(255,255,255,.18)}
-.btn-pr:hover{background:linear-gradient(135deg,#4f46e5,#3730a3);box-shadow:0 10px 22px rgba(79,70,229,.36)}
+.btn-pr{background:linear-gradient(135deg,#3a5fe0,#2442b0);color:#fff;
+  box-shadow:0 6px 16px rgba(47,85,212,.30),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-pr:hover{background:linear-gradient(135deg,#2f55d4,#1e3a8a);box-shadow:0 10px 22px rgba(47,85,212,.36)}
 .btn-ol{background:var(--card);border:1.5px solid var(--border2);color:var(--accent)}
 .btn-ol:hover{border-color:var(--accent);background:var(--accent-soft)}
 .btn-gh{background:var(--light);color:var(--muted);border:1px solid transparent}
@@ -499,7 +499,7 @@ tr.jr:hover{background:var(--accent-soft)}
   font-size:18px;margin:-4px -4px 0 0;transition:all .15s}
 .modal .close-btn:hover{background:var(--light);color:var(--text)}
 .rev-period-btn{border:1.5px solid var(--border);background:var(--card);color:var(--muted);border-radius:999px;font-weight:600}
-.rev-period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.25)}
+.rev-period-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(47,85,212,.25)}
 .rev-summary{background:linear-gradient(135deg,var(--accent-soft),#f5f3ff);border:1px solid #e0e7ff;border-radius:14px;padding:16px}
 .rev-sum-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-variant-numeric:tabular-nums}
 .rev-sum-label{color:var(--muted)}
@@ -509,7 +509,7 @@ tr.jr:hover{background:var(--accent-soft)}
   border-width:1px;display:none}
 #toast.success{background:#fff;border:1px solid #bbf7d0;color:#15803d;border-left:4px solid var(--green)}
 #toast.error{background:#fff;border:1px solid #fecaca;color:#b91c1c;border-left:4px solid var(--red)}
-#toast.info{background:#fff;border:1px solid #c7d2fe;color:var(--accent2);border-left:4px solid var(--accent)}
+#toast.info{background:#fff;border:1px solid #bcd0f7;color:var(--accent2);border-left:4px solid var(--accent)}
 
 /* ── SCANNER ────────────────────────────────────────────── */
 .scan-box{border:none;border-radius:18px;box-shadow:var(--sh-pop)}
@@ -547,35 +547,162 @@ tr.jr:hover{background:var(--accent-soft)}
 /* ════════ MONTSERRAT FONT + MOBILE FIX + INVENTORY ════════ */
 body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-btn,.btn,.rev-period-btn,input,select,textarea,.cs-btn,label.fl,.card-title,.tag,.pay-badge,.status-select,.dfv,.dfl,.rr-t{font-family:'Montserrat',sans-serif}
 @media(max-width:720px){input,select,textarea,.cs-btn{font-size:16px}}
+.cust-link{color:var(--accent);cursor:pointer;text-decoration:none;border-bottom:1px dotted transparent}
+.cust-link:hover{border-bottom-color:currentColor}
+.set-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.set-grid{grid-template-columns:1fr}}
+.set-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--card,#fff);cursor:pointer;font-family:'Montserrat',sans-serif;transition:border-color .15s,background .15s,transform .15s}
+.set-card:hover{border-color:var(--accent);background:var(--accent-soft,#e9eefc);transform:translateY(-2px)}
+.set-card .si{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--accent-soft,#e9eefc);font-size:19px}
+.set-card .st{font-weight:800;font-size:14px;color:var(--text)}
+.set-card small{color:var(--muted);font-size:11px;font-weight:500;line-height:1.4}
+#profile-menu{position:fixed;top:60px;right:14px;z-index:1300;width:236px;background:var(--card,#fff);border:1px solid var(--border);border-radius:14px;box-shadow:0 18px 50px rgba(16,24,40,.22);padding:8px;display:none}
+#profile-menu.open{display:block}
+@media(max-width:720px){#profile-menu{top:auto;bottom:82px;right:10px}}
+.pf-head{padding:11px 12px;border-bottom:1px solid var(--light);margin-bottom:6px}
+.pf-name{font-family:'Montserrat',sans-serif;font-weight:800;font-size:14px;color:var(--text)}
+.pf-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.pf-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text)}
+.pf-item:hover{background:var(--light)}
+.pf-item.danger{color:var(--red)}
+.tk-toggles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+@media(max-width:560px){.tk-toggles{grid-template-columns:repeat(2,1fr)}}
+#welcome-ov{position:fixed;inset:0;z-index:1600;display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;background:#000}
+#welcome-ov.hide{display:none}
+#welcome-ov::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 620px at 50% 16%,rgba(47,85,212,.30),transparent 60%),radial-gradient(760px 520px at 50% 120%,rgba(56,189,248,.13),transparent 60%),linear-gradient(180deg,#05060a,#0b0d16 60%,#05060a);animation:wcGlow 9s ease-in-out infinite alternate}
+@keyframes wcGlow{from{opacity:.82;transform:scale(1)}to{opacity:1;transform:scale(1.07)}}
+.wc-card{position:relative;width:min(660px,94vw);text-align:center;color:#f5f5f7}
+.wc-el{opacity:0;transform:translateY(24px);animation:wcUp 1.05s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes wcUp{to{opacity:1;transform:none}}
+.wc-logo{width:96px;height:96px;border-radius:26px;display:grid;place-items:center;margin:0 auto 30px;background:linear-gradient(135deg,#5e7cf0,#2442b0);box-shadow:0 24px 70px rgba(47,85,212,.6),inset 0 1px 0 rgba(255,255,255,.28);opacity:0;transform:translateY(24px);animation:wcUp 1.05s cubic-bezier(.16,1,.3,1) forwards,wcFloat 6s ease-in-out 1.1s infinite}
+.wc-logo svg{width:46px;height:46px;color:#fff}
+@keyframes wcFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}
+.wc-title{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(46px,9vw,82px);line-height:1.02;letter-spacing:-2.5px;margin:0;background:linear-gradient(180deg,#ffffff,#b4b7c8);-webkit-background-clip:text;background-clip:text;color:transparent;animation-delay:.12s}
+.wc-sub{font-size:clamp(17px,2.6vw,25px);font-weight:500;color:#a1a1aa;margin-top:14px;letter-spacing:-.2px;animation-delay:.22s}
+.wc-meta{margin-top:28px;font-size:14px;font-weight:600;color:#e5e5ea;animation-delay:.32s}
+.wc-meta .dot{color:#52525b;margin:0 9px}
+.wc-feat{margin-top:18px;font-size:11px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:#71717a;animation-delay:.4s}
+.wc-pass-wrap{margin-top:32px;animation-delay:.42s}
+.wc-input{width:min(300px,80vw);padding:14px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font-family:'Montserrat',sans-serif;font-size:16px;text-align:center;outline:none;transition:border .2s,background .2s}
+.wc-input::placeholder{color:#71717a}
+.wc-input:focus{border-color:#0071e3;background:rgba(255,255,255,.10)}
+.wc-err{display:none;color:#ff6b6b;font-size:12.5px;font-weight:600;margin-top:11px}
+.wc-err.show{display:block}
+.wc-shake{animation:wcShake .4s}
+@keyframes wcShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.wc-cta{margin-top:42px;animation-delay:.52s}
+.wc-btn{display:inline-flex;align-items:center;gap:9px;background:#0071e3;color:#fff;border:none;border-radius:980px;padding:15px 36px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:17px;cursor:pointer;transition:background .25s,transform .25s,box-shadow .25s;box-shadow:0 10px 30px rgba(0,113,227,.45)}
+.wc-btn:hover{background:#0077ed;transform:translateY(-2px);box-shadow:0 16px 42px rgba(0,113,227,.55)}
+.wc-btn .arr{transition:transform .25s}
+.wc-btn:hover .arr{transform:translateX(4px)}
+.wc-foot{margin-top:24px;font-size:12px;color:#52525b;animation-delay:.62s}
+@media(max-width:480px){.wc-logo{width:80px;height:80px;border-radius:22px;margin-bottom:24px}.wc-logo svg{width:40px;height:40px}}
+.jno-wrap{position:relative;display:flex;align-items:center}
+.jno-wrap input{width:100%;padding-right:44px}
+.jno-edit{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--light);border:1px solid var(--border);color:var(--accent);border-radius:7px;cursor:pointer;font-size:13px;padding:0;line-height:1}
+.jno-edit:hover{border-color:var(--accent);background:#e9eefc}
 #iv-qr img,#iv-qr canvas{display:block}
 .stat-card{flex-direction:row!important;text-align:left}
 .stat-body{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .stat-val,.stat-label{text-align:left}
 .vwrap{display:contents}
 @media(max-width:720px){.vwrap{display:block;text-align:right;margin-left:auto}}
+.cs-acts{display:flex;gap:4px;align-items:center;flex-shrink:0}
+#page-jobList{max-width:none}
+@media(min-width:721px){#page-jobList .tw{overflow-x:visible}#page-jobList table{min-width:0;table-layout:auto}}
 </style>
 </head>
 <body>
 <nav>
-  <span class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><span class="logo-text"><em>TECH</em> GARAGE</span></span>
-  <button class="nav-btn active" onclick="go('dashboard')" aria-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></button>
-  <button class="nav-btn" onclick="openNewJob()" aria-label="New Job"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>New Job</span></button>
-  <button class="nav-btn" onclick="go('jobList');renderList()" aria-label="All Jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>All Jobs</span></button>
-  <button class="nav-btn" onclick="go('inventory');renderInv()" aria-label="Inventory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg><span>Inventory</span></button>
-  <button class="nav-btn" onclick="openWASettings()" aria-label="WhatsApp templates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span>Messages</span></button>
-  <button class="nav-btn" onclick="openManageLists()" aria-label="Manage lists"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Lists</span></button>
-  <button class="nav-btn" onclick="openShopSettings()" aria-label="Shop settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M3 9v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9M3 9h18M8 13h8"/></svg><span>Shop</span></button>
-  <span id="sync-nav" class="sync-badge sync-ok" style="cursor:pointer" onclick="syncFromSheet()" title="Sync from Google Sheets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg><span class="sync-txt">Synced</span></span>
-  <span class="nav-count" id="nav-count">0 jobs</span>
+  <span class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span><span class="logo-text"><em>TECH</em> GARAGE</span></span>
+  <button class="nav-btn active" onclick="go('dashboard')" aria-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg><span>Dashboard</span></button>
+  <button class="nav-btn" onclick="openNewJob()" aria-label="New Job"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg><span>New Job</span></button>
+  <button class="nav-btn" onclick="go('jobList');renderList()" aria-label="All Jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>All Jobs</span></button>
+  <button class="nav-btn" onclick="go('inventory');renderInv()" aria-label="Inventory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"></path></svg><span>Inventory</span></button>
+  <span id="sync-nav" class="sync-badge sync-ok" style="cursor:pointer" onclick="syncFromSheet(true)" title="Sync from Google Sheets"><span class="sync-ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="sync-txt">Synced</span></span>
+  <span class="nav-count" id="nav-count">65 jobs</span>
+  <button class="nav-btn" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button><button class="nav-btn" onclick="toggleProfileMenu()" aria-label="Profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></button>
 </nav>
-<div id="toast"></div>
+<!-- SETTINGS HUB -->
+<div class="modal-bg" id="settings-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('settings-modal')">✕</button>
+    <h3>⚙️ Settings</h3>
+    <p style="color:var(--muted);font-size:11.5px;margin-bottom:16px;line-height:1.6">Everything to set up and customize Repair Tracker.</p>
+    <div class="set-grid">
+      <button class="set-card" onclick="closeModal('settings-modal');openWASettings()"><div class="si">💬</div><div class="st">WhatsApp Messages</div><small>Edit the message templates sent to customers</small></button>
+      <button class="set-card" onclick="closeModal('settings-modal');openManageLists()"><div class="si">📱</div><div class="st">Models &amp; Problems</div><small>Manage brands, models, problems &amp; parts</small></button>
+      <button class="set-card" onclick="closeModal('settings-modal');openShopSettings()"><div class="si">🏪</div><div class="st">Shop Info</div><small>Name, address, phone, footer &amp; sync URL</small></button>
+      <button class="set-card" onclick="closeModal('settings-modal');openTicketSettings()"><div class="si">🧾</div><div class="st">Edit Ticket</div><small>Customize what prints on the repair ticket</small></button>
+    </div>
+  </div>
+</div>
+<!-- TICKET EDITOR -->
+<div class="modal-bg" id="ticket-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('ticket-modal')">✕</button>
+    <h3>🧾 Edit Ticket</h3>
+    <p style="color:var(--muted);font-size:11.5px;margin-bottom:14px;line-height:1.6">Shop name, address, phone &amp; footer come from <b>Shop Info</b>. Here you choose the heading, which details print, and a custom thank-you / terms line.</p>
+    <label class="fl">Ticket Heading</label>
+    <input type="text" id="tk-title" placeholder="Repair Job Ticket">
+    <div class="card-title" style="margin:14px 0 4px">Show these on the ticket</div>
+    <div class="tk-toggles">
+      <label class="chk-lbl"><input type="checkbox" id="tk-showQR"> QR Code</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showPhone"> Phone</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showAltPhone"> Alt Phone</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showIMEI"> IMEI</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showLock"> Device Lock</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showSIM"> SIM/Storage</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showProblems"> Problems</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showParts"> Parts</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showStatus"> Status</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showPayment"> Payment</label>
+      <label class="chk-lbl"><input type="checkbox" id="tk-showEstimate"> Estimate</label>
+    </div>
+    <label class="fl" style="margin-top:14px">Custom Thank-you line <span style="color:var(--dim);font-weight:500;text-transform:none;letter-spacing:0">(use {shop} for shop name)</span></label>
+    <input type="text" id="tk-thanks" placeholder="Thank you for choosing {shop}!">
+    <label class="fl" style="margin-top:10px">Terms / Extra note (optional)</label>
+    <textarea id="tk-terms" rows="2" placeholder="e.g. 7-day service warranty · Goods once sold..."></textarea>
+    <div class="btn-row" style="margin-top:16px"><button class="btn btn-pr" onclick="saveTicketSettings()">💾 Save</button><button class="btn btn-ol" onclick="previewTicket()">👁 Preview</button><button class="btn btn-gh" onclick="closeModal('ticket-modal')">Cancel</button></div>
+  </div>
+</div>
+<!-- CHANGE PASSWORD -->
+<div class="modal-bg" id="pass-modal">
+  <div class="modal" style="max-width:380px">
+    <button class="close-btn" onclick="closeModal('pass-modal')">✕</button>
+    <h3>🔒 Change Password</h3>
+    <div id="pass-err" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:12px;font-weight:600;padding:9px 12px;border-radius:9px;margin-bottom:12px"></div>
+    <label class="fl">Current Password</label><input type="password" id="pm-cur" placeholder="Current password">
+    <label class="fl" style="margin-top:10px">New Password</label><input type="password" id="pm-new" placeholder="New password (min 4 characters)">
+    <label class="fl" style="margin-top:10px">Confirm New Password</label><input type="password" id="pm-new2" placeholder="Re-enter new password">
+    <div class="btn-row" style="margin-top:16px"><button class="btn btn-pr" onclick="saveNewPass()">💾 Update Password</button><button class="btn btn-gh" onclick="closeModal('pass-modal')">Cancel</button></div>
+  </div>
+</div>
+<!-- PROFILE MENU -->
+<div id="profile-menu">
+  <div class="pf-head"><div class="pf-name">Repair Tracker</div><div class="pf-sub" id="pf-sub">Signed in</div></div>
+  <div class="pf-item" onclick="openChangePass()">🔒&nbsp; Change Password</div>
+  <div class="pf-item danger" onclick="doLogout()">⎋&nbsp; Log out</div>
+</div>
+<div id="welcome-ov">
+  <div class="wc-card">
+    <div class="wc-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+    <h1 class="wc-title wc-el">Repair Tracker</h1>
+    <div class="wc-sub wc-el" id="wc-tag">Mobile &amp; Tablet Repair Tracker</div>
+    <div class="wc-meta wc-el"><span id="wc-greet">Welcome</span><span class="dot">·</span><span id="wc-date"></span></div>
+    <div class="wc-pass-wrap wc-el"><input type="password" id="wc-pass" class="wc-input" placeholder="Enter password" autocomplete="off" oninput="var _e=document.getElementById('wc-err');if(_e)_e.classList.remove('show')" onkeydown="if(event.key==='Enter')enterApp()"><div class="wc-err" id="wc-err">Incorrect password — try again</div></div>
+    <div class="wc-cta wc-el"><button class="wc-btn" onclick="enterApp()">Enter <span class="arr">→</span></button></div>
+    <div class="wc-foot wc-el">Your data stays on this device &nbsp;·&nbsp; Auto-synced to Google Sheets</div>
+  </div>
+</div>
+<div id="toast" class=""> ✓ Model "iPhone Air" added!</div>
 <div id="qr-stage" style="display:none"></div>
 
 <!-- SCANNER -->
 <div id="scan-ov">
   <div class="scan-box">
     <div class="scan-hd"><span>📷 Barcode Scanner</span><button class="btn btn-sm btn-re" onclick="closeScan()">✕</button></div>
-    <div class="scan-fr" id="scan-fr"><video id="scan-vid" autoplay playsinline muted></video><div class="scan-tgt"><div class="scan-ln"></div></div></div>
+    <div class="scan-fr" id="scan-fr"><video id="scan-vid" autoplay="" playsinline="" muted=""></video><div class="scan-tgt"><div class="scan-ln"></div></div></div>
     <div class="scan-err" id="scan-err" style="display:none"></div>
     <div class="scan-ft">Point camera at barcode or QR code</div>
   </div>
@@ -587,42 +714,42 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <button class="close-btn" onclick="closeEditModal()">✕</button>
     <h3>✏️ Edit Job <span id="edit-modal-jno" class="ac"></span></h3>
     <div class="form-row">
-      <div><label class="fl">Job Number</label><input type="text" id="e-jno"/></div>
+      <div><label class="fl">Job Number</label><input type="text" id="e-jno"></div>
       <div>
         <label class="fl">Date &amp; Time</label>
-        <div class="dt-row"><input type="text" id="e-dt" readonly/><button class="dt-eb" id="e-dte-btn" onclick="toggleEditDTE()">✏️</button></div>
-        <div id="e-dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="e-dtm" onchange="applyEditDTM()"/></div>
+        <div class="dt-row"><input type="text" id="e-dt" readonly=""><button class="dt-eb" id="e-dte-btn" onclick="toggleEditDTE()">✏️</button></div>
+        <div id="e-dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="e-dtm" onchange="applyEditDTM()"></div>
       </div>
     </div>
     <div class="form-row">
-      <div><label class="fl">Customer Name</label><input type="text" id="e-cname" placeholder="Customer name"/></div>
-      <div><label class="fl">Contact Number</label><input type="tel" id="e-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/><div id="e-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="e-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"/></div><button type="button" class="addnum-link" id="e-addnum" onclick="toggleSecondPhone('e')">+ Add another number</button></div>
+      <div><label class="fl">Customer Name</label><input type="text" id="e-cname" placeholder="Customer name"></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="e-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"><div id="e-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="e-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"></div><button type="button" class="addnum-link" id="e-addnum" onclick="toggleSecondPhone('e')">+ Add another number</button></div>
     </div>
-    <div class="form-row"><div style="grid-column:1/-1"><label class="fl">IMEI</label><input type="text" id="e-imei"/></div></div>
+    <div class="form-row"><div style="grid-column:1/-1"><label class="fl">IMEI</label><input type="text" id="e-imei"></div></div>
     <div class="form-row">
       <div>
         <label class="fl">Brand</label>
-        <div class="cs-wrap" id="e-bw"><button class="cs-btn" id="e-b-btn" onclick="togDD('e-b')"><span id="e-b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="e-b-dd"><div class="cs-sw"><input type="text" id="e-b-srch" placeholder="Search or type new brand..." oninput="csSearch('e-b')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-b-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-b')">Add +</button></div><div class="cs-list" id="e-b-list"></div></div></div>
+        <div class="cs-wrap" id="e-bw"><button class="cs-btn" id="e-b-btn" onclick="togDD('e-b')"><span id="e-b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="e-b-dd"><div class="cs-sw"><input type="text" id="e-b-srch" placeholder="Search or type new brand..." oninput="csSearch('e-b')" onclick="event.stopPropagation()"><button class="cs-add" id="e-b-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-b')">Add +</button></div><div class="cs-list" id="e-b-list"></div></div></div>
       </div>
       <div>
         <label class="fl">Model</label>
-        <div class="cs-wrap" id="e-mw"><button class="cs-btn" id="e-m-btn" onclick="togDD('e-m')"><span id="e-m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="e-m-dd"><div class="cs-sw"><input type="text" id="e-m-srch" placeholder="Search or type new model..." oninput="csSearch('e-m')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-m-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-m')">Add +</button></div><div class="cs-list" id="e-m-list"></div></div></div>
+        <div class="cs-wrap" id="e-mw"><button class="cs-btn" id="e-m-btn" onclick="togDD('e-m')"><span id="e-m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="e-m-dd"><div class="cs-sw"><input type="text" id="e-m-srch" placeholder="Search or type new model..." oninput="csSearch('e-m')" onclick="event.stopPropagation()"><button class="cs-add" id="e-m-add" style="display:none" onclick="event.stopPropagation();quickAddCS('e-m')">Add +</button></div><div class="cs-list" id="e-m-list"></div></div></div>
       </div>
     </div>
     <div style="margin-bottom:11px">
       <label class="fl">Problem(s)</label>
-      <div class="prob-wrap"><button class="cs-btn" id="e-p-btn" onclick="togProbDD('e')"><span id="e-p-lbl">Select...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-p-dd"><div class="cs-sw"><input type="text" id="e-p-srch" placeholder="Search or type new problem..." oninput="probSearch('e')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('e')">Add +</button></div><div class="pd-list" id="e-p-list"></div></div></div>
+      <div class="prob-wrap"><button class="cs-btn" id="e-p-btn" onclick="togProbDD('e')"><span id="e-p-lbl">Select...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-p-dd"><div class="cs-sw"><input type="text" id="e-p-srch" placeholder="Search or type new problem..." oninput="probSearch('e')" onclick="event.stopPropagation()"><button class="cs-add" id="e-p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('e')">Add +</button></div><div class="pd-list" id="e-p-list"></div></div></div>
       <div class="prob-tags" id="e-p-tags"></div>
     </div>
     <div style="margin-bottom:11px">
       <label class="fl">Part to be Change / Repair</label>
-      <div class="prob-wrap"><button class="cs-btn" id="e-pt-btn" onclick="togPartDD('e')"><span id="e-pt-lbl">Select part(s)...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-pt-dd"><div class="cs-sw"><input type="text" id="e-pt-srch" placeholder="Search or type new part..." oninput="partSearch('e')" onclick="event.stopPropagation()"/><button class="cs-add" id="e-pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('e')">Add +</button></div><div class="pd-list" id="e-pt-list"></div></div></div>
+      <div class="prob-wrap"><button class="cs-btn" id="e-pt-btn" onclick="togPartDD('e')"><span id="e-pt-lbl">Select part(s)...</span><span class="arr">▼</span></button><div class="prob-dd" id="e-pt-dd"><div class="cs-sw"><input type="text" id="e-pt-srch" placeholder="Search or type new part..." oninput="partSearch('e')" onclick="event.stopPropagation()"><button class="cs-add" id="e-pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('e')">Add +</button></div><div class="pd-list" id="e-pt-list"></div></div></div>
       <div class="prob-tags" id="e-pt-tags"></div>
     </div>
     <div class="form-row">
-      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-est" placeholder="0.00"/></div></div>
+      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="e-est" placeholder="0.00"></div></div>
       <div><label class="fl">Device Lock</label><select id="e-lock" onchange="toggleLockValue('e')"><option value="nil">Nil</option><option value="pin">PIN</option><option value="pattern">Pattern</option><option value="password">Password</option></select></div>
-      <div id="e-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="e-lock-value" placeholder=""/></div>
+      <div id="e-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="e-lock-value" placeholder=""></div>
     </div>
     <div class="form-row">
       <div><label class="fl">Payment</label><select id="e-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
@@ -631,9 +758,9 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div style="margin-bottom:11px">
       <label class="fl">SIM / Storage</label>
       <div class="chk-row">
-        <label class="chk-lbl"><input type="checkbox" id="e-sim1"/> SIM 1</label>
-        <label class="chk-lbl"><input type="checkbox" id="e-sim2"/> SIM 2</label>
-        <label class="chk-lbl"><input type="checkbox" id="e-mmc"/> MMC</label>
+        <label class="chk-lbl"><input type="checkbox" id="e-sim1"> SIM 1</label>
+        <label class="chk-lbl"><input type="checkbox" id="e-sim2"> SIM 2</label>
+        <label class="chk-lbl"><input type="checkbox" id="e-mmc"> MMC</label>
       </div>
     </div>
     <div style="margin-bottom:4px"><label class="fl">Notes</label><textarea id="e-notes" rows="3" placeholder="Additional notes..."></textarea></div>
@@ -647,10 +774,10 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <button class="close-btn" onclick="document.getElementById('rev-modal').classList.remove('open')">✕</button>
     <h3>📊 Revenue Report</h3>
     <div class="rev-period-row">
-      <button class="rev-period-btn active" onclick="setRevPeriod('day',this)">Today</button>
+      <button class="rev-period-btn" onclick="setRevPeriod('day',this)">Today</button>
       <button class="rev-period-btn" onclick="setRevPeriod('week',this)">This Week</button>
       <button class="rev-period-btn" onclick="setRevPeriod('month',this)">This Month</button>
-      <button class="rev-period-btn" onclick="setRevPeriod('year',this)">This Year</button>
+      <button class="rev-period-btn active" onclick="setRevPeriod('year',this)">This Year</button>
       <button class="rev-period-btn" onclick="setRevPeriod('all',this)">All Time</button>
       <select id="rev-sort" onchange="renderRevModal()" style="width:auto;min-height:32px;border-radius:20px;font-size:11px;font-weight:700;padding:5px 26px 5px 10px"><option value="newest">Date: Newest First</option><option value="oldest">Date: Oldest First</option></select>
     </div>
@@ -675,7 +802,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <h3>💬 WhatsApp Message Template</h3>
     <p style="color:var(--muted);font-size:11px;margin-bottom:12px;line-height:1.6">Placeholders: <code style="background:var(--light);padding:1px 5px;border-radius:4px">{JOB_NO}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{MODEL}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE_TIME}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{ESTIMATE}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{PROBLEMS}</code> <code style="background:var(--light);padding:1px 5px;border-radius:4px">{CUSTOMER_NAME}</code></p>
     <label class="fl">Estimated Repair Time</label>
-    <input type="text" id="wa-time" placeholder="e.g. 2-3 hours" style="margin-bottom:11px"/>
+    <input type="text" id="wa-time" placeholder="e.g. 2-3 hours" style="margin-bottom:11px">
     <label class="fl">Message Template</label>
     <textarea id="wa-template" rows="8" style="font-family:monospace;font-size:12px" oninput="updateWAPreview()"></textarea>
     <div style="margin-top:10px"><label class="fl">Preview</label><div class="wa-preview"><div class="wa-bubble" id="wa-preview-text"></div></div></div>
@@ -700,18 +827,22 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
       <button class="btn btn-pr" id="tab-models" onclick="switchTab('models')">📱 Models</button>
       <button class="btn btn-gh" id="tab-probs" onclick="switchTab('probs')">🔧 Problems</button>
     </div>
-    <div id="tab-models-content">
-      <div style="margin-bottom:9px"><label class="fl">Brand</label><select id="manage-brand" onchange="renderManageModels()"></select></div>
+    <div id="tab-models-content" style="display: block;">
+      <div style="margin-bottom:9px"><label class="fl">Brand</label><select id="manage-brand" onchange="renderManageModels()"><option value="Apple">Apple</option><option value="Samsung">Samsung</option><option value="OnePlus">OnePlus</option><option value="Xiaomi">Xiaomi</option><option value="Redmi">Redmi</option><option value="Realme">Realme</option><option value="Oppo">Oppo</option><option value="Vivo">Vivo</option><option value="Nokia">Nokia</option><option value="Motorola">Motorola</option><option value="Sony">Sony</option><option value="Google">Google</option><option value="POCO">POCO</option></select></div>
       <div id="manage-models-list" style="max-height:250px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
-      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-model-new" placeholder="Add new model..."/><button onclick="manageAddModel()">+ Add</button></div>
+      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-model-new" placeholder="Add new model..."><button onclick="manageAddModel()">+ Add</button></div>
     </div>
     <div id="tab-probs-content" style="display:none">
       <div id="manage-probs-list" style="max-height:290px;overflow-y:auto;border:1px solid var(--border);border-radius:10px"></div>
-      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-prob-new" placeholder="Add new problem..."/><button onclick="manageAddProb()">+ Add</button></div>
+      <div class="cs-new-wrap" style="margin-top:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg)"><input type="text" id="manage-prob-new" placeholder="Add new problem..."><button onclick="manageAddProb()">+ Add</button></div>
     </div>
     <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-      <button class="btn btn-pr" style="width:100%" onclick="exportApp()">⬇️ Save App File (bake my lists into the code)</button>
-      <p style="color:var(--muted);font-size:10px;margin-top:7px;line-height:1.6">Downloads a fresh <b>TechGarage.html</b> that already contains every brand, model, problem and part you have added — so new copies keep your data. Replace your old file with this one.</p>
+      <div class="card-title" style="margin-bottom:8px">Backup / Restore Lists</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-pr" onclick="exportLists()">⬇️ Export Lists (JSON)</button>
+        <label class="btn btn-ol" style="cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center">⬆️ Import Lists<input type="file" accept="application/json,.json" onchange="importLists(this)" style="display:none"></label>
+      </div>
+      <p style="color:var(--muted);font-size:10px;margin-top:7px;line-height:1.6">Saves all your <b>brands, models, problems &amp; parts</b> to a small <b>techgarage-lists.json</b> file — keep it as a backup or load it on another device. Your lists are also saved automatically in this browser.</p>
     </div>
   </div>
 </div>
@@ -723,16 +854,16 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <h3>🏪 Shop Details</h3>
     <p style="color:var(--muted);font-size:11px;margin-bottom:14px;line-height:1.6">These appear on the printed job ticket header. Set them once.</p>
     <div class="form-row">
-      <div><label class="fl">Shop Name</label><input type="text" id="sh-name" placeholder="Tech Garage"/></div>
-      <div><label class="fl">Tagline</label><input type="text" id="sh-tag" placeholder="Mobile & Tablet Repair"/></div>
+      <div><label class="fl">Shop Name</label><input type="text" id="sh-name" placeholder="Tech Garage"></div>
+      <div><label class="fl">Tagline</label><input type="text" id="sh-tag" placeholder="Mobile &amp; Tablet Repair"></div>
     </div>
     <div style="margin-bottom:11px"><label class="fl">Address</label><textarea id="sh-addr" rows="2" placeholder="Shop address..."></textarea></div>
     <div class="form-row">
-      <div><label class="fl">Phone</label><input type="text" id="sh-phone" placeholder="+91 98765 43210"/></div>
-      <div><label class="fl">GST / Reg No (optional)</label><input type="text" id="sh-gst" placeholder=""/></div>
+      <div><label class="fl">Phone</label><input type="text" id="sh-phone" placeholder="+91 98765 43210"></div>
+      <div><label class="fl">GST / Reg No (optional)</label><input type="text" id="sh-gst" placeholder=""></div>
     </div>
     <div style="margin-bottom:4px"><label class="fl">Ticket Footer Note</label><textarea id="sh-footer" rows="2" placeholder="Please keep this receipt safe to collect your device."></textarea></div>
-    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px"><label class="fl">Google Sheet Sync URL</label><input type="text" id="sh-gsurl" placeholder="https://script.google.com/macros/s/.../exec"/><div class="btn-row" style="margin-top:8px"><button class="btn btn-ol btn-sm" onclick="testSync()">&#128268; Test Connection</button></div><div id="sh-gsurl-status" style="font-size:11px;margin-top:7px;line-height:1.5;color:var(--muted)">Paste your own Apps Script Web App URL (ending in /exec), press Test, then Save. Each shop needs its own Sheet + deployment set to &ldquo;Anyone&rdquo;.</div></div>
+    <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px"><label class="fl">Google Sheet Sync URL</label><input type="text" id="sh-gsurl" placeholder="https://script.google.com/macros/s/.../exec"><div class="btn-row" style="margin-top:8px"><button class="btn btn-ol btn-sm" onclick="testSync()">🔌 Test Connection</button></div><div id="sh-gsurl-status" style="font-size:11px;margin-top:7px;line-height:1.5;color:var(--muted)">Paste your own Apps Script Web App URL (ending in /exec), press Test, then Save. Each shop needs its own Sheet + deployment set to “Anyone”.</div></div>
     <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveShopSettings()">💾 Save</button><button class="btn btn-gh" onclick="document.getElementById('shop-modal').classList.remove('open')">Cancel</button></div>
   </div>
 </div>
@@ -741,16 +872,16 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 <div class="page" id="page-inventory">
   <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>Inventory <span class="ac">Control</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openInvScan()">▤ Scan Product</button></div>
   <div class="stats-grid">
-    <div class="stat-card sc-blue"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-prod">0</div><div class="stat-label">Products</div></div></div>
-    <div class="stat-card sc-green"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-units">0</div><div class="stat-label">Units in Stock</div></div></div>
-    <div class="stat-card sc-rev"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-value">&#8377;0</div><div class="stat-label">Stock Value (cost)</div></div></div>
-    <div class="stat-card sc-red"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-low">0</div><div class="stat-label">Low Stock</div></div></div>
+    <div class="stat-card sc-blue"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-prod">0</div><div class="stat-label">Products</div></div></div>
+    <div class="stat-card sc-green"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-units">0</div><div class="stat-label">Units in Stock</div></div></div>
+    <div class="stat-card sc-rev"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-value">₹0</div><div class="stat-label">Stock Value (cost)</div></div></div>
+    <div class="stat-card sc-red"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4M12 17h.01"></path></svg></div><div class="stat-body"><div class="stat-val" id="inv-s-low">0</div><div class="stat-label">Low Stock</div></div></div>
   </div>
   <div class="card">
     <div class="sb" style="grid-template-columns:1fr auto auto;gap:10px;align-items:center">
-      <input type="text" id="inv-search" placeholder="Search name, barcode or category..." oninput="renderInv()"/>
+      <input type="text" id="inv-search" placeholder="Search name, barcode or category..." oninput="renderInv()">
       <button class="btn btn-pr" onclick="openInvModal()">+ Add Product</button>
-      <div style="display:flex;gap:8px"><button class="btn btn-gh btn-sm" onclick="exportInv()">&#8595; Backup</button><label class="btn btn-gh btn-sm" style="cursor:pointer">&#8593; Restore<input type="file" accept="application/json" onchange="importInv(this)" style="display:none"/></label></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-gh btn-sm" onclick="exportInv()">↓ Backup</button><label class="btn btn-gh btn-sm" style="cursor:pointer">↑ Restore<input type="file" accept="application/json" onchange="importInv(this)" style="display:none"></label></div>
     </div>
   </div>
   <div class="card">
@@ -762,34 +893,34 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 <!-- INVENTORY PRODUCT MODAL -->
 <div class="modal-bg" id="inv-modal">
   <div class="modal">
-    <button class="close-btn" onclick="closeInvModal()">&#10005;</button>
+    <button class="close-btn" onclick="closeInvModal()">✕</button>
     <h3 id="inv-modal-title">Add Product</h3>
     <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
       <div style="flex:1;min-width:240px">
         <label class="fl">Barcode (unique)</label>
-        <div class="igrp"><input type="text" id="iv-barcode" placeholder="Scan, type, or generate" oninput="invRenderQR()"/><button class="btn btn-ol btn-sm" onclick="invGen()" style="padding:0 10px">Generate</button><button class="btn btn-ol btn-sm" onclick="invScanInModal()" style="padding:0 10px">&#9636; Scan</button></div>
-        <div class="form-row" style="margin-top:11px"><div><label class="fl">Product Name *</label><input type="text" id="iv-name" placeholder="e.g. iPhone 12 Screen"/></div><div><label class="fl">Category</label><input type="text" id="iv-cat" placeholder="e.g. Display"/></div></div>
-        <div class="form-row"><div><label class="fl">Quantity in Stock</label><input type="number" id="iv-qty" min="0" value="1"/></div><div><label class="fl">Low-stock Alert at</label><input type="number" id="iv-low" min="0" value="5"/></div></div>
-        <div class="form-row"><div><label class="fl">Cost Price</label><div class="rp-wrap"><div class="rp-sym">&#8377;</div><input type="number" id="iv-cost" min="0" step="0.01" placeholder="0.00"/></div></div><div><label class="fl">Selling Price</label><div class="rp-wrap"><div class="rp-sym">&#8377;</div><input type="number" id="iv-price" min="0" step="0.01" placeholder="0.00"/></div></div></div>
-        <div class="form-row"><div style="grid-column:1/-1"><label class="fl">Supplier</label><input type="text" id="iv-sup" placeholder="Supplier / source"/></div></div>
+        <div class="igrp"><input type="text" id="iv-barcode" placeholder="Scan, type, or generate" oninput="invRenderQR()"><button class="btn btn-ol btn-sm" onclick="invGen()" style="padding:0 10px">Generate</button><button class="btn btn-ol btn-sm" onclick="invScanInModal()" style="padding:0 10px">▤ Scan</button></div>
+        <div class="form-row" style="margin-top:11px"><div><label class="fl">Product Name *</label><input type="text" id="iv-name" placeholder="e.g. iPhone 12 Screen"></div><div><label class="fl">Category</label><input type="text" id="iv-cat" placeholder="e.g. Display"></div></div>
+        <div class="form-row"><div><label class="fl">Quantity in Stock</label><input type="number" id="iv-qty" min="0" value="1"></div><div><label class="fl">Low-stock Alert at</label><input type="number" id="iv-low" min="0" value="5"></div></div>
+        <div class="form-row"><div><label class="fl">Cost Price</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="iv-cost" min="0" step="0.01" placeholder="0.00"></div></div><div><label class="fl">Selling Price</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="iv-price" min="0" step="0.01" placeholder="0.00"></div></div></div>
+        <div class="form-row"><div style="grid-column:1/-1"><label class="fl">Supplier</label><input type="text" id="iv-sup" placeholder="Supplier / source"></div></div>
         <div style="margin-bottom:6px"><label class="fl">Notes</label><textarea id="iv-notes" rows="2" placeholder="Optional notes..."></textarea></div>
       </div>
       <div style="text-align:center"><label class="fl">Scannable Code</label><div id="iv-qr" style="background:#fff;padding:8px;border:1px solid var(--border);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;min-width:116px;min-height:116px"></div></div>
     </div>
-    <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveInvProduct()">&#128190; Save Product</button><button class="btn btn-gh" onclick="closeInvModal()">Cancel</button></div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn btn-pr" onclick="saveInvProduct()">💾 Save Product</button><button class="btn btn-gh" onclick="closeInvModal()">Cancel</button></div>
   </div>
 </div>
 <!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
-  <div class="ph"><div><h1>Repair <span class="ac">Tracker</span></h1><p class="ph-sub">Tech Garage · <span id="dash-date"></span></p></div></div>
+  <div class="ph"><div><h1>Repair <span class="ac">Tracker</span></h1><p class="ph-sub">Tech Garage · <span id="dash-date">Saturday, 20 June 2026</span></p></div></div>
   <div class="stats-grid">
-    <div class="stat-card sc-blue" onclick="showFilterModal('all')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div><div class="stat-body"><div class="stat-val" id="s-tot">0</div><div class="stat-label">Total Jobs</div></div></div>
-    <div class="stat-card sc-amber" onclick="showFilterModal('pending')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="stat-body"><div class="stat-val" id="s-pen">0</div><div class="stat-label">Pending</div></div></div>
-    <div class="stat-card sc-green" onclick="showFilterModal('done')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="stat-body"><div class="stat-val" id="s-don">0</div><div class="stat-label">Completed</div></div></div>
-    <div class="stat-card sc-red" onclick="showFilterModal('unpaid')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-body"><div class="stat-val" id="s-unp">0</div><div class="stat-label">Unpaid</div></div></div>
-    <div class="stat-card sc-rev" onclick="openRevModal()"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div class="stat-body"><div class="stat-val" id="s-rev">₹0</div><div class="stat-label">Today's Revenue</div></div></div>
+    <div class="stat-card sc-blue" onclick="showFilterModal('all')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"></path></svg></div><div class="stat-body"><div class="stat-val" id="s-tot">65</div><div class="stat-label">Total Jobs</div></div></div>
+    <div class="stat-card sc-amber" onclick="showFilterModal('pending')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div><div class="stat-body"><div class="stat-val" id="s-pen">0</div><div class="stat-label">Pending</div></div></div>
+    <div class="stat-card sc-green" onclick="showFilterModal('done')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div><div class="stat-body"><div class="stat-val" id="s-don">60</div><div class="stat-label">Completed</div></div></div>
+    <div class="stat-card sc-red" onclick="showFilterModal('unpaid')"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><div class="stat-body"><div class="stat-val" id="s-unp">2</div><div class="stat-label">Unpaid</div></div></div>
+    <div class="stat-card sc-rev" onclick="openRevModal()"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path></svg></div><div class="stat-body"><div class="stat-val" id="s-rev">₹13,400.00</div><div class="stat-label">Today's Revenue</div></div></div>
   </div>
-  <div class="card"><div class="card-title">Recent Jobs</div><div id="recent-list"><div class="empty">No jobs yet!</div></div></div>
+  <div class="card"><div class="card-title">Recent Jobs</div><div id="recent-list"></div></div>
   <div class="btn-row"><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button><button class="btn btn-ol" onclick="go('jobList');renderList()">View All →</button><button class="btn btn-ol" onclick="go('inventory');renderInv()">📦 Inventory</button></div>
 </div>
 
@@ -799,43 +930,43 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="card">
     <div class="card-title">Job Identification</div>
     <div class="form-row">
-      <div><label class="fl">Job Number *</label><div class="igrp"><input type="text" id="f-jno" placeholder="e.g. 35" oninput="jnoChg()" onblur="lockJno()"/><button class="btn btn-ol btn-sm" onclick="autoJno()" id="btn-auto" style="padding:0 11px">AUTO</button></div></div>
+      <div><label class="fl">Job Number *</label><div class="jno-wrap"><input type="text" id="f-jno" placeholder="e.g. 35" oninput="jnoChg()" onblur="lockJno()" readonly><button type="button" class="jno-edit" id="f-jno-edit" title="Edit job number" onclick="editJno()">✎</button></div></div>
       <div>
         <label class="fl">Date &amp; Time</label>
-        <div class="dt-row"><input type="text" id="f-dt" placeholder="Auto-fills after Job No" style="color:var(--dim)" readonly/><button class="dt-eb" id="btn-dte" onclick="toggleDTE()">✏️</button></div>
-        <div id="dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="f-dtm" onchange="applyDTM()"/></div>
+        <div class="dt-row"><input type="text" id="f-dt" placeholder="Auto-fills after Job No" style="color: var(--green);" readonly=""><button class="dt-eb" id="btn-dte" onclick="toggleDTE()">✏️</button></div>
+        <div id="dte-wrap" style="display:none;margin-top:7px"><input type="datetime-local" id="f-dtm" onchange="applyDTM()"></div>
       </div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Customer Identification</div>
     <div class="form-row">
-      <div><label class="fl">Customer Name</label><input type="text" id="f-cname" placeholder="Full name"/></div>
-      <div><label class="fl">Contact Number</label><input type="tel" id="f-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"/><div id="f-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="f-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"/></div><button type="button" class="addnum-link" id="f-addnum" onclick="toggleSecondPhone('f')">+ Add another number</button></div>
+      <div><label class="fl">Customer Name</label><input type="text" id="f-cname" placeholder="Full name"></div>
+      <div><label class="fl">Contact Number</label><input type="tel" id="f-cphone" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 9876543210"><div id="f-cphone2-wrap" style="display:none;margin-top:8px"><input type="tel" id="f-cphone2" value="+91 " inputmode="numeric" maxlength="14" oninput="formatPhoneInput(this)" onfocus="ensurePhonePrefix(this)" onblur="ensurePhonePrefix(this)" placeholder="+91 Alternate number"></div><button type="button" class="addnum-link" id="f-addnum" onclick="toggleSecondPhone('f')">+ Add another number</button></div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Device Identification</div>
-    <div class="form-row" style="margin-bottom:9px"><div style="grid-column:1/-1"><label class="fl">IMEI Number *</label><div class="igrp"><input type="text" id="f-imei" placeholder="Scan barcode or type IMEI"/><button class="btn btn-ic btn-ol" onclick="openScan()" title="Scan">▤</button></div></div></div>
+    <div class="form-row" style="margin-bottom:9px"><div style="grid-column:1/-1"><label class="fl">IMEI Number *</label><div class="igrp"><input type="text" id="f-imei" placeholder="Scan barcode or type IMEI"><button class="btn btn-ic btn-ol" onclick="openScan()" title="Scan">▤</button></div></div></div>
     <div class="form-row">
       <div>
         <label class="fl">Brand *</label>
-        <div class="cs-wrap" id="bw"><button class="cs-btn" id="b-btn" onclick="togDD('b')"><span id="b-lbl">Select Brand</span><span class="arr">▼</span></button><div class="cs-dd" id="b-dd"><div class="cs-sw"><input type="text" id="b-srch" placeholder="Search or type new brand..." oninput="csSearch('b')" onclick="event.stopPropagation()"/><button class="cs-add" id="b-add" style="display:none" onclick="event.stopPropagation();quickAddCS('b')">Add +</button></div><div class="cs-list" id="b-list"></div></div></div>
+        <div class="cs-wrap" id="bw"><button class="cs-btn" id="b-btn" onclick="togDD('b')"><span id="b-lbl">Apple</span><span class="arr">▼</span></button><div class="cs-dd" id="b-dd"><div class="cs-sw"><input type="text" id="b-srch" placeholder="Search or type new brand..." oninput="csSearch('b')" onclick="event.stopPropagation()"><button class="cs-add" id="b-add" style="display: none;" onclick="event.stopPropagation();quickAddCS('b')">Add +</button></div><div class="cs-list" id="b-list"></div></div></div>
       </div>
       <div>
         <label class="fl">Model *</label>
-        <div class="cs-wrap" id="mw"><button class="cs-btn" id="m-btn" onclick="togDD('m')"><span id="m-lbl">Select Model</span><span class="arr">▼</span></button><div class="cs-dd" id="m-dd"><div class="cs-sw"><input type="text" id="m-srch" placeholder="Search or type new model..." oninput="csSearch('m')" onclick="event.stopPropagation()"/><button class="cs-add" id="m-add" style="display:none" onclick="event.stopPropagation();quickAddCS('m')">Add +</button></div><div class="cs-list" id="m-list"></div></div></div>
+        <div class="cs-wrap" id="mw"><button class="cs-btn" id="m-btn" onclick="togDD('m')"><span id="m-lbl">iPhone Air</span><span class="arr">▼</span></button><div class="cs-dd" id="m-dd"><div class="cs-sw"><input type="text" id="m-srch" placeholder="Search or type new model..." oninput="csSearch('m')" onclick="event.stopPropagation()"><button class="cs-add" id="m-add" style="display: none;" onclick="event.stopPropagation();quickAddCS('m')">Add +</button></div><div class="cs-list" id="m-list"></div></div></div>
       </div>
     </div>
     <div class="form-row">
       <div><label class="fl">Device Lock</label><select id="f-lock" onchange="toggleLockValue('f')"><option value="nil">Nil (No Lock)</option><option value="pin">PIN</option><option value="pattern">Pattern</option><option value="password">Password</option></select></div>
-      <div id="f-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="f-lock-value" placeholder=""/></div>
+      <div id="f-lock-value-wrap" style="display:none"><label class="fl">Lock Value</label><input type="text" id="f-lock-value" placeholder=""></div>
       <div>
         <label class="fl">SIM / Storage</label>
         <div class="chk-row" style="margin-top:2px">
-          <label class="chk-lbl"><input type="checkbox" id="f-sim1" onchange="syncSimState()"/> SIM 1</label>
-          <label class="chk-lbl"><input type="checkbox" id="f-sim2" onchange="syncSimState()"/> SIM 2</label>
-          <label class="chk-lbl"><input type="checkbox" id="f-mmc" onchange="syncSimState()"/> MMC</label>
+          <label class="chk-lbl"><input type="checkbox" id="f-sim1" onchange="syncSimState()"> SIM 1</label>
+          <label class="chk-lbl"><input type="checkbox" id="f-sim2" onchange="syncSimState()"> SIM 2</label>
+          <label class="chk-lbl"><input type="checkbox" id="f-mmc" onchange="syncSimState()"> MMC</label>
         </div>
       </div>
     </div>
@@ -845,7 +976,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="prob-wrap">
       <button class="cs-btn" id="p-btn" onclick="togProbDD('n')"><span id="p-lbl">Select problem(s)...</span><span class="arr">▼</span></button>
       <div class="prob-dd" id="p-dd">
-        <div class="cs-sw"><input type="text" id="p-srch" placeholder="Search or type new problem..." oninput="probSearch('n')" onclick="event.stopPropagation()"/><button class="cs-add" id="p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('n')">Add +</button></div>
+        <div class="cs-sw"><input type="text" id="p-srch" placeholder="Search or type new problem..." oninput="probSearch('n')" onclick="event.stopPropagation()"><button class="cs-add" id="p-add" style="display:none" onclick="event.stopPropagation();quickAddProb('n')">Add +</button></div>
         <div class="pd-list" id="p-list"></div>
       </div>
     </div>
@@ -855,7 +986,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
     <div class="prob-wrap">
       <button class="cs-btn" id="pt-btn" onclick="togPartDD('n')"><span id="pt-lbl">Select part(s)...</span><span class="arr">▼</span></button>
       <div class="prob-dd" id="pt-dd">
-        <div class="cs-sw"><input type="text" id="pt-srch" placeholder="Search or type new part..." oninput="partSearch('n')" onclick="event.stopPropagation()"/><button class="cs-add" id="pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('n')">Add +</button></div>
+        <div class="cs-sw"><input type="text" id="pt-srch" placeholder="Search or type new part..." oninput="partSearch('n')" onclick="event.stopPropagation()"><button class="cs-add" id="pt-add" style="display:none" onclick="event.stopPropagation();quickAddPart('n')">Add +</button></div>
         <div class="pd-list" id="pt-list"></div>
       </div>
     </div>
@@ -864,7 +995,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <div class="card">
     <div class="card-title">Financial &amp; Notes</div>
     <div class="form-row">
-      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-est" placeholder="0.00" min="0" step="0.01"/></div></div>
+      <div><label class="fl">Estimate ₹</label><div class="rp-wrap"><div class="rp-sym">₹</div><input type="number" id="f-est" placeholder="0.00" min="0" step="0.01"></div></div>
       <div><label class="fl">Payment Status</label><select id="f-pay"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
       <div><label class="fl">Job Status</label><select id="f-sts"><option value="pending">⏳ Pending</option><option value="done">✅ Done</option><option value="returned">Returned</option></select></div>
     </div>
@@ -875,8 +1006,8 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 
 <!-- ALL JOBS -->
 <div class="page" id="page-jobList">
-  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>All <span class="ac">Jobs</span> <span id="jl-cnt" style="color:var(--dim);font-size:13px;font-weight:600"></span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button></div>
-  <div class="card"><div class="sb"><input type="text" id="s-inp" placeholder="🔍  Search Job No, IMEI, Name, Brand, Problem..." oninput="renderList()"/><select id="s-sts" onchange="renderList()"><option value="all">All Status</option><option value="pending">Pending</option><option value="done">Done</option><option value="returned">Returned</option></select><select id="s-brd" onchange="renderList()"><option value="all">All Brands</option></select><select id="s-pay" onchange="renderList()"><option value="all">All Payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option></select></div></div>
+  <div class="ph"><button class="bk" onclick="go('dashboard');renderDash()">←</button><h2>All <span class="ac">Jobs</span> <span id="jl-cnt" style="color:var(--dim);font-size:13px;font-weight:600">(65)</span></h2><div class="sp"></div><button class="btn btn-pr" onclick="openNewJob()">+ New Job</button></div>
+  <div class="card"><div class="sb"><input type="text" id="s-inp" placeholder="🔍  Search Job No, IMEI, Name, Brand, Problem..." oninput="renderList()"><select id="s-sts" onchange="renderList()"><option value="all">All Status</option><option value="pending">Pending</option><option value="done">Done</option><option value="returned">Returned</option></select><select id="s-brd" onchange="renderList()"><option value="all">All Brands</option><option value="Apple">Apple</option><option value="Samsung">Samsung</option><option value="OnePlus">OnePlus</option><option value="Xiaomi">Xiaomi</option><option value="Redmi">Redmi</option><option value="Realme">Realme</option><option value="Oppo">Oppo</option><option value="Vivo">Vivo</option><option value="Nokia">Nokia</option><option value="Motorola">Motorola</option><option value="Sony">Sony</option><option value="Google">Google</option><option value="POCO">POCO</option></select><select id="s-pay" onchange="renderList()"><option value="all">All Payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid</option></select></div></div>
   <div class="card">
     <div class="tw">
       <table>
@@ -909,7 +1040,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
 
 <script>
 // ════════ GOOGLE SHEETS SYNC ══════════════════════════════════
-let GS_URL = (function(){try{return localStorage.getItem("tg_gs_url")||"https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec"}catch(e){return "https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec"}})();
+let GS_URL = (function(){var NEW="https://script.google.com/macros/s/AKfycbxhCf0oi0pvHFzgpivLt7VpZXruB1A_DdS0E5tJMO-6xlCb5amE737EsMOX8d39-osh-Q/exec",OLD="https://script.google.com/macros/s/AKfycbxUXDGPFdf3tXVQ8av87--9T6aULz0Ap7kZBAqNhW2VDpd9HpmVYtyg2EylYpmqaXnIXw/exec";try{var st=localStorage.getItem("tg_gs_url");if(!st||st===OLD){localStorage.setItem("tg_gs_url",NEW);return NEW;}return st;}catch(e){return NEW;}})();
 const SYNC_INTERVAL_MS = 45000;
 let syncTimer = null;
 
@@ -984,7 +1115,6 @@ function syncJobToSheet(job) {
     .then(d => {
       if (!d.ok) throw new Error(d.error || "Sheet sync failed");
       setSyncBadge("ok");
-      toast("Synced to Google Sheets", "success");
       return d;
     })
     .catch(err => {
@@ -1058,33 +1188,25 @@ function startAutoSync() {
 }
 
 function setSyncBadge(state) {
-  const b = document.getElementById("sync-nav");
+  const b = document.getElementById("sync-nav"); if(!b) return;
   b.className = "sync-badge sync-" + state;
+  const ICON = {
+    ok:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    ing:'<svg class="sync-spin" viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.6" opacity=".25"/><path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
+    err:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>'
+  };
+  const ic = b.querySelector(".sync-ic"); if(ic) ic.innerHTML = ICON[state] || ICON.ok;
   const txt = b.querySelector(".sync-txt");
   const label = state === "ok" ? "Synced" : state === "ing" ? "Syncing" : "Sync Error";
-  if (txt) { txt.textContent = label; } else { b.textContent = label; }
+  if (txt) { txt.textContent = label; }
 }
 
 // ════════ DATA ═════════════════════════════════════════════════
 /*TG_SEED_START*/
-const BM_DEFAULT={
-  Apple:["iPhone 17 Pro Max","iPhone 17 Pro","iPhone 17 Plus","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],
-  Samsung:["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20"],
-  OnePlus:["OnePlus 13 Pro","OnePlus 13","OnePlus 12 Pro","OnePlus 12","OnePlus 11 Pro","OnePlus 11","OnePlus 10 Pro","OnePlus 10T","OnePlus 10R","OnePlus 9 Pro","OnePlus 9","OnePlus 9R","OnePlus 8 Pro","OnePlus 8T","OnePlus 8","OnePlus 7 Pro","OnePlus 7T Pro","OnePlus 7T","OnePlus 7","OnePlus 6T","OnePlus 6","Nord 4","Nord CE4 Lite","Nord CE4","Nord CE3 Lite","Nord CE3","Nord CE2 Lite","Nord CE2","Nord CE","Nord 3","Nord 2T","Nord 2"],
-  Xiaomi:["Xiaomi 15 Ultra","Xiaomi 15 Pro","Xiaomi 15","Xiaomi 14 Ultra","Xiaomi 14 Pro","Xiaomi 14","Xiaomi 13 Ultra","Xiaomi 13 Pro","Xiaomi 13","Xiaomi 12 Ultra","Xiaomi 12 Pro","Xiaomi 12","Xiaomi 11 Ultra","Xiaomi 11 Pro","Xiaomi 11","POCO X7 Pro","POCO X7","POCO X6 Pro","POCO X6","POCO X5 Pro","POCO X5","POCO F7 Ultra","POCO F7 Pro","POCO F6 Pro","POCO F6","POCO F5 Pro","POCO F5","POCO F4 GT","POCO F4","POCO F3","POCO M7 Pro","POCO M6 Pro","POCO M6","POCO M5s","POCO M5","POCO M4 Pro","POCO M4","POCO C75","POCO C65","POCO C55","POCO C40"],
-  Redmi:["Redmi Note 14 Pro+","Redmi Note 14 Pro","Redmi Note 14","Redmi Note 14 4G","Redmi Note 13 Pro+","Redmi Note 13 Pro","Redmi Note 13","Redmi Note 13 4G","Redmi Note 12 Pro+","Redmi Note 12 Pro","Redmi Note 12","Redmi Note 12 4G","Redmi Note 11 Pro+","Redmi Note 11 Pro","Redmi Note 11","Redmi Note 11 4G","Redmi Note 10 Pro Max","Redmi Note 10 Pro","Redmi Note 10","Redmi Note 10 4G","Redmi 14C","Redmi 13C","Redmi 13","Redmi 12","Redmi 12C","Redmi A4","Redmi A3","Redmi A2+","Redmi A2","Redmi A1+","Redmi A1","Redmi K80 Pro","Redmi K80","Redmi K70 Pro","Redmi K70","Redmi K60 Pro","Redmi K60"],
-  Realme:["Realme GT 7 Pro","Realme GT 7","Realme GT 6T","Realme GT 6","Realme GT 5 Pro","Realme GT 5","Realme GT Neo 6","Realme GT Neo 5","Realme GT Neo 3","Realme 14 Pro+","Realme 14 Pro","Realme 14","Realme 13 Pro+","Realme 13 Pro","Realme 13","Realme 12 Pro+","Realme 12 Pro","Realme 12","Realme 11 Pro+","Realme 11 Pro","Realme 11","Realme C67","Realme C65","Realme C63","Realme C55","Realme C53","Realme C51","Realme C35","Realme C33"],
-  Oppo:["Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Pro","Find X5","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","Reno 10 Pro+","Reno 10 Pro","Reno 10","A3 Pro","A3","A2 Pro","A2","A98","A78","A58","A38","A18"],
-  Vivo:["X200 Ultra","X200 Pro","X200","X100 Ultra","X100 Pro","X100","X90 Pro+","X90 Pro","X90","V40 Pro","V40","V30 Pro","V30","V29 Pro","V29","V27 Pro","V27","Y300 Pro+","Y300 Pro","Y300","Y200","Y100","Y78","Y56","Y36","Y18","iQOO 13","iQOO 12","iQOO 11","iQOO Neo 9 Pro","iQOO Neo 9","iQOO Z9 Pro","iQOO Z9"],
-  Nokia:["Nokia G42","Nokia G22","Nokia G21","Nokia G20","Nokia G10","Nokia C32","Nokia C22","Nokia C21","Nokia C12","Nokia XR21","Nokia XR20","Nokia 8.3","Nokia 7.3","Nokia 6.3","Nokia 5.4","Nokia 4.3","Nokia 3.4"],
-  Motorola:["Edge 50 Ultra","Edge 50 Pro","Edge 50 Fusion","Edge 50","Edge 40 Pro","Edge 40 Neo","Edge 40","Edge 30 Ultra","Edge 30 Pro","Moto G85","Moto G84","Moto G64","Moto G54","Moto G34","Moto G14","Razr 50 Ultra","Razr 50","Razr 40 Ultra","Razr 40"],
-  Sony:["Xperia 1 VI","Xperia 5 VI","Xperia 10 VI","Xperia 1 V","Xperia 5 V","Xperia 10 V","Xperia 1 IV","Xperia 5 IV","Xperia 10 IV"],
-  Google:["Pixel 9 Pro Fold","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8 Pro","Pixel 8a","Pixel 8","Pixel 7 Pro","Pixel 7a","Pixel 7","Pixel 6 Pro","Pixel 6a","Pixel 6"],
-  Other:["Other / Unknown"]
-};
+const BM_DEFAULT={"Apple":["iPhone 17 Pro Max","iPhone 17 Pro","iPhone Air","iPhone 17","iPhone 16 Pro Max","iPhone 16 Pro","iPhone 16 Plus","iPhone 16","iPhone 15 Pro Max","iPhone 15 Pro","iPhone 15 Plus","iPhone 15","iPhone 14 Pro Max","iPhone 14 Pro","iPhone 14 Plus","iPhone 14","iPhone 13 Pro Max","iPhone 13 Pro","iPhone 13 Mini","iPhone 13","iPhone 12 Pro Max","iPhone 12 Pro","iPhone 12 Mini","iPhone 12","iPhone 11 Pro Max","iPhone 11 Pro","iPhone 11","iPhone XS Max","iPhone XS","iPhone XR","iPhone X","iPhone SE (3rd Gen)","iPhone SE (2nd Gen)","iPhone SE (1st Gen)","iPhone 8 Plus","iPhone 8","iPhone 7 Plus","iPhone 7","iPhone 6s Plus","iPhone 6s","iPhone 6 Plus","iPhone 6"],"Samsung":["Galaxy S26 Ultra","Galaxy S26+","Galaxy S26","Galaxy S25 Ultra","Galaxy S25+","Galaxy S25","Galaxy S24 Ultra","Galaxy S24+","Galaxy S24","Galaxy S24 FE","Galaxy S23 Ultra","Galaxy S23+","Galaxy S23","Galaxy S23 FE","Galaxy S22 Ultra","Galaxy S22+","Galaxy S22","Galaxy S21 Ultra","Galaxy S21+","Galaxy S21","Galaxy S21 FE","Galaxy S20 Ultra","Galaxy S20+","Galaxy S20","Galaxy S20 FE","Galaxy Z Fold 6","Galaxy Z Fold 5","Galaxy Z Fold 4","Galaxy Z Fold 3","Galaxy Z Flip 6","Galaxy Z Flip 5","Galaxy Z Flip 4","Galaxy Z Flip 3","Galaxy A56","Galaxy A55","Galaxy A54","Galaxy A53","Galaxy A52","Galaxy A36","Galaxy A35","Galaxy A34","Galaxy A33","Galaxy A32","Galaxy A25","Galaxy A24","Galaxy A23","Galaxy A22","Galaxy A16","Galaxy A15","Galaxy A14","Galaxy A13","Galaxy A06","Galaxy A05","Galaxy A04","Galaxy A50","Galaxy A51","Galaxy M56","Galaxy M55","Galaxy M54","Galaxy M53","Galaxy M35","Galaxy M34","Galaxy M33","Galaxy M32","Galaxy Note 20 Ultra","Galaxy Note 20","Galaxy S7","Galaxy S7 Edge","Galaxy Note7","Galaxy A3 (2016)","Galaxy A5 (2016)","Galaxy A7 (2016)","Galaxy A8 (2016)","Galaxy A9 (2016)","Galaxy A9 Pro (2016)","Galaxy J1 (2016)","Galaxy J2 (2016)","Galaxy J3 (2016)","Galaxy J5 (2016)","Galaxy J7 (2016)","Galaxy C5","Galaxy C7","Galaxy On5 Pro","Galaxy On7 Pro","Galaxy S8","Galaxy S8+","Galaxy Note8","Galaxy A3 (2017)","Galaxy A5 (2017)","Galaxy A7 (2017)","Galaxy J2 Pro","Galaxy J3 Pro","Galaxy J5 Pro","Galaxy J7 Pro","Galaxy J7 Max","Galaxy C7 Pro","Galaxy On Max","Galaxy S9","Galaxy S9+","Galaxy Note9","Galaxy A6","Galaxy A6+","Galaxy A7 (2018)","Galaxy A8 (2018)","Galaxy A8+","Galaxy A9 (2018)","Galaxy J2 Core","Galaxy J4","Galaxy J6","Galaxy J8","Galaxy On6","Galaxy S10e","Galaxy S10","Galaxy S10+","Galaxy S10 5G","Galaxy Note10","Galaxy Note10+","Galaxy A10","Galaxy A20","Galaxy A30","Galaxy A40","Galaxy A70","Galaxy A80","Galaxy M10","Galaxy M20","Galaxy M30","Galaxy Fold","Galaxy A01","Galaxy A11","Galaxy A21","Galaxy A31","Galaxy A41","Galaxy A71","Galaxy M01","Galaxy M11","Galaxy M21","Galaxy M31","Galaxy M51","Galaxy Z Fold2","Galaxy Z Flip","Galaxy Z Flip 5G","Galaxy A02","Galaxy A12","Galaxy A72","Galaxy M12","Galaxy M22","Galaxy M52","Galaxy F12","Galaxy F22","Galaxy A03","Galaxy A73","Galaxy M13","Galaxy M23","Galaxy F13","Galaxy F23","Galaxy XCover6 Pro","Galaxy M14","Galaxy F14","Galaxy F34","Galaxy F54","Galaxy M15","Galaxy F15","Galaxy F55","Galaxy S25 Edge","Galaxy S25 FE","Galaxy A26","Galaxy M06","Galaxy M16","Galaxy F06","Galaxy F16","Galaxy F56","Galaxy Z Fold7","Galaxy Z Flip7","Galaxy Z Flip7 FE","Galaxy Z TriFold","Galaxy A07","Galaxy A07 5G","Galaxy A17","Galaxy A17 5G","Galaxy M07","Galaxy M17 5G","Galaxy F07","Galaxy F17 5G"],"OnePlus":["Nord CE6 Lite","Nord CE6","Nord 6","15T","Nord CE 5","Nord 5","15R","15","13s","13T","Nord 4","Nord 4 CE","13R","13","12R","12","Ace 2","Nord 3","Nord CE 3 Lite 5G","Nord CE3","11R","11","Nord 2T","Nord CE 2 Lite 5G","Nord CE2","10R 150W","10R","10T","10 Pro","Nord 2","Nord N200 5G","Nord CE 5G","9RT","9R","9 Pro","9","Nord","8T","8 Pro","8","7T Pro McLaren Edition","7T Pro","7T","7 Pro 5G","7 Pro","7","6T McLaren Edition","6T","6","5T","5","3T","3","13 Pro","12 Pro","11 Pro","Nord CE4 Lite","Nord CE4","Nord CE3 Lite","Nord CE2 Lite","Nord CE"],"Xiaomi":["17 Ultra","17","16 Ultra","16 Pro","16","15T Pro","15T","15 Ultra","15 Pro","15","14T Pro","14T","14 Ultra","14 Pro","14","13T Pro","13T","13 Ultra","13 Pro","13","12S Ultra","12S Pro","12S","12 Lite","12 Pro","12","11X Pro","11X","11 Ultra","11 Pro","11 Lite","11","10 Ultra","10 Lite","10 Pro","10","9T Pro","9T","9 SE","9","8 Pro","8 SE","8 Lite","8","6X","6","5S Plus","5S","Note 10 Lite","Note 10","Note 3","Note 2","Max 3","Max 2","Max Prime","Max","A3","A2 Lite","A2","A1","MIX 4","MIX Alpha","MIX 3 5G","MIX 3","MIX 2S","MIX 2","MIX","MIX Fold 5","MIX Fold 4","MIX Fold 3","MIX Fold 2","MIX Fold","MIX Flip 2","MIX Flip","12 Ultra"],"Redmi":["15A","15C","15 5G","15","14C","13C","13","12C","12","11 Prime","10C","10A","10 Prime","10","9 Prime","9C","9A","9","8A","8","7A","7","6 Pro","6A","6","5A","5","4X","4A","4","3X","3S","3","Note 15 Pro+","Note 15 Pro","Note 15 5G","Note 15","Note 14 Pro+","Note 14 Pro","Note 14","Note 13 Pro+","Note 13 Pro","Note 13","Note 12 Turbo","Note 12 Pro+","Note 12 Pro","Note 12","Note 11 Pro+","Note 11 Pro","Note 11S","Note 11","Note 10 Pro Max","Note 10 Pro","Note 10S","Note 10","Note 9 Pro Max","Note 9 Pro","Note 9","Note 8 Pro","Note 8","Note 7 Pro","Note 7","Note 6 Pro","Note 5A","Note 5 Pro","Note 5","Note 4X","Note 4","Note 3 Pro","Note 3","K90 Pro","K90","K80 Pro","K80","K70 Ultra","K70 Pro","K70E","K70","K60 Ultra","K60 Pro","K60E","K60","K50 Ultra","K50 Gaming","K50 Pro","K50","K40 Gaming","K40 Pro+","K40 Pro","K40","K30 Ultra","K30 Pro","K30 5G","K30","K20 Pro","K20","A5","A4 5G","A3 Pro","A3x","A3","A2+","A2","A1+","A1","Turbo 5","Turbo 4 Pro","Turbo 4","Turbo 3","Note 14 4G","Note 13 4G","Note 12 4G","Note 11 4G","Note 10 4G","A4"],"Realme":["16T 5G","16 Pro+","16 Pro","16","15 Pro","15x","15","14 Pro+","14 Pro","14x","14","13 Pro+","13 Pro","13+","13","12 Pro+","12 Pro","12+","12 5G","12x","12","11 Pro+","11 Pro","11 5G","11x","11","10 Pro+","10 Pro","10 5G","10","9 Pro+","9 Pro","9i","9 5G","9","8 Pro","8s 5G","8i","8 5G","8","7 Pro","7i","7","6 Pro","6i","6","5 Pro","5","3 Pro","3","2 Pro","2","1","GT 8 Pro","GT 7 Pro","GT 7T","GT 7","GT 6T","GT 6","GT 5 Pro","GT 5","GT 3","GT 2 Pro","GT 2","GT Neo 5 SE","GT Neo 5","GT Neo 3T","GT Neo 3","GT Neo 2T","GT Neo 2","GT Neo","GT Explorer Master Edition","GT Master Edition","GT","X7 Max","X7 Pro","X7","X3 SuperZoom","X3","X2 Pro","X2","XT","X","Narzo N100","Narzo N65","Narzo N63","Narzo N61","Narzo N55","Narzo N53","Narzo 70 Pro","Narzo 70x","Narzo 70","Narzo 60 Pro","Narzo 60x","Narzo 60","Narzo 50 5G","Narzo 50 Pro","Narzo 50i Prime","Narzo 50i","Narzo 50A","Narzo 50","Narzo 30 5G","Narzo 30 Pro","Narzo 30A","Narzo 30","Narzo 20 Pro","Narzo 20A","Narzo 20","Narzo 10A","Narzo 10","Narzo","C85","C75x","C75","C73","C71","C67","C65","C63","C61","C55","C53","C51","C35","C33","C31","C30s","C30","C25Y","C25s","C25","C21Y","C21","C20","C17","C15","C12","C11 (2021)","C11","C3i","C3","C2","C1","P4x","P4R","P4 Power","P4 Pro","P4 Lite 5G","P4 Lite","P4","P3 Ultra","P3 Pro","P3","P2 Pro","P2","P1 Pro","P1","GT Neo 6"],"Oppo":["Find X9s","Find X9 Ultra","Find X9 Pro","Find X9","Find X8 Ultra","Find X8 Pro","Find X8","Find X7 Ultra","Find X7","Find X6 Pro","Find X6","Find X5 Lite","Find X5 Pro","Find X5","Find X3 Lite","Find X3 Neo","Find X3 Pro","Find X3","Find X2 Lite","Find X2 Neo","Find X2 Pro","Find X2","Find X Lamborghini Edition","Find X","Find N5","Find N3 Flip","Find N3","Find N2 Flip","Find N2","Find N","Reno15 Pro Mini","Reno15 Pro","Reno15","Reno14 Pro","Reno14","Reno 13 Pro","Reno 13","Reno 12 Pro","Reno 12","Reno 11 Pro","Reno 11","Reno 10 Pro+","Reno 10 Pro","Reno 10","Reno9 Pro+","Reno9 Pro","Reno9","Reno8 T","Reno8 Pro","Reno8","Reno7 Z","Reno7 Pro","Reno7","Reno6 Z","Reno6 Pro","Reno6","Reno5 Z","Reno5 Lite","Reno5 F","Reno5 Pro","Reno5","Reno4 Z","Reno4 Pro","Reno4","Reno3 Pro","Reno3","Reno Ace","Reno2 Z","Reno2 F","Reno2","Reno Z","Reno 10x Zoom","Reno","F31 Pro+","F31 Pro","F31","F29 Pro","F29","F27 Pro+","F27","F25 Pro","F23","F21 Pro 5G","F21 Pro","F19 Pro+","F19 Pro","F19","F17 Pro","F17","F15","F11 Pro","F11","F9 Pro","F9","K14","K13","K12x","K12","K11x","K11","K10x","K10 Pro","K10 5G","K10","K9 Pro","K9","K7","K5","K3","K1","A6x","A6 Pro","A6","A5x","A5 Pro","A3 Pro","A3","A98","A97","A96","A95","A94","A93","A92","A91","A80","A79","A78","A77","A76","A74","A60","A59","A58","A57","A55","A54","A53","A33","A31","A18","A17k","A17","A16k","A16","A15s","A15","A12","A11k","A9","A7","A5s","A5","A3s","A1k","A2 Pro","A2","A38"],"Vivo":["X300 Ultra","X300 Pro","X300","X200T","X200 FE","X200 Pro Mini","X200 Pro","X200","X100 Ultra","X100 Pro","X100","X90 Pro+","X90 Pro","X90","X80 Pro","X80","X70 Pro+","X70 Pro","X70","X60 Pro+","X60 Pro","X60","X50 Pro+","X50 Pro","X50","X30 Pro","X30","X27 Pro","X27","X23 Symphony Edition","X23","X21i","X21 UD","X21","X20 Plus","X20","V70 Elite","V70","V60e","V60","V50e","V50","V40e","V40 Pro","V40","V30e","V30 Pro","V30","V29 Pro","V29","V27 Pro","V27","V25 Pro","V25","V23 Pro","V23","V21e","V21","V20 Pro","V20","V19","V17 Pro","V17","V15 Pro","V15","V11 Pro","V11","V9 Pro","V9","Y21 5G","Y11 5G","Y05","Y500 Pro","Y500","Y400","Y300 Pro","Y300","Y200 Pro","Y200 5G","Y200","Y100i","Y100e","Y100 5G","Y100A","Y100","Y58","Y56","Y36","Y35","Y33s","Y22s","Y22","Y21T","Y21e","Y21","Y20G","Y20A","Y20","Y19","Y17","Y15","Y12","Y11","Y95","Y93","Y91i","Y91","Y83","Y81","T4R","T4x","T4 Ultra","T4 Pro","T4 Lite","T4","T3x","T3 Ultra","T3 Pro","T3 Lite","T3","T2x","T2 Pro","T2","T1x","T1 Pro","T1","X Flip","X Fold5","X Fold3 Pro","X Fold3","X Fold2","X Fold+","X Fold","NEX 3 5G","NEX 3","NEX Dual Display","NEX A","NEX S","NEX","S20 Pro","S20","S19 Pro","S19","S18 Pro","S18","S17 Pro","S17","S16 Pro","S16","S15 Pro","S15","S12 Pro","S12","S10 Pro","S10","S9","S7e","S7","S6","S5","S1 Pro","S1","X200 Ultra","Y300 Pro+","Y78","Y18","iQOO 13","iQOO 12","iQOO 11","iQOO Neo 9 Pro","iQOO Neo 9","iQOO Z9 Pro","iQOO Z9"],"Nokia":["Nokia G42","Nokia G22","Nokia G21","Nokia G20","Nokia G10","Nokia C32","Nokia C22","Nokia C21","Nokia C12","Nokia XR21","Nokia XR20","Nokia 8.3","Nokia 7.3","Nokia 6.3","Nokia 5.4","Nokia 4.3","Nokia 3.4"],"Motorola":["Edge 70 Pro","Edge 70 Fusion","Edge 70","G77","G67 2026","G17 Power","G17","G 2026","G Play 2026","Razr 60 Ultra/Razr Ultra 2025","Razr 60 Plus/Razr Plus 2025","Razr 60/Razr 2025","Edge 60 Neo","Edge 60 Pro","Edge 60 Stylus","Edge 60","Edge 60 Fusion","X70 Air","G57 Power","G57","G67 Power","G67","G06 Power","G06","G96","G86 Power","G86","G56","G15","G Stylus 2025","G Power 2025","G 2025","G05","G75","E15","ThinkPhone 25","Razr 50 Ultra/Razr+ 2024","Razr 50/Razr 2024","Edge 2024","Edge 50 Ultra","Edge 50 Neo","Edge 50 Fusion","Edge 50 Pro","Edge 50","X50 Ultra","S50 Neo","S50","G Stylus 5G 2024","G Power 5G 2024","G 5G 2024","G Play 2024","G85","G55","G45","G35","G64","G24 Power","G24","G04s","G04","E14","ThinkPhone","Razr 40 Ultra/Razr+ 2023","Razr 40/Razr 2023","Edge 40 Neo","Edge 40 Pro/Edge+ 2023/Edge X40","Edge 40","X40","G54 Power Edition","G54j/G54y","G54","G84","G34 5G","G14","G73 5G","G53j/G53s/G53y","G23","G13","G53 5G","G Stylus 5G 2023","G Stylus 2023","G Power 5G 2023","G 5G 2023","G Play 2023","E13","Defy 2","Razr 2022","Edge 30 Neo","Edge 30 Fusion","Edge 30 Ultra","Edge 30 Pro","Edge 30","Edge+ 2022","Edge 2022","X30 Pro","S30 Pro","G72","G32","G62","G82","G52j","G52","G22","G200 5G","G71 5G","G51 5G","G41","G31","E32","E22s","E22","Defy","One 5G Ace","Edge X30","Edge S30","Edge 2021","Edge 20 Pro/Edge S Pro","Edge 20","Edge 20 Fusion","Edge 20 Lite","G100/Edge S","G60S","G60","G50 5G","G50","G40 Fusion","G30","G20","G10 Power","G10","G Stylus 5G","G Stylus","G Play","G Pure","G 5G","E40","E30","E20","E7i Power","E7 Power","E6i","Razr 5G","One Fusion+","One Fusion","Edge+","Edge","G9 Power","G9 Plus","G9/G9 Play","G 5G Plus","G Stylus/G Pro","G Power","G Fast","G8 Power Lite","G8 Power","G8","E7 Plus","E7","E 2020","E6s","Razr","One Hyper","One Macro","One Zoom","One Action","One Vision","Z4","G8 Plus","G8 Play","G7 Plus","G7 Power","G7 Play","G7","E6 Plus","E6 Play","E6","One Power","One","Z3 Play","Z3","G6 Plus","G6 Play","G6","E5 Plus","E5 Play","E5","Z2 Force","Z2 Play","X4","C Plus","C","G5S Plus","G5S","G5 Plus","G5","E4 Plus","E4","Z Force","Z Play","Z","M","G4 Plus","G4 Play","G4","E3 Power","E3","Edge 40 Pro","G34","Razr 50 Ultra","Razr 50","Razr 40 Ultra","Razr 40"],"Sony":["Xperia 1 VI","Xperia 5 VI","Xperia 10 VI","Xperia 1 V","Xperia 5 V","Xperia 10 V","Xperia 1 IV","Xperia 5 IV","Xperia 10 IV"],"Google":["Pixel 10a","Pixel 10 Pro Fold","Pixel 10 Pro XL","Pixel 10 Pro","Pixel 10","Pixel 9a","Pixel 9 Pro Fold","Pixel 9 Pro XL","Pixel 9 Pro","Pixel 9","Pixel 8a","Pixel 8 Pro","Pixel 8","Pixel Fold","Pixel 7a","Pixel 7 Pro","Pixel 7","Pixel 6a","Pixel 6 Pro","Pixel 6","Pixel 5a","Pixel 5","Pixel 4a 5G","Pixel 4a","Pixel 4 XL","Pixel 4","Pixel 3a XL","Pixel 3a","Pixel 3 XL","Pixel 3","Pixel 2 XL","Pixel 2","Pixel XL","Pixel"],"POCO":["F7 Ultra","F7 Pro","F7","F6 Pro","F6","F5 Pro","F5","F4 GT","F4","F3 GT","F3","F2 Pro","F1","X8 Pro Max","X8 Pro","X7 Neo","X7 Pro","X7","X6 Neo","X6 Pro 5G","X6 5G","X5 Pro 5G","X5 5G","X4 GT","X4 Pro 5G","X3 GT","X3 Pro","X3 NFC","X3","X2","M7 Pro","M7","M6 Plus","M6 Pro","M6","M5s","M5","M4 5G","M4 Pro 5G","M4 Pro 4G","M3 Pro 5G","M3","M2 Pro","M2","C85","C75","C71","C65","C61","C55","C51","C50","C40","C31","C3","X8 Pro Iron Man Edition","F4 GT Cyber Edition","Pad","X6 Pro","X6","X5 Pro","X5","M4 Pro","M4"]};
 const PROBS_DEFAULT=["Screen Cracked / Broken","Screen Not Displaying","Touch Screen Not Working","Battery Draining Fast","Battery Not Charging","Swollen Battery","Charging Port Damaged","Wireless Charging Issue","Speaker Not Working","Earpiece Not Working","Microphone Issue","Front Camera Not Working","Rear Camera Not Working","Camera Blurry / Foggy","Back Glass Broken","Frame / Body Damaged","Water / Liquid Damage","Corrosion Damage","Phone Not Turning On","Boot Loop / Stuck on Logo","Software Crash / Hang","Power Button Not Working","Volume Buttons Not Working","Home Button Issue","Fingerprint Sensor Issue","Face ID Not Working","Wi-Fi Not Working","Bluetooth Issue","Mobile Data Issue","SIM Card Not Detected","SIM Tray Damaged","Overheating","Phone Restarting Randomly","No Sound / Audio Issue","GPS Not Working","Vibration Not Working"];
-const PARTS_DEFAULT=["Display / Screen Replacement","Touch Glass Replacement","Battery Replacement","Charging Port Repair / Replacement","Speaker Repair / Replacement","Earpiece Repair / Replacement","Microphone Repair / Replacement","Front Camera Replacement","Rear Camera Replacement","Camera Lens / Glass Replacement","Back Glass Replacement","Middle Frame / Housing Replacement","Power Button Flex Repair / Replacement","Volume Button Flex Repair / Replacement","Fingerprint Sensor Repair / Replacement","Face ID / Sensor Repair","SIM Tray Replacement","SIM Slot Repair","Memory Card Slot Repair","Motherboard Repair","IC Replacement","Water Damage Cleaning / Repair","Software Repair / Flashing","Wi-Fi / Bluetooth Antenna Repair","Network Antenna Repair","Vibration Motor Replacement","Receiver Mesh Cleaning / Replacement","Tempered Glass Installation"];
-const SHOP_DEFAULT={name:'Tech Garage',tagline:'Mobile & Tablet Repair',addr:'',phone:'',gst:'',footer:'Please keep this receipt safe to collect your device.'};
+const PARTS_DEFAULT=["Display Repair","Display / Screen Replacement","Touch Glass Replacement","Battery Replacement","Charging Port Repair / Replacement","Speaker Repair / Replacement","Earpiece Repair / Replacement","Microphone Repair / Replacement","Front Camera Replacement","Rear Camera Replacement","Camera Lens / Glass Replacement","Back Glass Replacement","Middle Frame / Housing Replacement","Power Button Flex Repair / Replacement","Volume Button Flex Repair / Replacement","Fingerprint Sensor Repair / Replacement","Face ID / Sensor Repair","SIM Tray Replacement","SIM Slot Repair","Memory Card Slot Repair","Motherboard Repair","IC Replacement","Water Damage Cleaning / Repair","Software Repair / Flashing","Wi-Fi / Bluetooth Antenna Repair","Network Antenna Repair","Vibration Motor Replacement","Receiver Mesh Cleaning / Replacement","Tempered Glass Installation"];
+const SHOP_DEFAULT={"name":"Tech Garage","tagline":"Mobile & Tablet Repair","addr":"","phone":"","gst":"","footer":"Please keep this receipt safe to collect your device."};
 /*TG_SEED_END*/
 const WA_DEFAULT="Hello {CUSTOMER_NAME}! 👋\n\nThank you for choosing Tech Garage for your repair.\n\n📋 *Job Details:*\n• Job No: *#{JOB_NO}*\n• Device: *{MODEL}*\n• Issue: {PROBLEMS}\n\n💰 Estimate: ₹{ESTIMATE}\n⏱ Expected repair time: *{ESTIMATE_TIME}*\n\nWe will keep you updated. Please keep this message for reference.\n\nThank you! 🙏";
 const WA_DONE_DEFAULT="Hello {CUSTOMER_NAME}!\n\nYour repair job is completed and ready for pickup.\n\nJob No: #{JOB_NO}\nDevice: {MODEL}\nIssue: {PROBLEMS}\nAmount: Rs. {ESTIMATE}\n\nThank you for choosing Tech Garage.";
@@ -1102,6 +1224,31 @@ function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
 function loadAll(){
   jobs=lsGet('tg_jobs_v3',[]);
   BM=lsGet('tg_bm',JSON.parse(JSON.stringify(BM_DEFAULT)));
+  // one-time merge: add newly baked-in default models (e.g. Samsung 2016-2026) into saved data, without removing user's own
+  try{ if((lsGet('tg_bm_seed',0)||0) < 3){
+    var _nk=function(x){return String(x).toLowerCase().replace(/\s+/g,'')};
+    var _clean=function(br,m){m=String(m).trim();var rx={Motorola:/^(motorola|moto)\s+/i,Redmi:/^redmi\s+/i,Xiaomi:/^(xiaomi|mi)\s+/i,POCO:/^poco\s+/i,Realme:/^realme\s+/i,OnePlus:/^oneplus\s+/i}[br];if(rx)m=m.replace(rx,'').trim();return m;};
+    // ensure POCO brand exists; move POCO models out of Xiaomi
+    if(!BM.POCO)BM.POCO=[];
+    if(BM.Xiaomi){var _keep=[];BM.Xiaomi.forEach(function(m){if(/^poco\s+/i.test(m)){var pm=_clean('POCO',m);if(BM.POCO.indexOf(pm)<0)BM.POCO.push(pm);}else _keep.push(m);});BM.Xiaomi=_keep;}
+    // clean existing model names per brand + dedup
+    Object.keys(BM).forEach(function(br){var seen={},out=[];(BM[br]||[]).forEach(function(m){var c=_clean(br,m),k=_nk(c);if(c&&!seen[k]){seen[k]=1;out.push(c);}});BM[br]=out;});
+    // merge in all baked-in defaults (add missing only)
+    Object.keys(BM_DEFAULT).forEach(function(br){
+      if(!BM[br]){BM[br]=BM_DEFAULT[br].slice();}
+      else{var seen={};BM[br].forEach(function(m){seen[_nk(m)]=1;});BM_DEFAULT[br].forEach(function(m){var k=_nk(m);if(!seen[k]){seen[k]=1;BM[br].push(m);}});}
+    });
+    delete BM.Other;
+    Object.keys(BM_DEFAULT).forEach(function(br){
+      if(!BM[br])return;
+      var have={};BM[br].forEach(function(m){have[_nk(m)]=m;});
+      var defk={},out=[];
+      BM_DEFAULT[br].forEach(function(m){var k=_nk(m);defk[k]=1;if(have[k]!==undefined)out.push(have[k]);});
+      BM[br].forEach(function(m){if(!defk[_nk(m)])out.push(m);});
+      BM[br]=out;
+    });
+    lsSet('tg_bm',BM); lsSet('tg_bm_seed',3);
+  } }catch(e){}
   PROBS=lsGet('tg_probs',[...PROBS_DEFAULT]);
   PARTS=lsGet('tg_parts',[...PARTS_DEFAULT]);
   waTemplate=lsGet('tg_wa_tmpl',WA_DEFAULT);
@@ -1120,10 +1267,43 @@ window.onload=function(){
   document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
   document.addEventListener('click',outClick);
+  wcInit();
   // Auto sync on load
-  setTimeout(()=>syncFromSheet(),1500);
+  setTimeout(()=>syncFromSheet(true),1500);
   startAutoSync();
 };
+function enterApp(){
+  var inp=document.getElementById('wc-pass'),err=document.getElementById('wc-err');
+  var val=inp?inp.value:'';
+  var PW=(function(){try{return localStorage.getItem('tg_pass')||'nmw123'}catch(e){return 'nmw123'}})();
+  if(val!==PW){
+    if(err)err.classList.add('show');
+    if(inp){inp.classList.remove('wc-shake');void inp.offsetWidth;inp.classList.add('wc-shake');inp.focus();try{inp.select()}catch(e){}}
+    return;
+  }
+  if(err)err.classList.remove('show');
+  var o=document.getElementById('welcome-ov');if(o)o.classList.add('hide');
+  try{go('dashboard');renderDash();}catch(e){}
+}
+function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open')}
+function openSettings(){document.getElementById('settings-modal').classList.add('open')}
+function toggleProfileMenu(){var m=document.getElementById('profile-menu');if(m)m.classList.toggle('open')}
+function doLogout(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');document.querySelectorAll('.modal-bg.open').forEach(function(m){m.classList.remove('open')});var o=document.getElementById('welcome-ov');if(o)o.classList.remove('hide');var er=document.getElementById('wc-err');if(er)er.classList.remove('show');var pi=document.getElementById('wc-pass');if(pi){pi.value='';setTimeout(function(){try{pi.focus()}catch(e){}},250);}try{window.scrollTo(0,0)}catch(e){}}
+function openChangePass(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');['pm-cur','pm-new','pm-new2'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});var er=document.getElementById('pass-err');if(er)er.style.display='none';document.getElementById('pass-modal').classList.add('open');}
+function saveNewPass(){var cur=document.getElementById('pm-cur').value,nw=document.getElementById('pm-new').value,nw2=document.getElementById('pm-new2').value;var er=document.getElementById('pass-err');function fail(m){er.textContent=m;er.style.display='block';}var PW=(function(){try{return localStorage.getItem('tg_pass')||'nmw123'}catch(e){return 'nmw123'}})();if(cur!==PW)return fail('Current password is incorrect.');if(nw.length<4)return fail('New password must be at least 4 characters.');if(nw!==nw2)return fail('New passwords do not match.');try{localStorage.setItem('tg_pass',nw)}catch(e){}closeModal('pass-modal');toast('Password updated');}
+var TK_KEYS=['showQR','showPhone','showAltPhone','showIMEI','showLock','showSIM','showProblems','showParts','showStatus','showPayment','showEstimate'];
+function _readTK(){var TK={title:document.getElementById('tk-title').value.trim(),thanks:document.getElementById('tk-thanks').value.trim(),terms:document.getElementById('tk-terms').value.trim()};TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);TK[k]=c?c.checked:true;});return TK;}
+function openTicketSettings(){var TK=lsGet('tg_ticket',{});document.getElementById('tk-title').value=TK.title||'';document.getElementById('tk-thanks').value=TK.thanks||'';document.getElementById('tk-terms').value=TK.terms||'';TK_KEYS.forEach(function(k){var c=document.getElementById('tk-'+k);if(c)c.checked=(TK[k]!==false);});document.getElementById('ticket-modal').classList.add('open');}
+function saveTicketSettings(){lsSet('tg_ticket',_readTK());toast('Ticket layout saved');closeModal('ticket-modal');}
+function previewTicket(){lsSet('tg_ticket',_readTK());if(jobs&&jobs.length){var jj=(typeof sortedJobs==='function')?sortedJobs():jobs;genTicket(jj[0].id);}else{toast('Add a job first to preview the ticket','info');}}
+document.addEventListener('click',function(ev){var pm=document.getElementById('profile-menu');if(pm&&pm.classList.contains('open')&&!ev.target.closest('#profile-menu')&&!ev.target.closest('[aria-label=\"Profile\"]')){pm.classList.remove('open');}});
+function wcInit(){try{
+  var h=new Date().getHours();var g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  var nm=(typeof shop!=='undefined'&&shop&&shop.name)?shop.name:'';
+  var ge=document.getElementById('wc-greet');if(ge)ge.textContent=g;setTimeout(function(){var pi=document.getElementById('wc-pass');if(pi)pi.focus();},700);
+  var de=document.getElementById('wc-date');if(de)de.textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  var tg=document.getElementById('wc-tag');if(tg&&typeof shop!=='undefined'&&shop&&shop.tagline)tg.textContent=shop.tagline;
+}catch(e){}}
 function updNC(){document.getElementById('nav-count').textContent=jobs.length+' job'+(jobs.length!==1?'s':'')}
 function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const m={dashboard:0,newJob:1,jobList:2,inventory:3};if(m[id]!==undefined)document.querySelectorAll('.nav-btn')[m[id]].classList.add('active');closeAll()}
 function outClick(ev){
@@ -1151,12 +1331,13 @@ function renderDash(){
   document.getElementById('s-rev').innerHTML='&#8377;'+fR(todayRev);
   const el=document.getElementById('recent-list'),rec=sortedJobs().slice(0,5);
   if(!rec.length){el.innerHTML='<div class="empty">No jobs yet!</div>';return}
-  el.innerHTML=rec.map(j=>`<div class="rr" onclick="openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'')}${j.cphone?' · '+e(j.cphone):''} · ${fDT(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span><span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')
+  el.innerHTML=rec.map(j=>`<div class="rr" onclick="openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'')}${j.cphone?' · '+e(j.cphone):''} · ${fDT(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center">${j.s==='returned'?'':`<span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span>`}<span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')
 }
 
 // ════════ REVENUE MODAL ════════════════════════════════════════
 let revPeriod='day';
-function openRevModal(){revPeriod='day';document.querySelectorAll('.rev-period-btn').forEach((b,i)=>b.classList.toggle('active',i===0));renderRevModal();document.getElementById('rev-modal').classList.add('open')}
+let revView='paid';
+function openRevModal(){revPeriod='day';revView='paid';document.querySelectorAll('.rev-period-btn').forEach((b,i)=>b.classList.toggle('active',i===0));renderRevModal();document.getElementById('rev-modal').classList.add('open')}
 function setRevPeriod(p,btn){revPeriod=p;document.querySelectorAll('.rev-period-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRevModal()}
 function getRevJobs(){
   const now=new Date();
@@ -1172,18 +1353,35 @@ function getRevJobs(){
     return true;
   }).sort((a,b)=>revSort==='oldest'?new Date(paidDate(a)||0)-new Date(paidDate(b)||0):new Date(paidDate(b)||0)-new Date(paidDate(a)||0));
 }
+function getOutstandingJobs(){
+  const now=new Date();
+  const revSort=document.getElementById('rev-sort')?.value||'newest';
+  return jobs.filter(j=>{
+    if(j.pay==='paid'||j.s==='returned')return false;
+    const d=new Date(j.dt);if(isNaN(d))return false;
+    if(revPeriod==='all')return true;
+    if(revPeriod==='day')return d.toDateString()===now.toDateString();
+    if(revPeriod==='week'){const wk=new Date(now);const day=wk.getDay();const diff=(day+6)%7;wk.setDate(now.getDate()-diff);wk.setHours(0,0,0,0);return d>=wk}
+    if(revPeriod==='month')return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+    if(revPeriod==='year')return d.getFullYear()===now.getFullYear();
+    return true;
+  }).sort((a,b)=>revSort==='oldest'?new Date(a.dt||0)-new Date(b.dt||0):new Date(b.dt||0)-new Date(a.dt||0));
+}
+function setRevView(v){revView=v;renderRevModal();}
 function renderRevModal(){
-  const jj=getRevJobs();
-  const total=jj.reduce((a,j)=>a+(parseFloat(j.est)||0),0);
-  const paid=total;
-  const unpaid=0;
+  const paidJobs=getRevJobs();
+  const outJobs=getOutstandingJobs();
+  const total=paidJobs.reduce((a,j)=>a+(parseFloat(j.est)||0),0);
+  const outstanding=outJobs.reduce((a,j)=>a+(parseFloat(j.est)||0),0);
   document.getElementById('rev-summary').innerHTML=`
-    <div class="rev-sum-item"><div class="rev-sum-val">&#8377;${fR(total)}</div><div class="rev-sum-label">Paid Revenue</div></div>
-    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--green)">&#8377;${fR(paid)}</div><div class="rev-sum-label">Paid</div></div>
-    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--red)">&#8377;${fR(unpaid)}</div><div class="rev-sum-label">Excluded Unpaid</div></div>
-    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--accent)">${jj.length}</div><div class="rev-sum-label">Jobs</div></div>`;
-  if(!jj.length){document.getElementById('rev-job-list').innerHTML='<div class="empty">No jobs for this period.</div>';return}
-  document.getElementById('rev-job-list').innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Job #</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Date</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Customer</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Device</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Estimate</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Payment</th></tr></thead><tbody>${jj.map(j=>`<tr style="border-bottom:1px solid var(--light);cursor:pointer" onclick="document.getElementById('rev-modal').classList.remove('open');openDet(${j.id})"><td style="padding:9px;color:var(--accent);font-weight:800">#${e(j.jno)}</td><td style="padding:9px;color:var(--muted);font-size:11px">${fD(paidDate(j))}</td><td style="padding:9px;font-weight:600">${e(j.cname||'—')}</td><td style="padding:9px">${e(j.brand)} ${e(j.model)}</td><td style="padding:9px;color:var(--green);font-weight:800">&#8377;${fR(j.est)}</td><td style="padding:9px"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span></td></tr>`).join('')}</tbody></table></div>`
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--green)">&#8377;${fR(total)}</div><div class="rev-sum-label">Paid Revenue</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--accent)">${paidJobs.length}</div><div class="rev-sum-label">Paid Jobs</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--red)">&#8377;${fR(outstanding)}</div><div class="rev-sum-label">Outstanding Payment</div></div>
+    <div class="rev-sum-item"><div class="rev-sum-val" style="color:var(--red)">${outJobs.length}</div><div class="rev-sum-label">Unpaid Jobs</div></div>`;
+  const jj=(revView==='outstanding')?outJobs:paidJobs;
+  const toggle=`<div style="display:flex;gap:8px;margin-bottom:12px"><button class="rev-period-btn${revView!=='outstanding'?' active':''}" onclick="setRevView('paid')">Paid (${paidJobs.length})</button><button class="rev-period-btn${revView==='outstanding'?' active':''}" onclick="setRevView('outstanding')">Outstanding (${outJobs.length})</button></div>`;
+  if(!jj.length){document.getElementById('rev-job-list').innerHTML=toggle+'<div class="empty">No '+(revView==='outstanding'?'outstanding':'paid')+' jobs for this period.</div>';return}
+  document.getElementById('rev-job-list').innerHTML=toggle+`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Job #</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Date</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Customer</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Device</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Estimate</th><th style="padding:8px 9px;text-align:left;border-bottom:2px solid var(--border);font-size:10px;text-transform:uppercase;color:var(--muted)">Payment</th></tr></thead><tbody>${jj.map(j=>`<tr style="border-bottom:1px solid var(--light);cursor:pointer" onclick="document.getElementById('rev-modal').classList.remove('open');openDet(${j.id})"><td style="padding:9px;color:var(--accent);font-weight:800">#${e(j.jno)}</td><td style="padding:9px;color:var(--muted);font-size:11px">${fD(revView==='outstanding'?j.dt:paidDate(j))}</td><td style="padding:9px;font-weight:600">${e(j.cname||'—')}</td><td style="padding:9px">${e(j.brand)} ${e(j.model)}</td><td style="padding:9px;color:var(--green);font-weight:800">&#8377;${fR(j.est)}</td><td style="padding:9px"><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span></td></tr>`).join('')}</tbody></table></div>`
 }
 
 // ════════ FILTER MODAL (pending/done/unpaid/all) ════════════════
@@ -1195,19 +1393,33 @@ function showFilterModal(type){
   else{jj=[...jobs];title='📋 All Jobs'}
   document.getElementById('filter-modal-title').textContent=title+' ('+jj.length+')';
   if(!jj.length){document.getElementById('filter-modal-list').innerHTML='<div class="empty">No jobs in this category.</div>'}
-  else{document.getElementById('filter-modal-list').innerHTML=jj.slice().reverse().map(j=>`<div class="rr" onclick="document.getElementById('filter-modal').classList.remove('open');openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'—')}${j.cphone?' · '+e(j.cphone):''} · ${fD(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center"><span style="color:var(--green);font-weight:800;font-size:12px">&#8377;${fR(j.est)}</span><span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span><span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')}
+  else{document.getElementById('filter-modal-list').innerHTML=jj.slice().reverse().map(j=>`<div class="rr" onclick="document.getElementById('filter-modal').classList.remove('open');openDet(${j.id})"><div><div class="rr-t"><span>#${e(j.jno)}</span>${e(j.brand)} ${e(j.model)}</div><div class="rr-b">${e(j.cname||'—')}${j.cphone?' · '+e(j.cphone):''} · ${fD(j.dt)}</div></div><div style="display:flex;gap:5px;align-items:center"><span style="color:var(--green);font-weight:800;font-size:12px">&#8377;${fR(j.est)}</span>${j.s==='returned'?'':`<span class="pay-badge pay-${j.pay||'unpaid'}">${j.pay==='paid'?'Paid':'Unpaid'}</span>`}<span class="tag tag-${j.s}">${j.s.toUpperCase()}</span></div></div>`).join('')}
+  document.getElementById('filter-modal').classList.add('open');
+}
+function showCustomerHistory(kind,val){
+  val=String(val||'').trim(); if(!val) return;
+  var jj,title,sub;
+  if(kind==='phone'){var dig=phoneDigits(val);jj=jobs.filter(function(j){return phoneDigits(j.cphone)===dig||phoneDigits(j.cphone2)===dig});title='📱 +91 '+e(val);}
+  else{var nm=val.toLowerCase();jj=jobs.filter(function(j){return (j.cname||'').trim().toLowerCase()===nm});title='👤 '+e(val);}
+  jj=jj.slice().sort(function(a,b){return new Date(b.dt||0)-new Date(a.dt||0)});
+  var paid=jj.filter(function(j){return j.pay==='paid'}).reduce(function(a,j){return a+(parseFloat(j.est)||0)},0);
+  document.getElementById('filter-modal-title').textContent=title;
+  var head='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><div class="df" style="flex:1;min-width:90px"><div class="dfl">Total Visits</div><div class="dfv">'+jj.length+'</div></div><div class="df" style="flex:1;min-width:90px"><div class="dfl">Paid Total</div><div class="dfv" style="color:var(--green)">₹'+fR(paid)+'</div></div></div>';
+  var list = !jj.length ? '<div class="empty">No history found.</div>' :
+    jj.map(function(j){return '<div class="rr" onclick="document.getElementById(\'filter-modal\').classList.remove(\'open\');openDet('+j.id+')"><div><div class="rr-t"><span>#'+e(j.jno)+'</span>'+e(j.brand)+' '+e(j.model)+'</div><div class="rr-b">'+e((j.probs||[]).join(', ')||'—')+' · '+fD(j.dt)+'</div></div><div style="display:flex;gap:5px;align-items:center"><span style="color:var(--green);font-weight:800;font-size:12px">₹'+fR(j.est)+'</span>'+(j.s==='returned'?'':'<span class="pay-badge pay-'+(j.pay||'unpaid')+'">'+(j.pay==='paid'?'Paid':'Unpaid')+'</span>')+'<span class="tag tag-'+j.s+'">'+j.s.toUpperCase()+'</span></div></div>';}).join('');
+  document.getElementById('filter-modal-list').innerHTML=head+list;
   document.getElementById('filter-modal').classList.add('open');
 }
 
 // ════════ NEW JOB ══════════════════════════════════════════════
-function openNewJob(){reset();go('newJob');autoJno()}
+function openNewJob(){reset();go('newJob');autoJno();if(typeof syncFromSheet==='function'){try{var _p=syncFromSheet(true);if(_p&&_p.then)_p.then(function(){if(jnoAuto&&document.getElementById('page-newJob').classList.contains('active'))autoJno()}).catch(function(){})}catch(e){}}}
 function reset(){
   jLocked=false;selBrand='';selModel='';selProbs=[];selParts=[];dtISO='';dtEdit=false;simAllState=false;
   ['f-jno','f-imei','f-cname','f-cphone','f-est','f-notes','m-new','p-new','pt-new'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('f-cphone').value='+91 ';document.getElementById('f-cphone2').value='+91 ';document.getElementById('f-cphone2-wrap').style.display='none';document.getElementById('f-addnum').textContent='+ Add another number';
   const dt=document.getElementById('f-dt');dt.value='';dt.style.color='var(--dim)';
   document.getElementById('dte-wrap').style.display='none';document.getElementById('btn-dte').classList.remove('ed');document.getElementById('btn-dte').textContent='✏️';
-  document.getElementById('btn-auto').style.display='';document.getElementById('f-jno').readOnly=false;
+  var _je=document.getElementById('f-jno-edit');if(_je)_je.textContent='✎';document.getElementById('f-jno').readOnly=true;
   document.getElementById('b-lbl').textContent='Select Brand';document.getElementById('m-lbl').textContent='Select Model';
   document.getElementById('p-lbl').textContent='Select problem(s)...';document.getElementById('p-tags').innerHTML='';
   document.getElementById('pt-lbl').textContent='Select part(s)...';document.getElementById('pt-tags').innerHTML='';
@@ -1216,9 +1428,10 @@ function reset(){
   ['f-sim1','f-sim2','f-mmc'].forEach(id=>document.getElementById(id).checked=false);
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');
 }
-function jnoChg(){jLocked=false;document.getElementById('btn-auto').style.display=''}
-function lockJno(){const v=document.getElementById('f-jno').value.trim();if(v&&!jLocked){jLocked=true;setDT();document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true}}
-function autoJno(){const max=jobs.reduce((m,j)=>Math.max(m,parseInt(j.jno)||0),0);document.getElementById('f-jno').value=String(max+1);jLocked=true;document.getElementById('btn-auto').style.display='none';document.getElementById('f-jno').readOnly=true;setDT()}
+function jnoChg(){jLocked=false;jnoAuto=false}
+function lockJno(){const i=document.getElementById('f-jno');i.readOnly=true;const b=document.getElementById('f-jno-edit');if(b)b.textContent='✎';if(i.value.trim()&&!jLocked){jLocked=true;setDT()}}
+function autoJno(){const max=jobs.reduce((m,j)=>Math.max(m,parseInt(j.jno)||0),0);const i=document.getElementById('f-jno');i.value=String(max+1);jLocked=true;jnoAuto=true;i.readOnly=true;const b=document.getElementById('f-jno-edit');if(b)b.textContent='✎';setDT()}
+function editJno(){const i=document.getElementById('f-jno'),b=document.getElementById('f-jno-edit');if(i.readOnly){i.readOnly=false;jnoAuto=false;jLocked=true;i.focus();try{i.select()}catch(e){}if(b)b.textContent='✓';}else{i.readOnly=true;if(b)b.textContent='✎';}}
 function setDT(){const now=new Date();dtISO=now.toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--green)'}
 function toggleDTE(){dtEdit=!dtEdit;const w=document.getElementById('dte-wrap'),b=document.getElementById('btn-dte');if(dtEdit){w.style.display='block';b.classList.add('ed');b.textContent='✓';document.getElementById('f-dtm').value=dtISO?new Date(dtISO).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}else{w.style.display='none';b.classList.remove('ed');b.textContent='✏️'}}
 function applyDTM(){const v=document.getElementById('f-dtm').value;if(v){dtISO=new Date(v).toISOString();const el=document.getElementById('f-dt');el.value=fDT(dtISO);el.style.color='var(--accent)'}}
@@ -1239,7 +1452,7 @@ function toggleAllSIMEdit(){
 
 // ════════ BRAND/MODEL DROPDOWNS ════════════════════════════════
 function buildBList(pfx){const cur=pfx==='e'?eSelBrand:selBrand;const l=document.getElementById(pfx==='e'?'e-b-list':'b-list');l.innerHTML=BRANDS().map(b=>`<div class="cs-item${cur===b?' sel':''}" data-val="${e(b)}" onclick="selB('${pfx}','${jsq(b)}')"><span>${e(b)}</span></div>`).join('')}
-function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" data-val="${e(m)}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span>${m}</span><button class="cs-item-del" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></div>`).join('')}
+function buildMList(pfx,models){const cur=pfx==='e'?eSelModel:selModel;const listId=pfx==='e'?'e-m-list':'m-list';document.getElementById(listId).innerHTML=models.map(m=>`<div class="cs-item${cur===m?' sel':''}" data-val="${e(m)}" onclick="selM('${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m}</span><span class="cs-acts"><button class="cs-item-del" style="color:var(--accent);opacity:.7" title="Rename" onclick="editModel(event,'${pfx}',this)">✎</button><button class="cs-item-del" title="Delete" onclick="delModel(event,'${pfx}','${m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">✕</button></span></div>`).join('')}
 function togDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn'),isO=dd.classList.contains('open');closeAll();if(!isO){dd.classList.add('open');btn.classList.add('open');const s=document.getElementById(pfx+'-srch');if(s){s.value='';csSearch(pfx);s.focus()}}}
 function closeDD(pfx){const dd=document.getElementById(pfx+'-dd'),btn=document.getElementById(pfx+'-btn');if(dd)dd.classList.remove('open');if(btn)btn.classList.remove('open')}
 function filtList(pfx){const q=document.getElementById(pfx+'-srch').value.toLowerCase(),items=document.querySelectorAll('#'+pfx+'-list .cs-item');let v=0;items.forEach(i=>{const s=i.textContent.toLowerCase().includes(q);i.style.display=s?'':'none';if(s)v++});let em=document.getElementById(pfx+'-list-empty');if(!em){em=document.createElement('div');em.className='cs-none';em.id=pfx+'-list-empty';document.getElementById(pfx+'-list').appendChild(em)}em.style.display=v===0?'block':'none';if(v===0)em.textContent='No results. Add below ↓'}
@@ -1247,6 +1460,23 @@ function selB(pfx,brand){if(pfx==='e'){eSelBrand=brand;eSelModel='';document.get
 function selM(pfx,model){if(pfx==='e'){eSelModel=model;document.getElementById('e-m-lbl').textContent=model;closeDD('e-m');document.getElementById('e-m-srch').value='';buildMList('e',BM[eSelBrand]||[])}else{selModel=model;document.getElementById('m-lbl').textContent=model;closeDD('m');document.getElementById('m-srch').value='';buildMList('m',BM[selBrand]||[])}}
 function addNewModel(pfx){const inputId=pfx==='e'?'e-m-new':'m-new';const val=document.getElementById(inputId).value.trim();if(!val){toast('Type a model name','error');return}const brand=pfx==='e'?eSelBrand:selBrand;if(!brand){toast('Select a brand first','error');return}if(!BM[brand])BM[brand]=[];if(!BM[brand].includes(val))BM[brand].unshift(val);saveBM();document.getElementById(inputId).value='';if(pfx==='e'){eSelModel=val;document.getElementById('e-m-lbl').textContent=val;closeDD('e-m');buildMList('e',BM[brand])}else{selModel=val;document.getElementById('m-lbl').textContent=val;closeDD('m');buildMList('m',BM[brand])}toast('Model "'+val+'" added!')}
 function delModel(ev,pfx,model){ev.stopPropagation();const brand=pfx==='e'?eSelBrand:selBrand;if(!brand||!confirm('Delete model "'+model+'"?'))return;BM[brand]=(BM[brand]||[]).filter(m=>m!==model);saveBM();if(pfx==='e'){if(eSelModel===model){eSelModel='';document.getElementById('e-m-lbl').textContent='Select Model'}buildMList('e',BM[brand])}else{if(selModel===model){selModel='';document.getElementById('m-lbl').textContent='Select Model'}buildMList('m',BM[brand])}toast('Model deleted.')}
+function editModel(ev,pfx,btn){
+  ev.stopPropagation();
+  var item=btn.closest('.cs-item');var model=item?item.getAttribute('data-val'):'';
+  if(!model)return;
+  var brand=pfx==='e'?eSelBrand:selBrand;if(!brand){toast('Pick a brand first','error');return;}
+  var nn=prompt('Rename model "'+model+'" to:',model);if(nn===null)return;
+  var name=nn.trim();if(!name||name===model)return;
+  var list=BM[brand]||[];
+  if(list.some(function(m){return m.toLowerCase()===name.toLowerCase()&&m!==model})){toast('That model already exists','error');return;}
+  var idx=list.indexOf(model);if(idx<0)return;
+  list[idx]=name;saveBM();
+  jobs.forEach(function(j){if(j.brand===brand&&j.model===model)j.model=name});saveJobs();
+  if(pfx==='e'){if(eSelModel===model){eSelModel=name;document.getElementById('e-m-lbl').textContent=name}buildMList('e',BM[brand]);}
+  else{if(selModel===model){selModel=name;document.getElementById('m-lbl').textContent=name}buildMList('m',BM[brand]);}
+  if(typeof renderList==='function')renderList();
+  toast('Renamed to "'+name+'"');
+}
 
 // ════════ PROBLEMS (stays open on selection) ════════════════════
 function buildPList(pfx){
@@ -1329,6 +1559,7 @@ function resetDoneWATemplate(){document.getElementById('wa-done-template').value
 function popBFilter(){const s=document.getElementById('s-brd');s.innerHTML='<option value="all">All Brands</option>'+BRANDS().map(b=>`<option value="${b}">${b}</option>`).join('')}
 function mkTog(id,field){
   const j=jobs.find(j=>j.id===id);if(!j)return'';
+  if(j.s==='returned'){return`<div class="tog-wrap" style="opacity:.4;cursor:not-allowed" title="Returned — payment N/A"><div class="tog-track"><div class="tog-thumb"></div></div><span class="tog-label" style="color:var(--muted)">N/A</span></div>`}
   const on=j.pay==='paid';
   return`<div class="tog-wrap" onclick="event.stopPropagation();togField(${id},'${field}')" title="Toggle">
     <div class="tog-track${on?' on-green':''}"><div class="tog-thumb"></div></div>
@@ -1337,17 +1568,17 @@ function mkTog(id,field){
 }
 function statusSelect(id,status){const s=status||'pending';return`<select class="status-select ${s}" onchange="event.stopPropagation();setJobStatus(${id},this.value)" onclick="event.stopPropagation()"><option value="pending" ${s==='pending'?'selected':''}>Pending</option><option value="done" ${s==='done'?'selected':''}>Done</option><option value="returned" ${s==='returned'?'selected':''}>Returned</option></select>`}
 function setJobStatus(id,status){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;changedJob={...j,s:status,updatedAt:now};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
-function togField(id,field){let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;changedJob={...j,updatedAt:now,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
+function togField(id,field){const _jj=jobs.find(x=>x.id===id);if(field==='pay'&&_jj&&_jj.s==='returned'){toast('Returned job — payment disabled','info');return;}let changedJob=null;const now=new Date().toISOString();jobs=jobs.map(j=>{if(j.id!==id)return j;const newPay=field==='pay'?(j.pay==='paid'?'unpaid':'paid'):j.pay;changedJob={...j,updatedAt:now,pay:newPay,paidAt:newPay==='paid'?(j.paidAt||now):''};return changedJob});saveJobs();if(changedJob)syncJobToSheet(changedJob);renderList();renderDash();if(selJob===id)renderDet(jobs.find(j=>j.id===id))}
 function renderList(){
   const q=document.getElementById('s-inp').value.toLowerCase(),fs=document.getElementById('s-sts').value,fb=document.getElementById('s-brd').value,fp=document.getElementById('s-pay').value;
-  const f=sortedJobs().filter(j=>{const ms=!q||(j.jno||'').includes(q)||(j.imei||'').includes(q)||(j.brand||'').toLowerCase().includes(q)||(j.model||'').toLowerCase().includes(q)||(j.cname||'').toLowerCase().includes(q)||(j.cphone||'').includes(q)||(j.notes||'').toLowerCase().includes(q)||(j.probs||[]).join(' ').toLowerCase().includes(q)||(j.parts||[]).join(' ').toLowerCase().includes(q);return ms&&(fs==='all'||j.s===fs)&&(fb==='all'||j.brand===fb)&&(fp==='all'||j.pay===fp)});
+  const f=sortedJobs().filter(j=>{const ms=!q||(j.jno||'').includes(q)||(j.imei||'').includes(q)||(j.brand||'').toLowerCase().includes(q)||(j.model||'').toLowerCase().includes(q)||(j.cname||'').toLowerCase().includes(q)||(j.cphone||'').includes(q)||(j.notes||'').toLowerCase().includes(q)||(j.probs||[]).join(' ').toLowerCase().includes(q)||(j.parts||[]).join(' ').toLowerCase().includes(q);return ms&&(fs==='all'||j.s===fs)&&(fb==='all'||j.brand===fb)&&(fp==='all'||(j.s!=='returned'&&j.pay===fp))});
   document.getElementById('jl-cnt').textContent='('+f.length+')';
   const tb=document.getElementById('j-tbody'),em=document.getElementById('j-empty');
   if(!f.length){tb.innerHTML='';em.style.display='block';return}em.style.display='none';
   tb.innerHTML=f.map(j=>`<tr class="jr" onclick="openDet(${j.id})">
     <td class="j-no" data-label="Job #">#${e(j.jno)}</td>
     <td class="j-dt" data-label="Date">${fD(j.dt)}</td>
-    <td data-label="Customer"><div class="vwrap"><div style="font-weight:600;font-size:12px">${e(j.cname||'—')}</div><div class="j-im">${j.cphone?'+91 '+e(j.cphone):''}</div></div></td>
+    <td data-label="Customer"><div class="vwrap"><div style="font-weight:600;font-size:12px">${j.cname?`<a class="cust-link" data-v="${e(j.cname)}" onclick="event.stopPropagation();showCustomerHistory('name',this.dataset.v)">${e(j.cname)}</a>`:'—'}</div><div class="j-im">${j.cphone?`<a class="cust-link" data-v="${e(j.cphone)}" onclick="event.stopPropagation();showCustomerHistory('phone',this.dataset.v)">+91 ${e(j.cphone)}</a>`:''}</div></div></td>
     <td class="j-br" data-label="Device"><div class="vwrap">${e(j.brand)}<br><span style="color:var(--muted);font-size:10px;font-weight:500">${e(j.model)}</span></div></td>
     <td class="j-pr" data-label="Problems">${e((j.probs||[]).join(', '))}</td>
     <td class="j-pr" data-label="Parts">${e((j.parts||[]).join(', '))}</td>
@@ -1453,7 +1684,7 @@ function closeScan(){scanRun=false;document.getElementById('scan-ov').classList.
 
 // ════════ SHOP SETTINGS ══════════════════════════════════════════
 function openShopSettings(){document.getElementById('sh-name').value=shop.name||'';document.getElementById('sh-tag').value=shop.tagline||'';document.getElementById('sh-addr').value=shop.addr||'';document.getElementById('sh-phone').value=shop.phone||'';document.getElementById('sh-gst').value=shop.gst||'';document.getElementById('sh-footer').value=shop.footer||'';var _gu=document.getElementById('sh-gsurl');if(_gu)_gu.value=GS_URL;document.getElementById('shop-modal').classList.add('open')}
-function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);var _gu=document.getElementById('sh-gsurl');if(_gu){var _v=_gu.value.trim();if(_v&&_v!==GS_URL){GS_URL=_v;try{localStorage.setItem('tg_gs_url',_v)}catch(e){}}}document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!');try{syncFromSheet()}catch(e){}}
+function saveShopSettings(){shop={name:document.getElementById('sh-name').value.trim()||'Tech Garage',tagline:document.getElementById('sh-tag').value.trim(),addr:document.getElementById('sh-addr').value.trim(),phone:document.getElementById('sh-phone').value.trim(),gst:document.getElementById('sh-gst').value.trim(),footer:document.getElementById('sh-footer').value.trim()};lsSet('tg_shop',shop);var _gu=document.getElementById('sh-gsurl');if(_gu){var _v=_gu.value.trim();if(_v&&_v!==GS_URL){GS_URL=_v;try{localStorage.setItem('tg_gs_url',_v)}catch(e){}}}document.getElementById('shop-modal').classList.remove('open');toast('Shop details saved!');try{syncFromSheet(true)}catch(e){}}
 
 // ════════ JOB TICKET (80mm thermal) ══════════════════════════════
 function makeQRDataURL(text){
@@ -1470,6 +1701,7 @@ function makeQRDataURL(text){
 function genTicket(id){
   const j=jobs.find(x=>x.id===id);
   if(!j){toast('Job not found','error');return}
+  const TK=lsGet('tg_ticket',{});
   const qr=makeQRDataURL(j.jno||'');
   const locks={nil:'',pin:'PIN',pattern:'Pattern',password:'Password'};
   const lockTxt=j.lock&&j.lock!=='nil'?(locks[j.lock]||'')+(j.lockValue?' • '+e(j.lockValue):''):'';
@@ -1510,30 +1742,29 @@ html,body{width:80mm;background:#fff;color:#000;font-family:'Segoe UI',Roboto,Ar
   ${shop.phone?`<div class="c meta">☎ ${e(shop.phone)}</div>`:''}
   ${shop.gst?`<div class="c meta">${e(shop.gst)}</div>`:''}
   <hr class="hr">
-  <div class="c sec">Repair Job Ticket</div>
+  <div class="c sec">${e(TK.title||'Repair Job Ticket')}</div>
   <div class="c big">Job #${e(j.jno)}</div>
   <div class="c meta">${fDT(j.dt)}</div>
-  ${qr?`<img class="qr" src="${qr}" width="120" height="120" alt="QR">`:''}
+  ${(qr&&TK.showQR!==false)?`<img class="qr" src="${qr}" width="120" height="120" alt="QR">`:''}
   <div class="c meta">Job No: ${e(j.jno)}</div>
   <hr class="hr">
   <div class="row"><span class="k">Customer</span><span class="v">${e(j.cname||'—')}</span></div>
-  ${j.cphone?`<div class="row"><span class="k">Phone</span><span class="v">+91 ${e(j.cphone)}</span></div>`:''}
-  ${j.cphone2?`<div class="row"><span class="k">Alt Phone</span><span class="v">+91 ${e(j.cphone2)}</span></div>`:''}
+  ${(j.cphone&&TK.showPhone!==false)?`<div class="row"><span class="k">Phone</span><span class="v">+91 ${e(j.cphone)}</span></div>`:''}
+  ${(j.cphone2&&TK.showAltPhone!==false)?`<div class="row"><span class="k">Alt Phone</span><span class="v">+91 ${e(j.cphone2)}</span></div>`:''}
   <div class="row"><span class="k">Device</span><span class="v">${device}</span></div>
-  ${j.imei&&j.imei!=='0'?`<div class="row"><span class="k">IMEI</span><span class="v">${e(j.imei)}</span></div>`:''}
-  ${lockTxt?`<div class="row"><span class="k">Lock</span><span class="v">${lockTxt}</span></div>`:''}
-  ${sims?`<div class="row"><span class="k">SIM/Storage</span><span class="v">${sims}</span></div>`:''}
-  <div class="sec">Problem(s) Reported</div>
-  ${probsHtml}
-  ${partsHtml?`<div class="sec">Part(s) to Repair</div>${partsHtml}`:''}
+  ${(j.imei&&j.imei!=='0'&&TK.showIMEI!==false)?`<div class="row"><span class="k">IMEI</span><span class="v">${e(j.imei)}</span></div>`:''}
+  ${(lockTxt&&TK.showLock!==false)?`<div class="row"><span class="k">Lock</span><span class="v">${lockTxt}</span></div>`:''}
+  ${(sims&&TK.showSIM!==false)?`<div class="row"><span class="k">SIM/Storage</span><span class="v">${sims}</span></div>`:''}
+  ${TK.showProblems!==false?`<div class="sec">Problem(s) Reported</div>${probsHtml}`:''}
+  ${(partsHtml&&TK.showParts!==false)?`<div class="sec">Part(s) to Repair</div>${partsHtml}`:''}
   ${j.notes?`<div class="sec">Notes</div><div class="li">${e(j.notes).replace(/\n/g,'<br>')}</div>`:''}
   <hr class="hr">
-  <div class="row"><span class="k">Status</span><span class="v">${stsMap[j.s]||'Pending'}</span></div>
-  <div class="row"><span class="k">Payment</span><span class="v">${payTxt}</span></div>
-  <div class="row"><span class="k big">Estimate</span><span class="v est">₹${fR(j.est)}</span></div>
+  ${TK.showStatus!==false?`<div class="row"><span class="k">Status</span><span class="v">${stsMap[j.s]||'Pending'}</span></div>`:''}
+  ${TK.showPayment!==false?`<div class="row"><span class="k">Payment</span><span class="v">${payTxt}</span></div>`:''}
+  ${TK.showEstimate!==false?`<div class="row"><span class="k big">Estimate</span><span class="v est">₹${fR(j.est)}</span></div>`:''}
   <hr class="hr">
   <div class="foot">${e(shop.footer||'Please keep this receipt safe to collect your device.')}</div>
-  <div class="foot" style="margin-top:3px">Thank you for choosing ${e(shop.name||'Tech Garage')}!</div>
+  ${TK.thanks?`<div class="foot" style="margin-top:3px">${e(TK.thanks).replace('{shop}',e(shop.name||'Tech Garage'))}</div>`:`<div class="foot" style="margin-top:3px">Thank you for choosing ${e(shop.name||'Tech Garage')}!</div>`}${TK.terms?`<div class="foot" style="margin-top:4px">${e(TK.terms).replace(/\n/g,'<br>')}</div>`:''}
 </div>
 <div class="noprint"><button onclick="window.print()">🖨 Print Ticket</button></div>
 <script>window.onload=function(){setTimeout(function(){window.focus();try{window.print()}catch(e){}},350)}<\/script>
@@ -1633,6 +1864,35 @@ function exportApp(){
     toast('App file saved — replace your old file with it!');
   }catch(err){console.error(err);toast('Export failed','error')}
 }
+function exportLists(){
+  try{
+    var data={app:'TechGarage',type:'lists',version:1,exportedAt:new Date().toISOString(),brands_models:BM,problems:PROBS,parts:PARTS};
+    var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='techgarage-lists.json';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1200);
+    toast('Lists exported (brands, models, problems, parts)');
+  }catch(err){console.error(err);toast('Export failed','error')}
+}
+function importLists(inp){
+  var f=inp.files&&inp.files[0];if(!f){return;}
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var d=JSON.parse(ev.target.result);
+      var bm=d.brands_models||d.BM||d.bm||(d.brands&&d.models?null:null);
+      var did=false;
+      if(bm&&typeof bm==='object'&&!Array.isArray(bm)){BM=bm;saveBM();did=true;}
+      if(Array.isArray(d.problems)){PROBS=d.problems;saveProbs();did=true;}
+      if(Array.isArray(d.parts)){PARTS=d.parts;saveParts();did=true;}
+      if(!did){toast('No lists found in that file','error');inp.value='';return;}
+      buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');if(typeof popBFilter==='function')popBFilter();
+      if(document.getElementById('manage-modal').classList.contains('open'))openManageLists();
+      toast('Lists imported successfully');
+    }catch(err){console.error(err);toast('Invalid lists file','error');}
+    inp.value='';
+  };
+  r.readAsText(f);
+}
 
 // ════════ UTILS ══════════════════════════════════════════════════
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=(type==='error'?'⚠ ':type==='info'?'ℹ ':' ✓ ')+msg;el.className='show '+type;clearTimeout(tTimer);tTimer=setTimeout(()=>{el.className=''},3500)}
@@ -1643,19 +1903,17 @@ function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 </script>
 
 <script>
-/* ════════ INVENTORY CONTROL ════════
-   Stored in its OWN localStorage database key: "tg_inventory"
-   (completely separate from jobs/brands/problems). */
+/* ════════ INVENTORY CONTROL ════════ separate DB key: "tg_inventory" */
 var scanMode='imei';
+var jnoAuto=false;
 var inventory=[], invEditId=null;
 function loadInv(){inventory=lsGet('tg_inventory',[])}
-function saveInv(){lsSet('tg_inventory',inventory)}   /* <- persists to its own DB key */
+function saveInv(){lsSet('tg_inventory',inventory)}
 function iVal(id){var e=document.getElementById(id);return e?e.value:''}
 function setTxt(id,v){var e=document.getElementById(id);if(e)e.textContent=v}
 function escI(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function invMoney(v){return '₹'+(parseFloat(v)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
 function genBarcode(){var c;do{c='TG'+Math.random().toString(36).slice(2,8).toUpperCase()}while(inventory.some(function(p){return p.barcode===c}));return c}
-
 function openInvModal(id){
   invEditId=id||null;
   var p=id?inventory.find(function(x){return x.id===id}):null;
@@ -1696,7 +1954,6 @@ function saveInvProduct(){
 }
 function delInvProduct(id){var p=inventory.find(function(x){return x.id===id});if(!p)return;if(!confirm('Delete "'+p.name+'" from inventory?'))return;inventory=inventory.filter(function(x){return x.id!==id});saveInv();renderInv();toast('Deleted');}
 function adjStock(id,delta){var p=inventory.find(function(x){return x.id===id});if(!p)return;p.qty=Math.max(0,(parseInt(p.qty)||0)+delta);p.updated=Date.now();saveInv();renderInv();}
-
 function renderInv(){
   var units=0,value=0,low=0;
   inventory.forEach(function(p){var q=parseInt(p.qty)||0;units+=q;value+=q*(parseFloat(p.cost)||0);if(q<=(parseInt(p.low)||0))low++;});
@@ -1727,8 +1984,6 @@ function renderInv(){
       +'</div></td></tr>';
   }).join('');
 }
-
-/* scanner routing */
 function openScanRaw(){document.getElementById('scan-ov').classList.add('open');document.getElementById('scan-err').style.display='none';document.getElementById('scan-vid').style.display='block';startCam();}
 function openInvScan(){scanMode='inv';openScanRaw();}
 function handleInvScan(code){
@@ -1763,5 +2018,6 @@ function testSync(){
   }).catch(function(e){if(st){st.style.color='var(--red)';st.textContent='✗ Could not reach the URL. Make sure it ends in /exec and access is set to “Anyone”.';}});
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
