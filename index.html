@@ -662,7 +662,7 @@ body,nav,.logo,.logo-text,.ph h1,.ph h2,.stat-val,.modal h3,.rev-sum-val,.nav-bt
   <button class="nav-btn" onclick="openNewJob()" aria-label="New Job"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg><span>New Job</span></button>
   <button class="nav-btn" onclick="go('jobList');renderList()" aria-label="All Jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg><span>All Jobs</span></button>
   <button class="nav-btn" onclick="go('inventory');renderInv()" aria-label="Inventory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"></path></svg><span>Inventory</span></button>
-  <span id="sync-nav" class="sync-badge sync-ok" style="cursor:pointer" onclick="syncFromSheet(true)" title="Sync from Google Sheets"><span class="sync-ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="sync-txt">Synced</span></span>
+  <span id="sync-nav" class="sync-badge sync-ok" style="cursor:pointer" onclick="cloudSyncNow()" title="Sync now (cloud)"><span class="sync-ic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="sync-txt">Synced</span></span>
   <span class="nav-count" id="nav-count">65 jobs</span>
   <button class="nav-btn" onclick="openSettings()" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button><button class="nav-btn" onclick="toggleProfileMenu()" aria-label="Profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></button>
 </nav>
@@ -1196,6 +1196,7 @@ function newerThan(a, b) {
 }
 
 function syncJobToSheet(job) {
+  if(!GS_ENABLED)return;
   const payload = normalizeJobForSync({...job, updatedAt: job.updatedAt || new Date().toISOString()});
   payload.action = "upsert";
   setSyncBadge("ing");
@@ -1214,6 +1215,7 @@ function syncJobToSheet(job) {
 }
 
 function syncDeleteToSheet(id) {
+  if(!GS_ENABLED)return;
   setSyncBadge("ing");
   return fetch(GS_URL, {
     method: "POST",
@@ -1233,6 +1235,7 @@ function syncDeleteToSheet(id) {
 }
 
 function syncFromSheet(silent = false) {
+  if(!GS_ENABLED)return;
   setSyncBadge("ing");
   if (!silent) toast("Syncing from Google Sheets...", "info");
   return fetch(GS_URL + "?action=read")
@@ -1272,6 +1275,7 @@ function syncFromSheet(silent = false) {
 }
 
 function startAutoSync() {
+  if(!GS_ENABLED)return;
   if (syncTimer) clearInterval(syncTimer);
   syncTimer = setInterval(() => syncFromSheet(true), SYNC_INTERVAL_MS);
 }
@@ -1356,6 +1360,7 @@ const BRANDS=()=>Object.keys(BM);
 const SUPA_URL='https://ulcdlgxtoilvkbcmynsg.supabase.co';
 const SUPA_KEY='sb_publishable_R-HOcoFy8IoU8hy6EGrREQ_F5eQf4hs';
 let supa=null,CURRENT_UID=null,CURRENT_EMAIL=null,SUB=null,authMode='signin';
+let GS_ENABLED=false;
 const SYNC_KEYS=['tg_jobs_v3','tg_inventory','tg_bm','tg_bm_seed','tg_probs','tg_parts','tg_wa_tmpl','tg_wa_done_tmpl','tg_wa_time','tg_auto_wa','tg_shop','tg_ticket','tg_gs_url'];
 function supaInit(){try{if(window.supabase&&!supa){supa=window.supabase.createClient(SUPA_URL,SUPA_KEY);}}catch(e){}}
 window.onload=function(){ supaBoot(); };
@@ -1365,8 +1370,6 @@ function bootRender(){
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
   document.addEventListener('click',outClick);
   go('dashboard');renderDash();
-  setTimeout(function(){try{syncFromSheet(true)}catch(e){}},1500);
-  startAutoSync();
 }
 async function supaBoot(){
   try{wcInit();}catch(e){} try{pwaInit();}catch(e){}
@@ -1428,6 +1431,7 @@ async function cloudPush(){
   var obj={};SYNC_KEYS.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)obj[k]=v;}catch(e){}});
   try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); const r=await supa.from('app_state').upsert({user_id:CURRENT_UID,data:obj,updated_at:new Date().toISOString()}); if(r.error)throw r.error; if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); }
 }
+async function cloudSyncNow(){ if(!supa||!CURRENT_UID){return;} try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); await cloudPush(); await cloudPull(); loadAll();loadInv();renderDash();if(typeof renderList==='function')renderList(); if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); } }
 async function loadSub(){ try{ const r=await supa.from('subscriptions').select('*').eq('user_id',CURRENT_UID).maybeSingle(); SUB=r?r.data:null; updateSubUI(); }catch(e){} }
 function updateSubUI(){ var el=document.getElementById('pf-sub'); if(!el)return; if(SUB){ el.textContent=(SUB.plan||'trial')+' · '+(SUB.status||''); } else { el.textContent=CURRENT_EMAIL||'Signed in'; } }
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open')}
