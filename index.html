@@ -1390,6 +1390,7 @@ async function onSignedIn(user){
   try{await cloudPull();}catch(e){}
   try{await loadSub();}catch(e){}
   hideAuth();bootRender();
+  try{migratePhotos();}catch(e){}
 }
 function showAuth(msg){var o=document.getElementById('welcome-ov');if(o)o.classList.remove('hide');var er=document.getElementById('wc-err');if(er){if(msg){er.textContent=msg;er.classList.add('show');}else{er.classList.remove('show');}}setTimeout(function(){var e=document.getElementById('au-email');if(e)e.focus();},150);}
 function hideAuth(){var o=document.getElementById('welcome-ov');if(o)o.classList.add('hide');}
@@ -1416,10 +1417,35 @@ async function doAuth(){
   }catch(e){ fail((e&&e.message)||'Authentication failed.'); }
   if(btn)btn.style.opacity='';
 }
+function _isB64(u){return typeof u==='string'&&u.indexOf('data:')===0;}
+function _mergeJobs(localArr,cloudArr){
+  var map={};
+  (Array.isArray(cloudArr)?cloudArr:[]).forEach(function(j){if(j&&j.id!=null)map[j.id]=j;});
+  (Array.isArray(localArr)?localArr:[]).forEach(function(j){
+    if(!j||j.id==null)return; var c=map[j.id];
+    if(!c){map[j.id]=j;return;}
+    var lt=new Date(j.updatedAt||j.dt||0).getTime(),ct=new Date(c.updatedAt||c.dt||0).getTime();
+    var win=ct>=lt?c:j;
+    var b64=(j.photos||[]).filter(_isB64);
+    var urls=(win.photos||[]).filter(function(u){return !_isB64(u);});
+    win.photos=urls.concat(b64.filter(function(u){return urls.indexOf(u)<0;}));
+    map[j.id]=win;
+  });
+  return Object.keys(map).map(function(k){return map[k];});
+}
 async function cloudPull(){
   const r=await supa.from('app_state').select('data').eq('user_id',CURRENT_UID).maybeSingle();
   const row=r?r.data:null;const cloudObj=row&&row.data?row.data:null;
-  if(cloudObj&&Object.keys(cloudObj).length){ SYNC_KEYS.forEach(function(k){ if(cloudObj[k]!==undefined&&cloudObj[k]!==null){ try{localStorage.setItem(k,typeof cloudObj[k]==='string'?cloudObj[k]:JSON.stringify(cloudObj[k]));}catch(e){} } }); return true; }
+  if(cloudObj&&Object.keys(cloudObj).length){
+    SYNC_KEYS.forEach(function(k){ if(k==='tg_jobs_v3')return; if(cloudObj[k]!==undefined&&cloudObj[k]!==null){ try{localStorage.setItem(k,typeof cloudObj[k]==='string'?cloudObj[k]:JSON.stringify(cloudObj[k]));}catch(e){} } });
+    try{
+      var cj=cloudObj.tg_jobs_v3; if(typeof cj==='string')cj=JSON.parse(cj||'[]'); if(!Array.isArray(cj))cj=[];
+      var lj=[]; try{lj=JSON.parse(localStorage.getItem('tg_jobs_v3')||'[]');}catch(e){} if(!Array.isArray(lj))lj=[];
+      var merged=_mergeJobs(lj,cj);
+      localStorage.setItem('tg_jobs_v3',JSON.stringify(merged));
+    }catch(e){}
+    return true;
+  }
   var localHas=SYNC_KEYS.some(function(k){try{return localStorage.getItem(k)!==null;}catch(e){return false;}});
   if(localHas){ await cloudPush(); }
   return false;
@@ -1429,7 +1455,17 @@ function cloudPushDebounced(){ if(!CURRENT_UID||!supa)return; clearTimeout(_push
 async function cloudPush(){
   if(!CURRENT_UID||!supa)return;
   var obj={};SYNC_KEYS.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)obj[k]=v;}catch(e){}});
-  try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); const r=await supa.from('app_state').upsert({user_id:CURRENT_UID,data:obj,updated_at:new Date().toISOString()}); if(r.error)throw r.error; if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); }
+  if(obj.tg_jobs_v3){try{var jb=JSON.parse(obj.tg_jobs_v3);jb.forEach(function(j){if(Array.isArray(j.photos))j.photos=j.photos.filter(function(u){return !_isB64(u);});});obj.tg_jobs_v3=JSON.stringify(jb);}catch(e){}}
+  try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); const r=await supa.from('app_state').upsert({user_id:CURRENT_UID,data:obj,updated_at:new Date().toISOString()}); if(r.error)throw r.error; if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ console.warn('cloud push failed',e); if(typeof setSyncBadge==='function')setSyncBadge('err'); }
+}
+async function migratePhotos(){
+  if(!supa||!CURRENT_UID)return;
+  var lj; try{lj=JSON.parse(localStorage.getItem('tg_jobs_v3')||'[]');}catch(e){return;} if(!Array.isArray(lj))return;
+  var changed=false;
+  for(var i=0;i<lj.length;i++){var j=lj[i];if(!j||!Array.isArray(j.photos))continue;
+    for(var k=0;k<j.photos.length;k++){ if(_isB64(j.photos[k])){ try{var url=await uploadPhoto(j.photos[k]); if(url&&!_isB64(url)){j.photos[k]=url;changed=true;}}catch(e){} } }
+  }
+  if(changed){ try{localStorage.setItem('tg_jobs_v3',JSON.stringify(lj));}catch(e){} try{loadAll();renderDash();if(typeof renderList==='function')renderList();}catch(e){} cloudPushDebounced(); }
 }
 async function cloudSyncNow(){ if(!supa||!CURRENT_UID){return;} try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); await cloudPush(); await cloudPull(); loadAll();loadInv();renderDash();if(typeof renderList==='function')renderList(); if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ if(typeof setSyncBadge==='function')setSyncBadge('err'); } }
 async function loadSub(){ try{ const r=await supa.from('subscriptions').select('*').eq('user_id',CURRENT_UID).maybeSingle(); SUB=r?r.data:null; updateSubUI(); }catch(e){} }
