@@ -1788,9 +1788,21 @@ function openDet(id){selJob=id;renderDet(jobs.find(j=>j.id===id));go('jobDetail'
 function isOverdue(j){if(!j||!j.readyBy)return false;if(j.s==='done'||j.s==='returned')return false;var d=new Date(j.readyBy);if(isNaN(d))return false;var t=new Date();t.setHours(0,0,0,0);return d<t;}
 let fPhotos=[],ePhotos=[];
 function compressImage(file,cb){var rd=new FileReader();rd.onload=function(e){var img=new Image();img.onload=function(){var max=1000,w=img.width,h=img.height;if(w>h&&w>max){h=Math.round(h*max/w);w=max;}else if(h>=w&&h>max){w=Math.round(w*max/h);h=max;}try{var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.7));}catch(err){cb(e.target.result);}};img.onerror=function(){cb(null);};img.src=e.target.result;};rd.readAsDataURL(file);}
-function onPhotoInput(inp,which){var files=inp.files;if(!files||!files.length)return;var arr=which==='e'?ePhotos:fPhotos;for(var i=0;i<files.length;i++){compressImage(files[i],function(durl){if(durl){arr.push(durl);renderPhotoPreview(which);}});}inp.value='';}
+function dataURLtoBlob(durl){try{var a=durl.split(',');var mime=(a[0].match(/:(.*?);/)||[])[1]||'image/jpeg';var bin=atob(a[1]);var n=bin.length;var u8=new Uint8Array(n);while(n--){u8[n]=bin.charCodeAt(n);}return new Blob([u8],{type:mime});}catch(e){return null;}}
+async function uploadPhoto(durl){
+  if(!supa||!CURRENT_UID)return durl;
+  var blob=dataURLtoBlob(durl);if(!blob)return durl;
+  var path=CURRENT_UID+'/'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.jpg';
+  try{
+    var r=await supa.storage.from('job-photos').upload(path,blob,{contentType:'image/jpeg',upsert:false});
+    if(r.error)throw r.error;
+    var pub=supa.storage.from('job-photos').getPublicUrl(path);
+    return (pub&&pub.data&&pub.data.publicUrl)?pub.data.publicUrl:durl;
+  }catch(e){console.warn('photo upload failed, storing inline',e);toast('Photo saved locally (set up the job-photos bucket to sync it)','info');return durl;}
+}
+function onPhotoInput(inp,which){var files=inp.files;if(!files||!files.length)return;var arr=which==='e'?ePhotos:fPhotos;for(var i=0;i<files.length;i++){compressImage(files[i],function(durl){if(!durl)return;uploadPhoto(durl).then(function(url){arr.push(url);renderPhotoPreview(which);});});}inp.value='';}
 function renderPhotoPreview(which){var arr=which==='e'?ePhotos:fPhotos;var box=document.getElementById(which+'-photos');if(!box)return;box.innerHTML=arr.map(function(dd,i){return '<div class="ph-thumb"><img src="'+dd+'" onclick="openLightbox(this.src)"><button type="button" class="ph-del" onclick="removePhoto(\''+which+'\','+i+')">✕</button></div>';}).join('');}
-function removePhoto(which,i){var arr=which==='e'?ePhotos:fPhotos;arr.splice(i,1);renderPhotoPreview(which);}
+function removePhoto(which,i){var arr=which==='e'?ePhotos:fPhotos;var u=arr[i];arr.splice(i,1);renderPhotoPreview(which);try{if(supa&&typeof u==='string'&&u.indexOf('/job-photos/')>=0){var path=u.split('/job-photos/')[1];if(path)supa.storage.from('job-photos').remove([decodeURIComponent(path)]);}}catch(e){}}
 function openLightbox(src){var lb=document.getElementById('photo-lightbox');if(!lb)return;document.getElementById('photo-lightbox-img').src=src;lb.classList.add('open');}
 function renderDet(j){
   if(!j)return;
