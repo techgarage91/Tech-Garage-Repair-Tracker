@@ -1370,6 +1370,12 @@ function bootRender(){
   buildBList('b');buildMList('m',[]);buildPList('n');buildPartList('n');popBFilter();renderDash();updNC();
   document.addEventListener('click',outClick);
   go('dashboard');renderDash();
+  if(!window._cloudPollStarted){ window._cloudPollStarted=true;
+    var _rerender=function(){ try{loadAll();loadInv();renderDash();if(typeof renderList==='function')renderList();}catch(e){} };
+    setInterval(function(){ if(CURRENT_UID&&supa&&document.visibilityState==='visible'){ cloudPull().then(_rerender).catch(function(){}); } }, 20000);
+    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'&&CURRENT_UID&&supa){ cloudPull().then(_rerender).catch(function(){}); } });
+    window.addEventListener('focus',function(){ if(CURRENT_UID&&supa){ cloudPull().then(_rerender).catch(function(){}); } });
+  }
 }
 async function supaBoot(){
   try{wcInit();}catch(e){} try{pwaInit();}catch(e){}
@@ -1379,7 +1385,7 @@ async function supaBoot(){
     const r=await supa.auth.getSession();
     const session=r&&r.data?r.data.session:null;
     if(session&&session.user){ await onSignedIn(session.user); } else { showAuth(); }
-    supa.auth.onAuthStateChange(function(ev){ if(ev==='SIGNED_OUT'){ try{location.reload();}catch(e){} } });
+    supa.auth.onAuthStateChange(function(ev){ if(ev==='SIGNED_OUT'){ CURRENT_UID=null; try{showAuth();}catch(e){} } });
   }catch(e){ showAuth('Login error: '+((e&&e.message)||e)); }
 }
 async function onSignedIn(user){
@@ -1457,6 +1463,19 @@ async function cloudPush(){
   var obj={};SYNC_KEYS.forEach(function(k){try{var v=localStorage.getItem(k);if(v!==null)obj[k]=v;}catch(e){}});
   if(obj.tg_jobs_v3){try{var jb=JSON.parse(obj.tg_jobs_v3);jb.forEach(function(j){if(Array.isArray(j.photos))j.photos=j.photos.filter(function(u){return !_isB64(u);});});obj.tg_jobs_v3=JSON.stringify(jb);}catch(e){}}
   try{ if(typeof setSyncBadge==='function')setSyncBadge('ing'); const r=await supa.from('app_state').upsert({user_id:CURRENT_UID,data:obj,updated_at:new Date().toISOString()}); if(r.error)throw r.error; if(typeof setSyncBadge==='function')setSyncBadge('ok'); }catch(e){ console.warn('cloud push failed',e); if(typeof setSyncBadge==='function')setSyncBadge('err'); }
+  try{ mirrorToTables(); }catch(e){}
+}
+function _num(v){var n=parseFloat(v);return isFinite(n)?n:0;}
+function _stripB64Photos(o){try{var c=JSON.parse(JSON.stringify(o));if(Array.isArray(c.photos))c.photos=c.photos.filter(function(u){return typeof u==='string'&&u.indexOf('data:')!==0;});return c;}catch(e){return o;}}
+async function mirrorToTables(){
+  if(!supa||!CURRENT_UID)return;
+  try{
+    var jrows=(typeof jobs!=='undefined'&&Array.isArray(jobs)?jobs:[]).map(function(j){return {user_id:CURRENT_UID,job_id:String(j.id),jno:String(j.jno||''),status:j.s||'pending',pay:j.pay||'unpaid',est:_num(j.est),advance:_num(j.advance),parts_cost:_num(j.partsCost),assigned_to:j.assignedTo||null,ready_by:j.readyBy||null,brand:j.brand||'',model:j.model||'',cname:j.cname||'',cphone:j.cphone||'',deleted:!!j.deleted,updated_at:j.updatedAt||j.dt||new Date().toISOString(),data:_stripB64Photos(j)};});
+    if(jrows.length){var jr=await supa.from('jobs').upsert(jrows,{onConflict:'user_id,job_id'});if(jr&&jr.error)throw jr.error;}
+    var irows=(typeof inventory!=='undefined'&&Array.isArray(inventory)?inventory:[]).map(function(p){return {user_id:CURRENT_UID,product_id:String(p.id),barcode:p.barcode||'',name:p.name||'',category:p.category||'',qty:parseInt(p.qty)||0,cost:_num(p.cost),price:_num(p.price),low:parseInt(p.low)||0,updated_at:p.updated||new Date().toISOString(),data:p};});
+    if(irows.length){var ir=await supa.from('inventory').upsert(irows,{onConflict:'user_id,product_id'});if(ir&&ir.error)throw ir.error;}
+    try{ await supa.from('profiles').upsert({user_id:CURRENT_UID,shop_name:(typeof shop!=='undefined'&&shop&&shop.name)||'',owner_name:(typeof shop!=='undefined'&&shop&&shop.owner)||'',address:(typeof shop!=='undefined'&&shop&&shop.addr)||'',phone:(typeof shop!=='undefined'&&shop&&shop.phone)||'',gst:(typeof shop!=='undefined'&&shop&&shop.gst)||'',updated_at:new Date().toISOString()}); }catch(e){}
+  }catch(e){ console.warn('table mirror skipped (run the tables SQL to enable):',e&&e.message||e); }
 }
 async function migratePhotos(){
   if(!supa||!CURRENT_UID)return;
@@ -1473,7 +1492,7 @@ function updateSubUI(){ var el=document.getElementById('pf-sub'); if(!el)return;
 function closeModal(id){var m=document.getElementById(id);if(m)m.classList.remove('open')}
 function openSettings(){document.getElementById('settings-modal').classList.add('open')}
 function toggleProfileMenu(){var m=document.getElementById('profile-menu');if(m)m.classList.toggle('open')}
-function doLogout(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');if(!confirm('Log out of this account?'))return;try{if(supa)supa.auth.signOut();}catch(e){}setTimeout(function(){try{location.reload();}catch(e){}},250);}
+async function doLogout(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');if(!confirm('Log out of this account?'))return;try{if(supa)await supa.auth.signOut({scope:'local'});}catch(e){}try{localStorage.removeItem('tg_uid');}catch(e){}try{location.reload();}catch(e){}}
 function openChangePass(){var pm=document.getElementById('profile-menu');if(pm)pm.classList.remove('open');['pm-cur','pm-new','pm-new2'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});var er=document.getElementById('pass-err');if(er)er.style.display='none';document.getElementById('pass-modal').classList.add('open');}
 async function saveNewPass(){var nw=document.getElementById('pm-new').value,nw2=document.getElementById('pm-new2').value;var er=document.getElementById('pass-err');function fail(m){er.textContent=m;er.style.display='block';}if(nw.length<6)return fail('New password must be at least 6 characters.');if(nw!==nw2)return fail('New passwords do not match.');if(!supa)return fail('Not connected to the login service.');try{var r=await supa.auth.updateUser({password:nw});if(r.error)throw r.error;closeModal('pass-modal');toast('Password updated');}catch(e){fail((e&&e.message)||'Could not update password.');}}
 var TK_KEYS=['showQR','showPhone','showAltPhone','showIMEI','showLock','showSIM','showProblems','showParts','showStatus','showPayment','showEstimate'];
